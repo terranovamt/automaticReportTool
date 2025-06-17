@@ -354,7 +354,6 @@ def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred)
     import plotly_express as px
 
     nbins_fd = freedman_diaconis_rule(td["Value"])
-    print (nbins_fd)
     fig = px.histogram(
         td[["Value", "XId", "YId"]],
         x="Value",

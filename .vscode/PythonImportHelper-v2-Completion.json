@@ -573,24 +573,6 @@
         "documentation": {}
     },
     {
-        "label": "asyncio",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "asyncio",
-        "description": "asyncio",
-        "detail": "asyncio",
-        "documentation": {}
-    },
-    {
-        "label": "platform",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "platform",
-        "description": "platform",
-        "detail": "platform",
-        "documentation": {}
-    },
-    {
         "label": "warnings",
         "kind": 6,
         "isExtraImport": true,
@@ -639,14 +621,6 @@
         "description": "condition",
         "isExtraImport": true,
         "detail": "condition",
-        "documentation": {}
-    },
-    {
-        "label": "guihtml",
-        "importPath": "guihtml",
-        "description": "guihtml",
-        "isExtraImport": true,
-        "detail": "guihtml",
         "documentation": {}
     },
     {
@@ -1033,7 +1007,7 @@
         "kind": 2,
         "importPath": "src.jupiter.utility",
         "description": "src.jupiter.utility",
-        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    nbins_fd = freedman_diaconis_rule(td[\"Value\"])\n    print (nbins_fd)\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        nbins=nbins_fd,\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],",
+        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    nbins_fd = freedman_diaconis_rule(td[\"Value\"])\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        nbins=nbins_fd,\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],\n        barmode=\"overlay\",",
         "detail": "src.jupiter.utility",
         "documentation": {}
     },
@@ -2311,7 +2285,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_composite(parameter, csv_name):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))\n        if str(parameter[\"COM\"]).upper() == \"ALL\":",
+        "peekOfCode": "def process_composite(parameter, csv_name,df_stdf):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))\n        if str(parameter[\"COM\"]).upper() == \"TTIME\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2320,7 +2294,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_condition(parameter, stdf_folder):\n    \"\"\"\n    Process a FAKE composite for condition report and execute generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    uty.write_log(f\"Converting ANAFLOW by COM\", FILENAME)",
+        "peekOfCode": "def process_condition(parameter, stdf_folder,df_stdf):\n    \"\"\"\n    Process a FAKE composite for condition report and execute generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    uty.write_log(f\"Converting ANAFLOW by COM\", FILENAME)",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2329,7 +2303,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
+        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2338,7 +2312,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_ttime(parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a FAKE composite for test time analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    match_group = tsr[\"TEST_NAM\"].str.extract(r\"(log_ttime.*)\".format(composite))",
+        "peekOfCode": "def process_ttime(parameter, tsr, composite, csv_file,df_stdf):\n    \"\"\"\n    Process a FAKE composite for test time analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    match_group = tsr[\"TEST_NAM\"].str.extract(r\"(log_ttime.*)\".format(composite))",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2347,7 +2321,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_single_composite(\n    parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a single composite and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"",
+        "peekOfCode": "def process_single_composite(\n    parameter, tsr, composite, csv_file,df_stdf):\n    \"\"\"\n    Process a single composite and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2383,7 +2357,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def exec(parameter):\n    \"\"\"\n    Execute the report generation steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    try:\n        if (\n            str(parameter[\"COM\"].upper()) == \"YIELD\"\n            or str(parameter[\"TYPE\"]).upper() == \"CONDITION\"",
+        "peekOfCode": "def exec(parameter,df_stdf):\n    \"\"\"\n    Execute the report generation steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    try:\n        if (\n            str(parameter[\"COM\"].upper()) == \"YIELD\"\n            or str(parameter[\"TYPE\"]).upper() == \"CONDITION\"",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2419,7 +2393,7 @@
         "kind": 5,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef process_composite(parameter, csv_name):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef process_composite(parameter, csv_name,df_stdf):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))",
         "detail": "src.core",
         "documentation": {}
     },
@@ -3022,7 +2996,7 @@
         "kind": 2,
         "importPath": "src.pollingv4",
         "description": "src.pollingv4",
-        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous(5)\n    except Exception as e:",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:",
         "detail": "src.pollingv4",
         "documentation": {}
     },
@@ -3049,7 +3023,7 @@
         "kind": 2,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "def rework_stdf(parameter):\n    # print(parameter)\n    composite = parameter[\"COM\"]\n    flwtp = parameter[\"TYPE\"]\n    groosgood30 = 0\n    p = os.listdir()\n    ptr = pd.DataFrame()\n    ftr = pd.DataFrame()\n    population = pd.DataFrame()\n    ptr_dict = {}",
+        "peekOfCode": "def rework_stdf(parameter,df_stdf):\n    # print(parameter)\n    composite = parameter[\"COM\"]\n    flwtp = parameter[\"TYPE\"]\n    groosgood30 = 0\n    p = os.listdir()\n    ptr = pd.DataFrame()\n    ftr = pd.DataFrame()\n    population = pd.DataFrame()\n    ptr_dict = {}",
         "detail": "src.rework_stdf",
         "documentation": {}
     },

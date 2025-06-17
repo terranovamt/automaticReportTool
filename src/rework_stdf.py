@@ -52,7 +52,7 @@ def find_value(value, calc_type):
             return value - (value * 0.1)
 
 
-def rework_stdf(parameter):
+def rework_stdf(parameter,df_stdf):
     # print(parameter)
     composite = parameter["COM"]
     flwtp = parameter["TYPE"]
@@ -101,33 +101,21 @@ def rework_stdf(parameter):
         else [parameter["TEST_NUM"]]
     )
     # PTR Parametric Test Record
-    ptr_path = os.path.abspath(f"{parameter['CSV']}.ptr.csv")
-    if os.path.exists(ptr_path):
-        uty.write_log("Read PTR", FILENAME)
-        tmpptr = pd.read_csv(ptr_path, usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15],low_memory=False)
-        tmpptr = tmpptr[tmpptr["TEST_NUM"].isin(test_nums)]
-    else:
-        tmpptr = pd.DataFrame()
+    tmpptr = df_stdf["ptr"][df_stdf["ptr"]["TEST_NUM"].isin(test_nums)].copy()
 
     # FTR Functional Test Record
-    ftr_path = os.path.abspath(f"{parameter['CSV']}.ftr.csv")
-    if os.path.exists(ftr_path):
-        uty.write_log("Read FTR", FILENAME)
-        tmpftr = pd.read_csv(ftr_path, usecols=[0, 1, 4, 23],low_memory=False)
-        tmpftr = tmpftr[tmpftr["TEST_NUM"].isin(test_nums)]
-    else:
-        tmpftr = pd.DataFrame()
+    tmpftr = df_stdf["ftr"][df_stdf["ftr"]["TEST_NUM"].isin(test_nums)].copy()
 
     # MIR Master Information Record
-    mir = pd.read_csv(f"{parameter['CSV']}.mir.csv")
+    mir = df_stdf["mir"].copy()
     # PRR Part Results Record
-    prr = pd.read_csv(f"{parameter['CSV']}.prr.csv")
+    prr = df_stdf["prr"].copy()
     # PCR Part Count Record
-    pcr = pd.read_csv(f"{parameter['CSV']}.pcr.csv")
+    pcr = df_stdf["pcr"].copy()
     # HBR Hardware Bin Record
-    hbr = pd.read_csv(f"{parameter['CSV']}.hbr.csv")
+    hbr = df_stdf["hbr"].copy()
     # SBR Software Bin Record
-    sbr = pd.read_csv(f"{parameter['CSV']}.sbr.csv")
+    sbr = df_stdf["sbr"].copy()
 
     # ----------==================================================---------- #
     uty.write_log("Extract general inforamtion", FILENAME)
@@ -346,9 +334,7 @@ def rework_stdf(parameter):
             )
 
             tmpptr["RESULT"] = tmpptr["RESULT"].astype(float)
-            tmpptr["RESULT"] = round(
-                tmpptr["RESULT"] * tmpptr["RES_SCAL"].apply(power_of_10), 3
-            ).astype(float)
+            tmpptr["RESULT"] = tmpptr["RESULT"] * tmpptr["RES_SCAL"].apply(power_of_10).astype(float)
 
             tmpptr["HI_LIMIT"] = tmpptr["HI_LIMIT"].astype(float)
             tmpptr["HI_LIMIT"] = round(
@@ -546,11 +532,6 @@ def rework_stdf(parameter):
         ptr = pd.concat(ptr_dict.values(), ignore_index=True)
     if len(ftr_dict) != 0:
         ftr = pd.concat(ftr_dict.values(), ignore_index=True)
-
-    if os.path.exists(f"{base_path}/tmp"):
-        pass
-    else:
-        os.makedirs(f"{base_path}/tmp", exist_ok=True)
 
     ptr.drop(
         ["TestNumber", "RES_SCAL", "LLM_SCAL", "HLM_SCAL", "FTYPE"],

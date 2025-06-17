@@ -63,8 +63,8 @@
       "110": "#E6007E"
     },
     "product_name": "Mosquito256K",
-    "xwafer": [19, 152],
-    "ywafer": [21, 173],
+    "xwafer": [19, 170],
+    "ywafer": [21, 182],
     "touch_down": 1192,
     "XY_XL": 4500001,
     "XY_XH": 4500002,

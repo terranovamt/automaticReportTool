@@ -1,9 +1,3 @@
-import asyncio
-import platform
-
-if platform.system() == "Windows":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
 import os
 import json
 import warnings
@@ -13,13 +7,12 @@ import pandas as pd
 import jupiter.utility as uty
 from rework_stdf import rework_stdf
 from condition import condition_rework
-from guihtml import guihtml
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 FILENAME = os.path.abspath("src/run.log")
 
-def process_composite(parameter, csv_name):
+def process_composite(parameter, csv_name,df_stdf):
     """
     Process the composite data from a CSV file and execute the report generation.
 
@@ -29,36 +22,24 @@ def process_composite(parameter, csv_name):
     """
     try:
         tsr = pd.read_csv(os.path.abspath(f"{csv_name}.tsr.csv"))
-        if str(parameter["COM"]).upper() == "ALL":
-            composites = (
-                tsr["TEST_NAM"]
-                .str.extract(r"(.*_(.*)_.*:.*|.*_(.*)_..$)")[1]
-                .dropna()
-                .unique()
-            )
-            composites = composites[composites != ""]
 
-            for composite in composites[1:]:
-                parameter["TITLE"] = composite.upper()
-                process_single_composite(
-                    parameter, tsr, composite, csv_name)
-        elif str(parameter["COM"]).upper() == "TTIME":
+        if str(parameter["COM"]).upper() == "TTIME":
             process_ttime(
-                parameter, tsr, parameter["COM"], csv_name)
+                parameter, tsr, parameter["COM"], csv_name,df_stdf)
         elif str(parameter["COM"]).upper() == "YIELD":
             process_yield(
-                parameter, tsr, parameter["COM"], csv_name)
+                parameter, tsr, parameter["COM"], csv_name,df_stdf)
         elif str(parameter["COM"]).upper() == "CONDITION":
             process_condition(
-                parameter, tsr, parameter["COM"], csv_name)
+                parameter, tsr, parameter["COM"], csv_name,df_stdf)
         else:
             process_single_composite(
-                parameter, tsr, parameter["COM"], csv_name)
+                parameter, tsr, parameter["COM"], csv_name,df_stdf)
     except Exception as e:
         print(f"Error processing composite: {e}")
 
 
-def process_condition(parameter, stdf_folder):
+def process_condition(parameter, stdf_folder,df_stdf):
     """
     Process a FAKE composite for condition report and execute generation.
 
@@ -84,10 +65,10 @@ def process_condition(parameter, stdf_folder):
     parameter["TEST_NUM"] = ""
     parameter["CSV"] = csv_file
 
-    exec(parameter)
+    exec(parameter,df_stdf)
 
 
-def process_yield(parameter, tsr, composite, csv_file):
+def process_yield(parameter, tsr, composite, csv_file, df_stdf):
     """
     Process a FAKE composite for yeald analysis and execute the report generation.
 
@@ -114,10 +95,10 @@ def process_yield(parameter, tsr, composite, csv_file):
     parameter["CSV"] = csv_file
     parameter["TYPE"] = "YIELD"
 
-    exec(parameter)
+    exec(parameter,df_stdf)
 
 
-def process_ttime(parameter, tsr, composite, csv_file):
+def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
     """
     Process a FAKE composite for test time analysis and execute the report generation.
 
@@ -167,11 +148,11 @@ def process_ttime(parameter, tsr, composite, csv_file):
     parameter["CSV"] = csv_file
     parameter["TYPE"] = "TTIME"
 
-    exec(parameter)
+    exec(parameter,df_stdf)
 
 
 def process_single_composite(
-    parameter, tsr, composite, csv_file):
+    parameter, tsr, composite, csv_file,df_stdf):
     """
     Process a single composite and execute the report generation.
 
@@ -220,7 +201,7 @@ def process_single_composite(
     parameter["TEST_NUM"] = test_numbers
     parameter["CSV"] = csv_file
 
-    exec(parameter)
+    exec(parameter,df_stdf)
 
 
 def write_config_file(parameter):
@@ -364,8 +345,7 @@ def rework_report(parameter, dir_output, str_output):
         uty.write_log(f"ERROR: rework_report {e}", FILENAME)
         print(f"ERROR: rework_report {e}")
 
-
-def exec(parameter):
+def exec(parameter,df_stdf):
     """
     Execute the report generation steps.
 
@@ -379,7 +359,7 @@ def exec(parameter):
         ):
             pass
         else:
-            parameter = rework_stdf(parameter)
+            parameter = rework_stdf(parameter,df_stdf)
             pass
         write_config_file(parameter)
         timestartsub, dir_output, str_output = convert_notebook_to_html(parameter)

@@ -13,6 +13,8 @@ import os
 import re
 import subprocess
 import time
+import json
+import pandas as pd
 from enum import Enum
 from dataclasses import dataclass
 from typing import List, Dict, Set, Tuple, Optional
@@ -651,10 +653,10 @@ class DirectoryPoller:
             # Se non è l'ultimo elemento e non sono state stampate righe, sovrascrive
             if index == max_iterations and not printed_something:
                 # Sposta il cursore su di 2 righe per sovrascrivere percentuale e prodotto
-                print("\033[A\033[A", end='', flush=True)
+                print("\033[A\033[A\n\n\033[A\033[A", end='', flush=True)
         
             # Stampa finale
-            print("[Polling] Completed")
+            False and print("[Polling] Completed")
             break
             
         return stdf_list, csv_list, condition_list
@@ -809,6 +811,17 @@ class ReportWorker(ProcessingWorker):
                 f"{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf")
         composite_list = CompositeManager.get_composite_list(logger=logger, svn_url=svn_url)
         
+        # SPOSTATO QUI: Leggi il CSV una sola volta prima del ciclo
+        df_stdf = None
+        csv_path = None
+        if self.process_type == ProcessType.CSV2REPORT:
+            csv_path = os.path.join(
+                os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),
+                "csv",
+                os.path.basename(parameter['FILE'][parameter['WAFER']]['path'])
+            )
+            df_stdf = self._read_csv_to_dataframe(parameter, csv_path)
+        
         # Process each composite
         for composite in composite_list:
             parameter["COM"] = composite
@@ -823,17 +836,94 @@ class ReportWorker(ProcessingWorker):
             if not os.path.isfile(report_path):
                 self._log_start_message(parameter)
                 try:
-                    self._run_report_generation(parameter, path, logger)
+                    # Passa df_stdf e csv_path già preparati
+                    self._run_report_generation(parameter, path, logger, df_stdf, csv_path)
                 except Exception as e:
                     print(f"[{self.process_type.value.upper()}] Error in {composite}: {e}")
             else:
                 print(f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}")
         
         # Create completion marker in the CONDITION directory (parent of the file)
-        condition_directory = os.path.dirname(path)
+        if self.process_type == ProcessType.CONDITION2REPORT:
+            condition_directory = os.path.dirname(path)
+        else:
+            condition_directory = os.path.dirname(path)
         marker_name, marker_content = self.get_completion_marker_info()
         FileProcessor.create_completion_marker(condition_directory, marker_name, marker_content)
     
+    def _read_csv_to_dataframe(self, parameter: Dict, csv_path: str) -> Dict:
+        """
+        Legge i file CSV e restituisce un dizionario di DataFrame.
+        CORREZIONE: Rimossa la definizione di funzione annidata e corretti i parametri.
+        
+        Args:
+            parameter: Dizionario dei parametri contenente le informazioni del file
+            csv_path: Percorso base del file CSV
+            
+        Returns:
+            Dict: Dizionario contenente i DataFrame dei file CSV
+        """
+        # Carica i dati di personalizzazione
+        try:
+            with open("src/jupiter/personalization.json", "r") as file:
+                data = json.load(file)
+            
+            # Recupera il nome del prodotto
+            product_data = data.get(parameter["CODE"], {})
+            product_name = product_data.get("product_name", "")
+            parameter["PRODUCT"] = product_name
+        except FileNotFoundError:
+            print("[WARNING] personalization.json not found, using default product name")
+            parameter["PRODUCT"] = parameter.get("CODE", "")
+        except Exception as e:
+            print(f"[ERROR] Error reading personalization.json: {e}")
+            parameter["PRODUCT"] = parameter.get("CODE", "")
+
+        def read_csv_file(file_path: str, usecols=None) -> pd.DataFrame:
+            """
+            Funzione helper per leggere un file CSV.
+            
+            Args:
+                file_path: Percorso del file CSV
+                usecols: Colonne da leggere (opzionale)
+                
+            Returns:
+                DataFrame o DataFrame vuoto se il file non esiste
+            """
+            if os.path.exists(file_path):
+                try:
+                    print(f"[ERROR] reading {file_path}")
+                    return pd.read_csv(file_path, usecols=usecols, low_memory=False)
+                except Exception as e:
+                    print(f"[ERROR] Error reading {file_path}: {e}")
+                    return pd.DataFrame()
+            else:
+                print(f"[WARNING] File not found: {file_path}")
+                return pd.DataFrame()
+
+        
+        # Legge tutti i file CSV necessari
+        ptr = read_csv_file(f"{csv_path}.ptr.csv", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15])
+        ftr = read_csv_file(f"{csv_path}.ftr.csv", usecols=[0, 1, 4, 23])
+        mir = read_csv_file(f"{csv_path}.mir.csv")
+        prr = read_csv_file(f"{csv_path}.prr.csv")
+        pcr = read_csv_file(f"{csv_path}.pcr.csv")
+        hbr = read_csv_file(f"{csv_path}.hbr.csv")
+        sbr = read_csv_file(f"{csv_path}.sbr.csv")
+
+        # Crea un dizionario per accedere ai DataFrame
+        df_stdf = {
+            "ptr": ptr,
+            "ftr": ftr,
+            "mir": mir,
+            "prr": prr,
+            "pcr": pcr,
+            "hbr": hbr,
+            "sbr": sbr
+        }
+
+        return df_stdf
+
     def _log_start_message(self, parameter: Dict):
         """Log start message for report generation."""
         if self.process_type == ProcessType.CSV2REPORT:
@@ -843,17 +933,22 @@ class ReportWorker(ProcessingWorker):
             print(f"[CONDITION2REPORT] Start Report {parameter['CODE']} {parameter['FLOW']} "
                  f"{parameter['COM']} condition")
 
-    def _run_report_generation(self, parameter: Dict, path: str, logger: logging.Logger):
-        """Run the actual report generation."""
+    def _run_report_generation(self, parameter: Dict, path: str, logger: logging.Logger, df_stdf: Dict = None, csv_path: str = None):
+        """
+        Run the actual report generation.
+        
+        Args:
+            parameter: Parameter dictionary
+            path: File path
+            logger: Logger instance
+            df_stdf: Pre-loaded DataFrame dictionary (for CSV2REPORT)
+            csv_path: CSV file path (for CSV2REPORT)
+        """
         local_parameter = copy.deepcopy(parameter)
         
         if self.process_type == ProcessType.CSV2REPORT:
-            csv_path = os.path.join(
-                os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),
-                "csv",
-                os.path.basename(parameter['FILE'][parameter['WAFER']]['path'])
-            )
-            core.process_composite(local_parameter, csv_path)
+            # Usa i dati già caricati invece di rileggerli
+            core.process_composite(local_parameter, csv_path, df_stdf)
             print(f"[CSV2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
                  f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
         else:
@@ -879,7 +974,7 @@ class STDFWorker(ProcessingWorker):
         print(f"[STDF2CSV] Start stdf2csv {parameter['CODE']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
         
-        self._convert_stdf_to_csv(path, logger)
+        #self._convert_stdf_to_csv(path, logger)
         
         print(f"[STDF2CSV] End stdf2csv {parameter['CODE']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
@@ -996,14 +1091,14 @@ class STDFProcessingSystem:
         """
         print(f"[SYSTEM] Starting STDF Processing System")
         print(f"[SYSTEM] Monitoring directory: {self.watch_path}")
-        print(f"[SYSTEM] Polling interval: {sleep_interval} seconds")
+        False and print(f"[SYSTEM] Polling interval: {sleep_interval} seconds")
         
         cycle_count = 0
         
         while True:
             try:
                 cycle_count += 1
-                print(f"\n[SYSTEM] Starting cycle {cycle_count}")
+                False and print(f"\n[SYSTEM] Starting cycle {cycle_count}")
                 
                 # Run processing cycle
                 stdf_count, csv_count, condition_count = self.run_single_cycle()
@@ -1014,10 +1109,10 @@ class STDFProcessingSystem:
                     print(f"[SYSTEM] Cycle {cycle_count} completed: "
                          f"STDF={stdf_count}, CSV={csv_count}, Condition={condition_count}")
                 else:
-                    print(f"[SYSTEM] Cycle {cycle_count} completed: No files to process")
+                    False and print(f"[SYSTEM] Cycle {cycle_count} completed: No files to process")
                 
                 # Sleep before next cycle
-                print(f"[SYSTEM] Sleeping for {sleep_interval} seconds...")
+                False and print(f"[SYSTEM] Sleeping for {sleep_interval} seconds...")
                 time.sleep(sleep_interval)
                 
             except KeyboardInterrupt:
@@ -1043,7 +1138,7 @@ def main():
     processing_system = STDFProcessingSystem(watch_path)
     
     try:
-        processing_system.run_continuous(5)
+        processing_system.run_continuous()
     except Exception as e:
         print(f"[MAIN] Fatal error: {e}")
         return 1
