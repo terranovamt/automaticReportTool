@@ -974,7 +974,7 @@ class STDFWorker(ProcessingWorker):
         print(f"[STDF2CSV] Start stdf2csv {parameter['CODE']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
         
-        #self._convert_stdf_to_csv(path, logger)
+        self._convert_stdf_to_csv(path, logger)
         
         print(f"[STDF2CSV] End stdf2csv {parameter['CODE']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
