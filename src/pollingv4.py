@@ -225,6 +225,47 @@ class ParameterExtractor:
             stdname=filename,
             path=path
         )
+    
+    def get_parameter(path):
+        """
+        Extract parameters from file path.
+        
+        Args:
+            path (str): File path to parse
+            
+        Returns:
+            dict: Dictionary containing extracted parameters
+        """
+        # Split path and extract components
+        product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split("\\", 10)[4:]
+        lot_pkg, waf_badge, corner = (waf_badge + "_TTTT").split("_", 2)
+
+        parameter = {
+            "TITLE": "",
+            "COM": "",
+            "FLOW": flow.upper(),
+            "TYPE": mytype.upper(),
+            "PRODUCT": "",
+            "CODE": product.upper(),
+            "LOT": lot_pkg.upper(),
+            "WAFER": waf_badge,
+            "CUT": productcut.upper(),
+            "REVISION": "0.1",
+            "FILE": {
+                waf_badge: {
+                    "corner": corner,
+                    "path": path,
+                }
+            },
+            "AUTHOR": "Matteo Terranova",
+            "MAIL": "matteo.terranova@st.com",
+            "SITE": "Catania",
+            "GROUP": "MDRF - EP - GPAM",
+            "TEST_NUM": "",
+            "CSV": stdname,
+        }
+
+        return parameter
 
     @staticmethod
     def _create_parameter_dict(product: str, productcut: str, flow: str, mytype: str,
@@ -758,7 +799,10 @@ class ReportWorker(ProcessingWorker):
             path: Path to condition file to process
             logger: Logger instance
         """
-        parameter = ParameterExtractor.get_parameter_from_condition_path(path)
+        if self.process_type == ProcessType.CSV2REPORT:
+            parameter = ParameterExtractor.get_parameter(path)
+        else:
+            parameter = ParameterExtractor.get_parameter_from_condition_path(path)
         
         # Get composite list
         svn_url = (f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/"
@@ -999,7 +1043,7 @@ def main():
     processing_system = STDFProcessingSystem(watch_path)
     
     try:
-        processing_system.run_continuous()
+        processing_system.run_continuous(5)
     except Exception as e:
         print(f"[MAIN] Fatal error: {e}")
         return 1

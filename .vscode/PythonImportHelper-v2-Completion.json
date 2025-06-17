@@ -1,5 +1,14 @@
 [
     {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
         "label": "print_function",
         "importPath": "__future__",
         "description": "__future__",
@@ -304,15 +313,6 @@
         "description": "pystdf.SummaryStatistics",
         "isExtraImport": true,
         "detail": "pystdf.SummaryStatistics",
-        "documentation": {}
-    },
-    {
-        "label": "numpy",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "numpy",
-        "description": "numpy",
-        "detail": "numpy",
         "documentation": {}
     },
     {
@@ -1020,11 +1020,20 @@
         "documentation": {}
     },
     {
+        "label": "freedman_diaconis_rule",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def freedman_diaconis_rule(data):\n    import numpy as np\n    data = data.dropna()  # Rimuove NaN\n    data = data[np.isfinite(data)]  # Rimuove inf e -inf\n    q25, q75 = np.percentile(data, [1, 99])  # Calcolo IQR\n    iqr = q75 - q25\n    if iqr == 0:\n        return 10\n    n = len(data)\n    bin_width = 2 * iqr / np.cbrt(n)",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
         "label": "create_histogram",
         "kind": 2,
         "importPath": "src.jupiter.utility",
         "description": "src.jupiter.utility",
-        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],\n        barmode=\"overlay\",\n        template=\"plotly_white\",\n        color_discrete_sequence=tempSTcolort,",
+        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    nbins_fd = freedman_diaconis_rule(td[\"Value\"])\n    print (nbins_fd)\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        nbins=nbins_fd,\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],",
         "detail": "src.jupiter.utility",
         "documentation": {}
     },
@@ -3013,7 +3022,7 @@
         "kind": 2,
         "importPath": "src.pollingv4",
         "description": "src.pollingv4",
-        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous(5)\n    except Exception as e:",
         "detail": "src.pollingv4",
         "documentation": {}
     },

@@ -1,3 +1,5 @@
+import numpy
+
 def read_csv_with_fallback(path):
     import pandas as pd
     from pandas.errors import EmptyDataError, ParserError
@@ -332,13 +334,31 @@ def create_heatmap(td, gradientcolor, xwafer, ywafer):
 
     fig.show()
 
+def freedman_diaconis_rule(data):
+    import numpy as np
+    data = data.dropna()  # Rimuove NaN
+    data = data[np.isfinite(data)]  # Rimuove inf e -inf
+
+    q25, q75 = np.percentile(data, [1, 99])  # Calcolo IQR
+    iqr = q75 - q25
+    if iqr == 0:
+        return 10
+    n = len(data)
+    bin_width = 2 * iqr / np.cbrt(n)
+    data_range = data.max() - data.min()
+    return int(np.ceil(data_range / bin_width))
+    
+
 
 def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):
     import plotly_express as px
 
+    nbins_fd = freedman_diaconis_rule(td["Value"])
+    print (nbins_fd)
     fig = px.histogram(
         td[["Value", "XId", "YId"]],
         x="Value",
+        nbins=nbins_fd,
         marginal="box",
         hover_data=td[["Value", "XId", "YId"]],
         barmode="overlay",
