@@ -1,0 +1,3182 @@
+[
+    {
+        "label": "print_function",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "print_function",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "print_function",
+        "importPath": "__future__",
+        "description": "__future__",
+        "isExtraImport": true,
+        "detail": "__future__",
+        "documentation": {}
+    },
+    {
+        "label": "sys,",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys.",
+        "description": "sys.",
+        "detail": "sys.",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "importPath": "pystdf.IO",
+        "description": "pystdf.IO",
+        "isExtraImport": true,
+        "detail": "pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "importPath": "pystdf.IO",
+        "description": "pystdf.IO",
+        "isExtraImport": true,
+        "detail": "pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "importPath": "pystdf.IO",
+        "description": "pystdf.IO",
+        "isExtraImport": true,
+        "detail": "pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "importPath": "pystdf.IO",
+        "description": "pystdf.IO",
+        "isExtraImport": true,
+        "detail": "pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "importPath": "pystdf.IO",
+        "description": "pystdf.IO",
+        "isExtraImport": true,
+        "detail": "pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "RecordIndexer",
+        "importPath": "pystdf.Indexing",
+        "description": "pystdf.Indexing",
+        "isExtraImport": true,
+        "detail": "pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "pystdf.Indexing",
+        "description": "pystdf.Indexing",
+        "isExtraImport": true,
+        "detail": "pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "pystdf.V4",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "prr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "hbr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "sbr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "ptr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "mpr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "prr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "pcr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "ptr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "mpr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "ftr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "tsr",
+        "importPath": "pystdf.V4",
+        "description": "pystdf.V4",
+        "isExtraImport": true,
+        "detail": "pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "STDF2DataFrame",
+        "importPath": "pystdf.Importer",
+        "description": "pystdf.Importer",
+        "isExtraImport": true,
+        "detail": "pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "STDF2DataFrame",
+        "importPath": "pystdf.Importer",
+        "description": "pystdf.Importer",
+        "isExtraImport": true,
+        "detail": "pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "TextWriter",
+        "importPath": "pystdf.Writers",
+        "description": "pystdf.Writers",
+        "isExtraImport": true,
+        "detail": "pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "XmlWriter",
+        "importPath": "pystdf.Writers",
+        "description": "pystdf.Writers",
+        "isExtraImport": true,
+        "detail": "pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "pystdf.Writers",
+        "description": "pystdf.Writers",
+        "isExtraImport": true,
+        "detail": "pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "TextWriter",
+        "importPath": "pystdf.Writers",
+        "description": "pystdf.Writers",
+        "isExtraImport": true,
+        "detail": "pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "pystdf.Mapping",
+        "description": "pystdf.Mapping",
+        "isExtraImport": true,
+        "detail": "pystdf.Mapping",
+        "documentation": {}
+    },
+    {
+        "label": "EventSource",
+        "importPath": "pystdf.Pipeline",
+        "description": "pystdf.Pipeline",
+        "isExtraImport": true,
+        "detail": "pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "DataSource",
+        "importPath": "pystdf.Pipeline",
+        "description": "pystdf.Pipeline",
+        "isExtraImport": true,
+        "detail": "pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "EventSource",
+        "importPath": "pystdf.Pipeline",
+        "description": "pystdf.Pipeline",
+        "isExtraImport": true,
+        "detail": "pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "EventSource",
+        "importPath": "pystdf.Pipeline",
+        "description": "pystdf.Pipeline",
+        "isExtraImport": true,
+        "detail": "pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "SummaryStatistics",
+        "importPath": "pystdf.SummaryStatistics",
+        "description": "pystdf.SummaryStatistics",
+        "isExtraImport": true,
+        "detail": "pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "SummaryStatistics",
+        "importPath": "pystdf.SummaryStatistics",
+        "description": "pystdf.SummaryStatistics",
+        "isExtraImport": true,
+        "detail": "pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "SummaryStatistics",
+        "importPath": "pystdf.SummaryStatistics",
+        "description": "pystdf.SummaryStatistics",
+        "isExtraImport": true,
+        "detail": "pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "abstract",
+        "importPath": "pystdf.OoHelpers",
+        "description": "pystdf.OoHelpers",
+        "isExtraImport": true,
+        "detail": "pystdf.OoHelpers",
+        "documentation": {}
+    },
+    {
+        "label": "V4",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "V4",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "V4",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "Pipeline",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "TableTemplate",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "TableTemplate",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "V4",
+        "importPath": "pystdf",
+        "description": "pystdf",
+        "isExtraImport": true,
+        "detail": "pystdf",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "exc_info",
+        "importPath": "sys",
+        "description": "sys",
+        "isExtraImport": true,
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "struct",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "struct",
+        "description": "struct",
+        "detail": "struct",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "pystdf.Types",
+        "description": "pystdf.Types",
+        "isExtraImport": true,
+        "detail": "pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "pystdf.Types",
+        "description": "pystdf.Types",
+        "isExtraImport": true,
+        "detail": "pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "StdfRecordMeta",
+        "importPath": "pystdf.Types",
+        "description": "pystdf.Types",
+        "isExtraImport": true,
+        "detail": "pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "RecordType",
+        "importPath": "pystdf.Types",
+        "description": "pystdf.Types",
+        "isExtraImport": true,
+        "detail": "pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "stdfToLogicalType",
+        "importPath": "pystdf.Types",
+        "description": "pystdf.Types",
+        "isExtraImport": true,
+        "detail": "pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "extract_stack",
+        "importPath": "traceback",
+        "description": "traceback",
+        "isExtraImport": true,
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "extract_tb",
+        "importPath": "traceback",
+        "description": "traceback",
+        "isExtraImport": true,
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "path",
+        "importPath": "os",
+        "description": "os",
+        "isExtraImport": true,
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "pdb",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pdb",
+        "description": "pdb",
+        "detail": "pdb",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "strftime",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "localtime",
+        "importPath": "time",
+        "description": "time",
+        "isExtraImport": true,
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "quoteattr",
+        "importPath": "xml.sax.saxutils",
+        "description": "xml.sax.saxutils",
+        "isExtraImport": true,
+        "detail": "xml.sax.saxutils",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "fileinput",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "fileinput",
+        "description": "fileinput",
+        "detail": "fileinput",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "StringIO",
+        "importPath": "io",
+        "description": "io",
+        "isExtraImport": true,
+        "detail": "io",
+        "documentation": {}
+    },
+    {
+        "label": "asyncio",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "asyncio",
+        "description": "asyncio",
+        "detail": "asyncio",
+        "documentation": {}
+    },
+    {
+        "label": "platform",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "platform",
+        "description": "platform",
+        "detail": "platform",
+        "documentation": {}
+    },
+    {
+        "label": "warnings",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "warnings",
+        "description": "warnings",
+        "detail": "warnings",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "jupiter.utility",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "jupiter.utility",
+        "description": "jupiter.utility",
+        "detail": "jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "rework_stdf",
+        "importPath": "rework_stdf",
+        "description": "rework_stdf",
+        "isExtraImport": true,
+        "detail": "rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "rework_stdf",
+        "description": "rework_stdf",
+        "isExtraImport": true,
+        "detail": "rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "condition_rework",
+        "importPath": "condition",
+        "description": "condition",
+        "isExtraImport": true,
+        "detail": "condition",
+        "documentation": {}
+    },
+    {
+        "label": "guihtml",
+        "importPath": "guihtml",
+        "description": "guihtml",
+        "isExtraImport": true,
+        "detail": "guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "socket",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "socket",
+        "description": "socket",
+        "detail": "socket",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "webbrowser",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "webbrowser",
+        "description": "webbrowser",
+        "detail": "webbrowser",
+        "documentation": {}
+    },
+    {
+        "label": "http.server",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "http.server",
+        "description": "http.server",
+        "detail": "http.server",
+        "documentation": {}
+    },
+    {
+        "label": "socketserver",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "socketserver",
+        "description": "socketserver",
+        "detail": "socketserver",
+        "documentation": {}
+    },
+    {
+        "label": "urllib.parse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "urllib.parse",
+        "description": "urllib.parse",
+        "detail": "urllib.parse",
+        "documentation": {}
+    },
+    {
+        "label": "defaultdict",
+        "importPath": "collections",
+        "description": "collections",
+        "isExtraImport": true,
+        "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "multiprocessing",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "Process",
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "isExtraImport": true,
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "Queue",
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "isExtraImport": true,
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "Process",
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "isExtraImport": true,
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "Manager",
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "isExtraImport": true,
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "core",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "core",
+        "description": "core",
+        "detail": "core",
+        "documentation": {}
+    },
+    {
+        "label": "*",
+        "importPath": "stdf2csvnew",
+        "description": "stdf2csvnew",
+        "isExtraImport": true,
+        "detail": "stdf2csvnew",
+        "documentation": {}
+    },
+    {
+        "label": "BaseRotatingHandler",
+        "importPath": "logging.handlers",
+        "description": "logging.handlers",
+        "isExtraImport": true,
+        "detail": "logging.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "BaseRotatingHandler",
+        "importPath": "logging.handlers",
+        "description": "logging.handlers",
+        "isExtraImport": true,
+        "detail": "logging.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "BaseRotatingHandler",
+        "importPath": "logging.handlers",
+        "description": "logging.handlers",
+        "isExtraImport": true,
+        "detail": "logging.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "BaseRotatingHandler",
+        "importPath": "logging.handlers",
+        "description": "logging.handlers",
+        "isExtraImport": true,
+        "detail": "logging.handlers",
+        "documentation": {}
+    },
+    {
+        "label": "multiprocessing.managers",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "multiprocessing.managers",
+        "description": "multiprocessing.managers",
+        "detail": "multiprocessing.managers",
+        "documentation": {}
+    },
+    {
+        "label": "copy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "copy",
+        "description": "copy",
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "stdf2csv",
+        "description": "stdf2csv",
+        "detail": "stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "Enum",
+        "importPath": "enum",
+        "description": "enum",
+        "isExtraImport": true,
+        "detail": "enum",
+        "documentation": {}
+    },
+    {
+        "label": "dataclass",
+        "importPath": "dataclasses",
+        "description": "dataclasses",
+        "isExtraImport": true,
+        "detail": "dataclasses",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Set",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_with_fallback",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def read_csv_with_fallback(path):\n    import pandas as pd\n    from pandas.errors import EmptyDataError, ParserError\n    import os\n    try:\n        # print (os.path.abspath(path))\n        return pd.read_csv(os.path.abspath(path))\n    except (EmptyDataError, FileNotFoundError, ParserError) as e:\n        # print(\"ERROR:\", e)\n        return pd.DataFrame()",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "color_cpk",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def color_cpk(val):\n    try:\n        val = float(val)\n    except ValueError:\n        return \"\"\n    if isinstance(val, (int, float)):\n        if val < 1.2:\n            return \"background-color: #F23202\"\n        elif 1.2 <= val < 1.3:\n            return \"background-color: #E85D04\"",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "color_yield",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def color_yield(val):\n    try:\n        val = float(val.strip(\"%\"))\n    except ValueError:\n        return \"\"\n    if isinstance(val, (int, float)):\n        if val < 50:\n            return \"background-color: #F23202\"\n        elif 50 <= val < 60:\n            return \"background-color: #E85D04\"",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "color_kurtosis",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def color_kurtosis(val):\n    try:\n        val = float(val)\n    except ValueError:\n        return \"\"\n    if isinstance(val, (int, float)):\n        if val > -0.2:\n            return \"background-color: #F23202\"\n        elif -0.2 >= val > -0.4:\n            return \"background-color: #E85D04\"",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "color_cp",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def color_cp(val):\n    try:\n        val = float(val)\n    except ValueError:\n        return \"\"\n    if isinstance(val, (int, float)):\n        if val < 6:\n            return \"background-color: #F23202\"\n        elif 6 <= val < 7:\n            return \"background-color: #E85D04\"",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "power_of_10",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.01\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "find_value",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.01\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")\n            return 0.01\n        elif calc_type == \"max\":\n            max_value = 0.01\n            # print(f\"Valore attuale: {value} Massimo: {max_value}\")\n            return -0.01",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "write_log",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def write_log(message, filename=\"../run.log\"):\n    import os\n    import datetime\n    now = datetime.datetime.now()\n    timestamp = now.strftime(\"[%Y-%m-%d %H:%M:%S]\")\n    try:\n        with open(filename, \"r+\") as file:\n            content = file.readlines()\n            # Limit the content to the last 499 lines\n            if len(content) >= 500:",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "interpolate_color",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def interpolate_color(color1, color2, factor: float):\n    \"\"\"Interpolates between two colors.\"\"\"\n    return [color1[i] + (color2[i] - color1[i]) * factor for i in range(3)]\ndef hex_to_rgb(hex_color: str):\n    \"\"\"Converts a hex color to an RGB tuple.\"\"\"\n    hex_color = hex_color.lstrip(\"#\")\n    return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))\ndef rgb_to_hex(rgb_color):\n    \"\"\"Converts an RGB tuple to a hex color.\"\"\"\n    return \"#{:02x}{:02x}{:02x}\".format(",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "hex_to_rgb",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def hex_to_rgb(hex_color: str):\n    \"\"\"Converts a hex color to an RGB tuple.\"\"\"\n    hex_color = hex_color.lstrip(\"#\")\n    return tuple(int(hex_color[i : i + 2], 16) for i in (0, 2, 4))\ndef rgb_to_hex(rgb_color):\n    \"\"\"Converts an RGB tuple to a hex color.\"\"\"\n    return \"#{:02x}{:02x}{:02x}\".format(\n        int(rgb_color[0]), int(rgb_color[1]), int(rgb_color[2])\n    )\ndef create_gradient(colors, num_colors):",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "rgb_to_hex",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def rgb_to_hex(rgb_color):\n    \"\"\"Converts an RGB tuple to a hex color.\"\"\"\n    return \"#{:02x}{:02x}{:02x}\".format(\n        int(rgb_color[0]), int(rgb_color[1]), int(rgb_color[2])\n    )\ndef create_gradient(colors, num_colors):\n    \"\"\"Creates a gradient of colors.\"\"\"\n    gradient = []\n    num_segments = len(colors) - 1\n    colors_per_segment = num_colors // num_segments",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "create_gradient",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def create_gradient(colors, num_colors):\n    \"\"\"Creates a gradient of colors.\"\"\"\n    gradient = []\n    num_segments = len(colors) - 1\n    colors_per_segment = num_colors // num_segments\n    for i in range(num_segments):\n        color1 = hex_to_rgb(colors[i])\n        color2 = hex_to_rgb(colors[i + 1])\n        for j in range(colors_per_segment):\n            factor = j / float(colors_per_segment)",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "create_heatmap",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def create_heatmap(td, gradientcolor, xwafer, ywafer):\n    import numpy as np\n    import pandas as pd\n    import plotly.graph_objects as go\n    std_dev = np.std(td[\"Value\"])\n    step = std_dev / 10\n    if step < 1e-5:\n        step = std_dev\n    additional_data = pd.DataFrame(\n        {",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "create_histogram",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],\n        barmode=\"overlay\",\n        template=\"plotly_white\",\n        color_discrete_sequence=tempSTcolort,",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "create_histogram_with_color",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def create_histogram_with_color(\n    td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred\n):\n    import plotly_express as px\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\", \"Volt\"]],\n        x=\"Value\",\n        color=\"Volt\",\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "process_file",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.rec_index",
+        "description": "src.pystdf.scripts.rec_index",
+        "peekOfCode": "def process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)\n        reopen_fn = lambda: gzip.open(filename, 'rb')",
+        "detail": "src.pystdf.scripts.rec_index",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.rec_index",
+        "description": "src.pystdf.scripts.rec_index",
+        "peekOfCode": "def main():\n    if len(sys.argv) < 2:\n        print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    else:\n        process_file(sys.argv[1])\nif __name__ == '__main__':\n    main()",
+        "detail": "src.pystdf.scripts.rec_index",
+        "documentation": {}
+    },
+    {
+        "label": "#sys.excepthook",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.rec_index",
+        "description": "src.pystdf.scripts.rec_index",
+        "peekOfCode": "#sys.excepthook = info\ngzPattern = re.compile('\\.g?z', re.I)\nbz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:",
+        "detail": "src.pystdf.scripts.rec_index",
+        "documentation": {}
+    },
+    {
+        "label": "gzPattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.rec_index",
+        "description": "src.pystdf.scripts.rec_index",
+        "peekOfCode": "gzPattern = re.compile('\\.g?z', re.I)\nbz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)",
+        "detail": "src.pystdf.scripts.rec_index",
+        "documentation": {}
+    },
+    {
+        "label": "bz2Pattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.rec_index",
+        "description": "src.pystdf.scripts.rec_index",
+        "peekOfCode": "bz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)",
+        "detail": "src.pystdf.scripts.rec_index",
+        "documentation": {}
+    },
+    {
+        "label": "toExcel",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2excel",
+        "description": "src.pystdf.scripts.stdf2excel",
+        "peekOfCode": "def toExcel(fname,tables):\n    \"\"\" Export the tables from toTables to Excel\n    \"\"\"\n    writer = pd.ExcelWriter(fname)\n    for k,v in tables.items():\n        # Make sure the order of columns complies the specs\n        record = [r for r in V4.records if r.__class__.__name__.upper()==k]\n        if len(record)==0:\n            print(\"Ignore exporting table %s: No such record type exists.\" %k)\n        else:",
+        "detail": "src.pystdf.scripts.stdf2excel",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2excel",
+        "description": "src.pystdf.scripts.stdf2excel",
+        "peekOfCode": "def main():\n    if len(sys.argv)==1:\n        print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    else:\n        fin = sys.argv[1]\n        if len(sys.argv)>2:\n            fout = sys.argv[2]\n        else:\n            fout = fin[:fin.rfind('.')]+\".xlsx\"\n        print(\"Importing %s\" %fin)",
+        "detail": "src.pystdf.scripts.stdf2excel",
+        "documentation": {}
+    },
+    {
+        "label": "process_file",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2text",
+        "description": "src.pystdf.scripts.stdf2text",
+        "peekOfCode": "def process_file(fnames):\n    filename = fnames[0]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)\n        reopen_fn = lambda: gzip.open(filename, 'rb')",
+        "detail": "src.pystdf.scripts.stdf2text",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2text",
+        "description": "src.pystdf.scripts.stdf2text",
+        "peekOfCode": "def main():\n    if len(sys.argv) < 2:\n        print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    else:\n        process_file(sys.argv[1:])\nif __name__ == '__main__':\n    main()",
+        "detail": "src.pystdf.scripts.stdf2text",
+        "documentation": {}
+    },
+    {
+        "label": "gzPattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.stdf2text",
+        "description": "src.pystdf.scripts.stdf2text",
+        "peekOfCode": "gzPattern = re.compile('\\.g?z', re.I)\nbz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fnames):\n    filename = fnames[0]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)",
+        "detail": "src.pystdf.scripts.stdf2text",
+        "documentation": {}
+    },
+    {
+        "label": "bz2Pattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.stdf2text",
+        "description": "src.pystdf.scripts.stdf2text",
+        "peekOfCode": "bz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fnames):\n    filename = fnames[0]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)",
+        "detail": "src.pystdf.scripts.stdf2text",
+        "documentation": {}
+    },
+    {
+        "label": "process_file",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2xml",
+        "description": "src.pystdf.scripts.stdf2xml",
+        "peekOfCode": "def process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)\n        reopen_fn = lambda: gzip.open(filename, 'rb')",
+        "detail": "src.pystdf.scripts.stdf2xml",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf2xml",
+        "description": "src.pystdf.scripts.stdf2xml",
+        "peekOfCode": "def main():\n    if len(sys.argv) < 2:\n        print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    else:\n        process_file(sys.argv[1])\nif __name__ == '__main__':\n    main()",
+        "detail": "src.pystdf.scripts.stdf2xml",
+        "documentation": {}
+    },
+    {
+        "label": "gzPattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.stdf2xml",
+        "description": "src.pystdf.scripts.stdf2xml",
+        "peekOfCode": "gzPattern = re.compile('\\.g?z', re.I)\nbz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)",
+        "detail": "src.pystdf.scripts.stdf2xml",
+        "documentation": {}
+    },
+    {
+        "label": "bz2Pattern",
+        "kind": 5,
+        "importPath": "src.pystdf.scripts.stdf2xml",
+        "description": "src.pystdf.scripts.stdf2xml",
+        "peekOfCode": "bz2Pattern = re.compile('\\.bz2', re.I)\ndef process_file(fn):\n    filename, = sys.argv[1:]\n    reopen_fn = None\n    if filename is None:\n        f = sys.stdin\n    elif gzPattern.search(filename):\n        if not have_gzip:\n            print(\"gzip is not supported on this system\", file=sys.stderr)\n            sys.exit(1)",
+        "detail": "src.pystdf.scripts.stdf2xml",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pystdf.scripts.stdf_slice",
+        "description": "src.pystdf.scripts.stdf_slice",
+        "peekOfCode": "def main():\n    filename, start, count = sys.argv[1:4]\n    start = int(start)\n    count = int(count)\n    f = open(filename, 'rb')\n    p=Parser(inp=f)\n    record_mapper = StreamMapper()\n    p.addSink(record_mapper)\n    p.parse(count=start+count)\n    p.addSink(AtdfWriter())",
+        "detail": "src.pystdf.scripts.stdf_slice",
+        "documentation": {}
+    },
+    {
+        "label": "BinSummarizer",
+        "kind": 6,
+        "importPath": "src.pystdf.BinSummarizer",
+        "description": "src.pystdf.BinSummarizer",
+        "peekOfCode": "class BinSummarizer(EventSource):\n  FLAG_SYNTH = 0x80\n  FLAG_FAIL = 0x08\n  FLAG_UNKNOWN = 0x02\n  FLAG_OVERALL = 0x01\n  def __init__(self):\n    EventSource.__init__(self, ['binSummaryReady'])\n  def binSummaryReady(self, dataSource): pass\n  def getHPfFlags(self, row):\n    flag = 0",
+        "detail": "src.pystdf.BinSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "ifElse",
+        "kind": 2,
+        "importPath": "src.pystdf.BinSummarizer",
+        "description": "src.pystdf.BinSummarizer",
+        "peekOfCode": "def ifElse(cond, trueVal, falseVal):\n  if cond:\n    return trueVal\n  else:\n    return falseVal\nclass BinSummarizer(EventSource):\n  FLAG_SYNTH = 0x80\n  FLAG_FAIL = 0x08\n  FLAG_UNKNOWN = 0x02\n  FLAG_OVERALL = 0x01",
+        "detail": "src.pystdf.BinSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "MemoryWriter",
+        "kind": 6,
+        "importPath": "src.pystdf.Importer",
+        "description": "src.pystdf.Importer",
+        "peekOfCode": "class MemoryWriter:\n    def __init__(self):\n        self.data = []\n    def after_send(self, dataSource, data):\n        self.data.append(data)\n    def write(self,line):\n        self.data.append(line)\n    def flush(self):\n        pass # Do nothing\ndef ImportSTDF(fname):",
+        "detail": "src.pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "ImportSTDF",
+        "kind": 2,
+        "importPath": "src.pystdf.Importer",
+        "description": "src.pystdf.Importer",
+        "peekOfCode": "def ImportSTDF(fname):\n    with open(fname,'rb') as fin:\n        p = Parser(inp=fin)\n        storage = MemoryWriter()\n        p.addSink(storage)\n        p.parse()\n    return storage.data\ndef STDF2Text(fname,delimiter='|'):\n    \"\"\" Convert STDF to a list of text representation\n    \"\"\"",
+        "detail": "src.pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "STDF2Text",
+        "kind": 2,
+        "importPath": "src.pystdf.Importer",
+        "description": "src.pystdf.Importer",
+        "peekOfCode": "def STDF2Text(fname,delimiter='|'):\n    \"\"\" Convert STDF to a list of text representation\n    \"\"\"\n    with open(fname,'rb') as fin:\n        p = Parser(inp=fin)\n        storage = MemoryWriter()\n        p.addSink(TextWriter(storage,delimiter=delimiter))\n        p.parse()\n        return storage.data\n    return None",
+        "detail": "src.pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "STDF2Dict",
+        "kind": 2,
+        "importPath": "src.pystdf.Importer",
+        "description": "src.pystdf.Importer",
+        "peekOfCode": "def STDF2Dict(fname):\n    \"\"\" Convert STDF to a list of dictionary objects\n    \"\"\"\n    data = ImportSTDF(fname)\n    data_out = []\n    for datum in data:\n        datum_out = {}\n        RecType = datum[0].__class__.__name__.upper()\n        datum_out['RecType'] = RecType\n        for k,v in zip(datum[0].fieldMap,datum[1]):",
+        "detail": "src.pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "STDF2DataFrame",
+        "kind": 2,
+        "importPath": "src.pystdf.Importer",
+        "description": "src.pystdf.Importer",
+        "peekOfCode": "def STDF2DataFrame(fname):\n    \"\"\" Convert STDF to a dictionary of DataFrame objects\n    \"\"\"\n    data = ImportSTDF(fname)\n    BigTable = {}\n    for datum in data:\n        RecType = datum[0].__class__.__name__.upper()\n        if RecType not in BigTable.keys():\n            BigTable[RecType] = {}\n        Rec = BigTable[RecType]",
+        "detail": "src.pystdf.Importer",
+        "documentation": {}
+    },
+    {
+        "label": "StreamIndexer",
+        "kind": 6,
+        "importPath": "src.pystdf.Indexing",
+        "description": "src.pystdf.Indexing",
+        "peekOfCode": "class StreamIndexer:\n  def before_header(self, dataSource, header):\n    self.position = dataSource.inp.tell() - 4\n    self.header = header\nclass SessionIndexer:\n  def getSessionID(self):\n    return self.sessionid\n  def before_begin(self, dataSource):\n    self.sessionid = self.createSessionID()\n  def createSessionID(self): abstract()",
+        "detail": "src.pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "SessionIndexer",
+        "kind": 6,
+        "importPath": "src.pystdf.Indexing",
+        "description": "src.pystdf.Indexing",
+        "peekOfCode": "class SessionIndexer:\n  def getSessionID(self):\n    return self.sessionid\n  def before_begin(self, dataSource):\n    self.sessionid = self.createSessionID()\n  def createSessionID(self): abstract()\nclass DemoSessionIndexer(SessionIndexer):\n  def createSessionID(self): return 0\nclass RecordIndexer:\n  def getRecID(self):",
+        "detail": "src.pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "DemoSessionIndexer",
+        "kind": 6,
+        "importPath": "src.pystdf.Indexing",
+        "description": "src.pystdf.Indexing",
+        "peekOfCode": "class DemoSessionIndexer(SessionIndexer):\n  def createSessionID(self): return 0\nclass RecordIndexer:\n  def getRecID(self):\n    return self.recid\n  def before_begin(self, dataSource):\n    self.recid = 0\n  def before_send(self, dataSource, data):\n    self.recid += 1\nclass MaterialIndexer:",
+        "detail": "src.pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "RecordIndexer",
+        "kind": 6,
+        "importPath": "src.pystdf.Indexing",
+        "description": "src.pystdf.Indexing",
+        "peekOfCode": "class RecordIndexer:\n  def getRecID(self):\n    return self.recid\n  def before_begin(self, dataSource):\n    self.recid = 0\n  def before_send(self, dataSource, data):\n    self.recid += 1\nclass MaterialIndexer:\n  def getCurrentWafer(self, head):\n    return self.currentWafer.get(head, 0)",
+        "detail": "src.pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "MaterialIndexer",
+        "kind": 6,
+        "importPath": "src.pystdf.Indexing",
+        "description": "src.pystdf.Indexing",
+        "peekOfCode": "class MaterialIndexer:\n  def getCurrentWafer(self, head):\n    return self.currentWafer.get(head, 0)\n  def getCurrentInsertion(self, head):\n    return self.currentInsertion.get(head, 0)\n  def getCurrentPart(self, head, site):\n    return self.currentPart.get((head, site), 0)\n  def before_begin(self, dataSource):\n    self.currentPart = dict()\n    self.currentInsertion = dict()",
+        "detail": "src.pystdf.Indexing",
+        "documentation": {}
+    },
+    {
+        "label": "Parser",
+        "kind": 6,
+        "importPath": "src.pystdf.IO",
+        "description": "src.pystdf.IO",
+        "peekOfCode": "class Parser(DataSource):\n    def readAndUnpack(self, header, fmt):\n        size = struct.calcsize(fmt)\n        if size > header.len:\n            self.inp.read(header.len)\n            header.len = 0\n            raise EndOfRecordException()\n        buf = self.inp.read(size)\n        if len(buf) == 0:\n            self.eof = 1",
+        "detail": "src.pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "appendFieldParser",
+        "kind": 2,
+        "importPath": "src.pystdf.IO",
+        "description": "src.pystdf.IO",
+        "peekOfCode": "def appendFieldParser(fn, action):\n    \"\"\"Append a field parsing function to a record parsing function.\n    This is used to build record parsing functions based on the record type specification.\n    \"\"\"\n    def newRecordParser(*args):\n        fields = fn(*args)\n        try:\n            fields.append(action(*args))\n        except EndOfRecordException:\n            pass",
+        "detail": "src.pystdf.IO",
+        "documentation": {}
+    },
+    {
+        "label": "get_exc_string_encoding",
+        "kind": 2,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "def get_exc_string_encoding():\n    return exc_string_encoding\ndef set_exc_string_encoding(encoding):\n    global exc_string_encoding\n    exc_string_encoding = encoding\n###############################################################################\nforce_string_translate_map = \" ????????\\t ?? ??????????????????\" + \"\".join([ chr(i) for i in range(32, 256) ])\ndef force_string(v):\n    if isinstance(v, str):\n        v = v.decode(exc_string_encoding, \"replace\").encode(exc_string_encoding, \"replace\")",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "set_exc_string_encoding",
+        "kind": 2,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "def set_exc_string_encoding(encoding):\n    global exc_string_encoding\n    exc_string_encoding = encoding\n###############################################################################\nforce_string_translate_map = \" ????????\\t ?? ??????????????????\" + \"\".join([ chr(i) for i in range(32, 256) ])\ndef force_string(v):\n    if isinstance(v, str):\n        v = v.decode(exc_string_encoding, \"replace\").encode(exc_string_encoding, \"replace\")\n        return v.translate(force_string_translate_map)\n    elif isinstance(v, unicode):",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "force_string",
+        "kind": 2,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "def force_string(v):\n    if isinstance(v, str):\n        v = v.decode(exc_string_encoding, \"replace\").encode(exc_string_encoding, \"replace\")\n        return v.translate(force_string_translate_map)\n    elif isinstance(v, unicode):\n        v = v.encode(exc_string_encoding, \"replace\")\n        return v.translate(force_string_translate_map)\n    else:\n        try:\n            v = str(v)",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "trace_string",
+        "kind": 2,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "def trace_string(tb = None):\n    return \" <- \".join([ force_string(\"%s() (%s:%s)\" % (m, path.split(f)[1], n))\n                         for f, n, m, u in _reversed(tb or extract_stack()[:-1]) ])\n###############################################################################\ndef exc_string():\n    try:\n        t, v, tb = exc_info()\n        if t is None:\n            return \"no exception\"\n        if v is not None:",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "exc_string",
+        "kind": 2,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "def exc_string():\n    try:\n        t, v, tb = exc_info()\n        if t is None:\n            return \"no exception\"\n        if v is not None:\n            v = force_string(v)\n        else:\n            v = force_string(t)\n        if hasattr(t, \"__name__\"):",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "__all__",
+        "kind": 5,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "__all__ = [ \"exc_string\", \"trace_string\", \"force_string\", \n            \"get_exc_string_encoding\", \"set_exc_string_encoding\" ]\n###############################################################################\nfrom sys import exc_info\nfrom traceback import extract_stack, extract_tb\nfrom os import path\n###############################################################################\nexc_string_encoding = \"windows-1251\"\ndef get_exc_string_encoding():\n    return exc_string_encoding",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "exc_string_encoding",
+        "kind": 5,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "exc_string_encoding = \"windows-1251\"\ndef get_exc_string_encoding():\n    return exc_string_encoding\ndef set_exc_string_encoding(encoding):\n    global exc_string_encoding\n    exc_string_encoding = encoding\n###############################################################################\nforce_string_translate_map = \" ????????\\t ?? ??????????????????\" + \"\".join([ chr(i) for i in range(32, 256) ])\ndef force_string(v):\n    if isinstance(v, str):",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "force_string_translate_map",
+        "kind": 5,
+        "importPath": "src.pystdf.logexcept",
+        "description": "src.pystdf.logexcept",
+        "peekOfCode": "force_string_translate_map = \" ????????\\t ?? ??????????????????\" + \"\".join([ chr(i) for i in range(32, 256) ])\ndef force_string(v):\n    if isinstance(v, str):\n        v = v.decode(exc_string_encoding, \"replace\").encode(exc_string_encoding, \"replace\")\n        return v.translate(force_string_translate_map)\n    elif isinstance(v, unicode):\n        v = v.encode(exc_string_encoding, \"replace\")\n        return v.translate(force_string_translate_map)\n    else:\n        try:",
+        "detail": "src.pystdf.logexcept",
+        "documentation": {}
+    },
+    {
+        "label": "StreamMapper",
+        "kind": 6,
+        "importPath": "src.pystdf.Mapping",
+        "description": "src.pystdf.Mapping",
+        "peekOfCode": "class StreamMapper(StreamIndexer):\n    def __init__(self, types=V4.records):\n        self.indexes = []\n        self.types = []\n        self.__rec_map = dict([((recType.typ, recType.sub), recType)\n                                for recType in types])\n    def before_header(self, dataSource, header):\n        StreamIndexer.before_header(self, dataSource, header)\n        self.indexes.append(self.position)\n        key = (self.header.typ, self.header.sub)",
+        "detail": "src.pystdf.Mapping",
+        "documentation": {}
+    },
+    {
+        "label": "MaterialMapper",
+        "kind": 6,
+        "importPath": "src.pystdf.Mapping",
+        "description": "src.pystdf.Mapping",
+        "peekOfCode": "class MaterialMapper(MaterialIndexer):\n    indexable_types = set([V4.wir, V4.wrr, V4.pir, V4.prr, V4.ptr, V4.mpr, V4.ftr])\n    per_part_types = set([V4.pir, V4.prr, V4.ptr, V4.mpr, V4.ftr])\n    def before_begin(self, dataSource):\n        MaterialIndexer.before_begin(self, dataSource)\n        self.waferid = []\n        self.insertionid = []\n        self.partid = []\n    def before_send(self, dataSource, data):\n        MaterialIndexer.before_send(self, dataSource, data)",
+        "detail": "src.pystdf.Mapping",
+        "documentation": {}
+    },
+    {
+        "label": "abstract",
+        "kind": 2,
+        "importPath": "src.pystdf.OoHelpers",
+        "description": "src.pystdf.OoHelpers",
+        "peekOfCode": "def abstract():\n\timport inspect\n\tcaller = inspect.getouterframes(inspect.currentframe())[1][3]\n\traise NotImplementedError(caller + ' must be implemented in subclass')",
+        "detail": "src.pystdf.OoHelpers",
+        "documentation": {}
+    },
+    {
+        "label": "\tcaller",
+        "kind": 5,
+        "importPath": "src.pystdf.OoHelpers",
+        "description": "src.pystdf.OoHelpers",
+        "peekOfCode": "\tcaller = inspect.getouterframes(inspect.currentframe())[1][3]\n\traise NotImplementedError(caller + ' must be implemented in subclass')",
+        "detail": "src.pystdf.OoHelpers",
+        "documentation": {}
+    },
+    {
+        "label": "ParametricSummarizer",
+        "kind": 6,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "class ParametricSummarizer(EventSource):\n\tdef __init__(self):\n\t\tEventSource.__init__(self, ['parametricSummaryReady'])\n\tdef parametricSummaryReady(self, dataSource): pass\n\tdef getAllRows(self):\n\t\treturn self.summaryMap.iteritems()\n\tdef before_begin(self, dataSource):\n\t\tself.rawMap = dict()\n\t\tself.summaryMap = None\n\tdef before_complete(self, dataSource):",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.rawMap",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\tself.rawMap = dict()\n\t\tself.summaryMap = None\n\tdef before_complete(self, dataSource):\n\t\tself.summaryMap = dict()\n\t\tfor key, values in self.rawMap.iteritems():\n\t\t\tvalues.sort()\n\t\t\tself.summaryMap[key] = SummaryStatistics(values)\n\t\tself.parametricSummaryReady(dataSource)\n\tdef before_send(self, dataSource, data):\n\t\ttable, row = data",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.summaryMap",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\tself.summaryMap = None\n\tdef before_complete(self, dataSource):\n\t\tself.summaryMap = dict()\n\t\tfor key, values in self.rawMap.iteritems():\n\t\t\tvalues.sort()\n\t\t\tself.summaryMap[key] = SummaryStatistics(values)\n\t\tself.parametricSummaryReady(dataSource)\n\tdef before_send(self, dataSource, data):\n\t\ttable, row = data\n\t\tif table.name == ptr.name:",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.summaryMap",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\tself.summaryMap = dict()\n\t\tfor key, values in self.rawMap.iteritems():\n\t\t\tvalues.sort()\n\t\t\tself.summaryMap[key] = SummaryStatistics(values)\n\t\tself.parametricSummaryReady(dataSource)\n\tdef before_send(self, dataSource, data):\n\t\ttable, row = data\n\t\tif table.name == ptr.name:\n\t\t\tself.onPtr(row)\n\t\telif table.name == mpr.name:",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\tself.summaryMap[key]",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\t\tself.summaryMap[key] = SummaryStatistics(values)\n\t\tself.parametricSummaryReady(dataSource)\n\tdef before_send(self, dataSource, data):\n\t\ttable, row = data\n\t\tif table.name == ptr.name:\n\t\t\tself.onPtr(row)\n\t\telif table.name == mpr.name:\n\t\t\tself.onMpr(row)\n\tdef onPtr(self, row):\n\t\tvalues = self.rawMap.setdefault((",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tvalues",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\tvalues = self.rawMap.setdefault((\n\t\t\trow[ptr.SITE_NUM],row[ptr.TEST_NUM],0), [])\n\t\tvalues.append(row[ptr.RESULT])\n\tdef onMpr(self, row):\n\t\tfor i in xrange(row[mpr.RSLT_CNT]):\n\t\t\tvalues = self.rawMap.setdefault((row[ptr.SITE_NUM],row[ptr.TEST_NUM],i), [])\n\t\t\tvalues.append(row[mpr.RTN_RSLT][i])",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "\t\t\tvalues",
+        "kind": 5,
+        "importPath": "src.pystdf.ParametricSummarizer",
+        "description": "src.pystdf.ParametricSummarizer",
+        "peekOfCode": "\t\t\tvalues = self.rawMap.setdefault((row[ptr.SITE_NUM],row[ptr.TEST_NUM],i), [])\n\t\t\tvalues.append(row[mpr.RTN_RSLT][i])",
+        "detail": "src.pystdf.ParametricSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "PartSummarizer",
+        "kind": 6,
+        "importPath": "src.pystdf.PartSummarizer",
+        "description": "src.pystdf.PartSummarizer",
+        "peekOfCode": "class PartSummarizer(Pipeline.EventSource):\n    FLAG_SYNTH = 0x80\n    FLAG_FAIL = 0x08\n    FLAG_UNKNOWN = 0x02\n    FLAG_OVERALL = 0x01\n    def __init__(self):\n        EventSource.__init__(self, ['partSummaryReady'])\n    def partSummaryReady(self, dataSource): pass\n    def getOverall(self):\n        return self.overall",
+        "detail": "src.pystdf.PartSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "filterNull",
+        "kind": 2,
+        "importPath": "src.pystdf.PartSummarizer",
+        "description": "src.pystdf.PartSummarizer",
+        "peekOfCode": "def filterNull(value):\n    if value == 4294967295:\n        return None\n    return value\nclass PartSummarizer(Pipeline.EventSource):\n    FLAG_SYNTH = 0x80\n    FLAG_FAIL = 0x08\n    FLAG_UNKNOWN = 0x02\n    FLAG_OVERALL = 0x01\n    def __init__(self):",
+        "detail": "src.pystdf.PartSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "EventSource",
+        "kind": 6,
+        "importPath": "src.pystdf.Pipeline",
+        "description": "src.pystdf.Pipeline",
+        "peekOfCode": "class EventSource:\n  \"\"\"EventSource\n  A generic base class for something that originates events (a source)\n  and broadcasts them to receivers (the sinks).  Events are propagated\n  as method calls.  Event sinks can receieve notification before or\n  after the event occurs.\n  Registration is achieved by a contract of method name convention.\n  The sink defines methods based on the event name in order to receive it.\n  Event method names in the sink with a 'before_' prefix will be invoked\n  prior to the event occuring, similarly, a method with the 'after_' suffix",
+        "detail": "src.pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "DataSource",
+        "kind": 6,
+        "importPath": "src.pystdf.Pipeline",
+        "description": "src.pystdf.Pipeline",
+        "peekOfCode": "class DataSource(EventSource):\n  def __init__(self, add_events):\n    EventSource.__init__(self, ['begin', 'send', 'complete', 'cancel'] + add_events)\n  def begin(self): pass\n  def send(self, data): pass\n  def complete(self): pass\n  def cancel(self, exception): pass",
+        "detail": "src.pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "appendPrefixAction",
+        "kind": 2,
+        "importPath": "src.pystdf.Pipeline",
+        "description": "src.pystdf.Pipeline",
+        "peekOfCode": "def appendPrefixAction(fn, ds, action):\n  \"\"\"Create a function that injects a call to 'action' prior to given function 'fn'\"\"\"\n  def new_fn(*args):\n    action(ds, *args)\n    fn(*args)\n  return new_fn\ndef appendSuffixAction(fn, sink, action):\n  \"\"\"Create a function that injects a call to 'action' following given function 'fn'\"\"\"\n  def new_fn(*args):\n    fn(*args)",
+        "detail": "src.pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "appendSuffixAction",
+        "kind": 2,
+        "importPath": "src.pystdf.Pipeline",
+        "description": "src.pystdf.Pipeline",
+        "peekOfCode": "def appendSuffixAction(fn, sink, action):\n  \"\"\"Create a function that injects a call to 'action' following given function 'fn'\"\"\"\n  def new_fn(*args):\n    fn(*args)\n    action(sink, *args)\n  return new_fn\nclass EventSource:\n  \"\"\"EventSource\n  A generic base class for something that originates events (a source)\n  and broadcasts them to receivers (the sinks).  Events are propagated",
+        "detail": "src.pystdf.Pipeline",
+        "documentation": {}
+    },
+    {
+        "label": "SummaryStatistics",
+        "kind": 6,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "class SummaryStatistics:\n\tdef __init__(self, values):\n\t\tself.values = values\n\t\tself.min = min(values)\n\t\tself.max = max(values)\n\t\tself.count = len(values)\n\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.values",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.values = values\n\t\tself.min = min(values)\n\t\tself.max = max(values)\n\t\tself.count = len(values)\n\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.min",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.min = min(values)\n\t\tself.max = max(values)\n\t\tself.count = len(values)\n\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.max",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.max = max(values)\n\t\tself.count = len(values)\n\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.count",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.count = len(values)\n\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.sum",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.sum = sum(values)\n\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.sumsqrs",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.sumsqrs = sum([value*value for value in values])\n\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.mean",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.mean = self.sum / float(self.count)\n\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.median",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.median = self.q2 = self.values[self.count / 2]\n\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.q1",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.q1 = self.values[self.count / 4]\n\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "\t\tself.q3",
+        "kind": 5,
+        "importPath": "src.pystdf.SummaryStatistics",
+        "description": "src.pystdf.SummaryStatistics",
+        "peekOfCode": "\t\tself.q3 = self.values[3 * (self.count / 4)]",
+        "detail": "src.pystdf.SummaryStatistics",
+        "documentation": {}
+    },
+    {
+        "label": "TableTemplate",
+        "kind": 6,
+        "importPath": "src.pystdf.TableTemplate",
+        "description": "src.pystdf.TableTemplate",
+        "peekOfCode": "class TableTemplate(object):\n    def __init__(self, columnNames, columnTypes, name=None):\n        if name is None:\n            self.name = self.__module__ + '.' + self.__class__.__name__\n        else:\n            self.name = name\n        self.columnNames = columnNames\n        self.columnTypes = columnTypes",
+        "detail": "src.pystdf.TableTemplate",
+        "documentation": {}
+    },
+    {
+        "label": "TestSummarizer",
+        "kind": 6,
+        "importPath": "src.pystdf.TestSummarizer",
+        "description": "src.pystdf.TestSummarizer",
+        "peekOfCode": "class TestSummarizer(EventSource):\n  FLAG_SYNTH = 0x80\n  FLAG_OVERALL = 0x01\n  PTR_TEST_TXT = 0x00\n  MPR_TEST_TXT = 0x01\n  FTR_TEST_TXT = 0x02\n  TSR_TEST_NAM = 0x03\n  TSR_SEQ_NAME = 0x04\n  TSR_TEST_LBL = 0x05\n  def __init__(self):",
+        "detail": "src.pystdf.TestSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "filterNull",
+        "kind": 2,
+        "importPath": "src.pystdf.TestSummarizer",
+        "description": "src.pystdf.TestSummarizer",
+        "peekOfCode": "def filterNull(value):\n  if value == 4294967295:\n    return None\n  return value\nclass TestSummarizer(EventSource):\n  FLAG_SYNTH = 0x80\n  FLAG_OVERALL = 0x01\n  PTR_TEST_TXT = 0x00\n  MPR_TEST_TXT = 0x01\n  FTR_TEST_TXT = 0x02",
+        "detail": "src.pystdf.TestSummarizer",
+        "documentation": {}
+    },
+    {
+        "label": "RecordHeader",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class RecordHeader:\n  def __init__(self):\n    self.len=0\n    self.typ=0\n    self.sub=0\n  def __repr__(self):\n    return \"<STDF Header, REC_TYP=%d REC_SUB=%d REC_LEN=%d>\" % (self.typ, self.sub, self.len) \nclass RecordType(TableTemplate):\n  def __init__(self):\n    TableTemplate.__init__(self, ",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "RecordType",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class RecordType(TableTemplate):\n  def __init__(self):\n    TableTemplate.__init__(self, \n      [name for name, stdfType in self.fieldMap], \n      [stdfToLogicalType(stdfTyp) for name, stdfTyp in self.fieldMap])\nclass UnknownRecord(TableTemplate):\n  def __init__(self, rec_typ, rec_sub):\n    TableTemplate.__init__(self, [], [], 'UnknownRecord')\n    self.rec_typ = rec_typ\n    self.rec_sub = rec_sub",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "UnknownRecord",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class UnknownRecord(TableTemplate):\n  def __init__(self, rec_typ, rec_sub):\n    TableTemplate.__init__(self, [], [], 'UnknownRecord')\n    self.rec_typ = rec_typ\n    self.rec_sub = rec_sub\nclass EofException(Exception): pass\nclass EndOfRecordException(Exception): pass\nclass InitialSequenceException(Exception): pass\nclass StdfRecordMeta(type):\n  \"\"\"Generate the necessary plumbing for STDF record classes ",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "EofException",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class EofException(Exception): pass\nclass EndOfRecordException(Exception): pass\nclass InitialSequenceException(Exception): pass\nclass StdfRecordMeta(type):\n  \"\"\"Generate the necessary plumbing for STDF record classes \n  based on simple, static field defintions.\n  This enables a simple, mini-DSL (domain-specific language)\n  approach to defining STDF records.\n  I did this partly to learn what metaclasses are good for,\n  partly for fun, and partly because I wanted end users to be",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "EndOfRecordException",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class EndOfRecordException(Exception): pass\nclass InitialSequenceException(Exception): pass\nclass StdfRecordMeta(type):\n  \"\"\"Generate the necessary plumbing for STDF record classes \n  based on simple, static field defintions.\n  This enables a simple, mini-DSL (domain-specific language)\n  approach to defining STDF records.\n  I did this partly to learn what metaclasses are good for,\n  partly for fun, and partly because I wanted end users to be\n  able to easily define their own custom STDF record types.",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "InitialSequenceException",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class InitialSequenceException(Exception): pass\nclass StdfRecordMeta(type):\n  \"\"\"Generate the necessary plumbing for STDF record classes \n  based on simple, static field defintions.\n  This enables a simple, mini-DSL (domain-specific language)\n  approach to defining STDF records.\n  I did this partly to learn what metaclasses are good for,\n  partly for fun, and partly because I wanted end users to be\n  able to easily define their own custom STDF record types.\n  \"\"\"",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "StdfRecordMeta",
+        "kind": 6,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "class StdfRecordMeta(type):\n  \"\"\"Generate the necessary plumbing for STDF record classes \n  based on simple, static field defintions.\n  This enables a simple, mini-DSL (domain-specific language)\n  approach to defining STDF records.\n  I did this partly to learn what metaclasses are good for,\n  partly for fun, and partly because I wanted end users to be\n  able to easily define their own custom STDF record types.\n  \"\"\"\n  def __init__(cls, name, bases, dct):",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "stdfToLogicalType",
+        "kind": 2,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "def stdfToLogicalType(fmt):\n  if fmt.startswith('k'):\n    return 'List'\n  else:\n    return logicalTypeMap[fmt]\nclass RecordHeader:\n  def __init__(self):\n    self.len=0\n    self.typ=0\n    self.sub=0",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "logicalTypeMap",
+        "kind": 5,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "logicalTypeMap = {\n  \"C1\": \"Char\",\n  \"B1\": \"UInt8\",\n  \"U1\": \"UInt8\",\n  \"U2\": \"UInt16\",\n  \"U4\": \"UInt32\",\n  \"U8\": \"UInt64\",\n  \"I1\": \"Int8\",\n  \"I2\": \"Int16\",\n  \"I4\": \"Int32\",",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "packFormatMap",
+        "kind": 5,
+        "importPath": "src.pystdf.Types",
+        "description": "src.pystdf.Types",
+        "peekOfCode": "packFormatMap = {\n  \"C1\": \"c\",\n  \"B1\": \"B\",\n  \"U1\": \"B\",\n  \"U2\": \"H\",\n  \"U4\": \"I\",\n  \"U8\": \"Q\",\n  \"I1\": \"b\",\n  \"I2\": \"h\",\n  \"I4\": \"i\",",
+        "detail": "src.pystdf.Types",
+        "documentation": {}
+    },
+    {
+        "label": "Far",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Far(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **File Attributes Record (FAR)**\n  Function:\n    Contains the information necessary to determine how to decode\n    the STDF data contained in the file.\n  Data Fields:\n    ======== ==== ========================================= ====================\n    Name     Type Description                               Missing/Invalid Flag\n    ======== ==== ========================================= ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Atr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Atr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Audit Trail Record (ATR)**\n  Function:\n    Used to record any operation that alters the contents of the STDF\n    file. The name of the program and all its parameters should be recorded\n    in the ASCII field provided in this record. Typically, this record will\n    be used to track filter programs that have been applied to the data.\n  Data Fields:\n    ======== ==== ========================================= ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Mir",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Mir(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Master Information Record (MIR)**\n  Function:\n    The MIR and the MRR (Master Results Record) contain all the global\n    information that is to be stored for a tested lot of parts. Each data\n    stream must have exactly oneMIR, immediately after theFAR (and the ATR's,\n    if they are used). This will allow any data reporting or analysis\n    programs access to this information in the shortest possible amount\n    of time.",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Mrr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Mrr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Master Results Record (MRR)**\n  Function:\n    The Master Results Record (MRR) is a logical extension of the Master\n    Information Record (MIR). The data can be thought of as belonging\n    with the MIR, but it is not available when the tester writes the MIR\n    information. Each data stream must have exactly one MRR as the last\n    record in the data stream.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Pcr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Pcr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Part Count Record (PCR)**\n  Function:\n    Contains the part count totals for one or all test sites. Each data stream\n    must have at least one PCR to show the part count.\n  Data Fields:\n    ======== ==== ========================================= ====================\n    Name     Type Description                               Missing/Invalid Flag\n    ======== ==== ========================================= ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Hbr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Hbr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Hardware Bin Record (HBR)**\n  Function:\n    Stores a count of the parts *physically* placed in a particular bin\n    after testing. (In wafer testing, *physical* binning is not an actual\n    transfer of the chip, but rather is represented by a drop of ink or an\n    entry in a wafer map file.) This bin count can be for a single test\n    site (when parallel testing) or a total for all test sites. The STDF\n    specification also supports a Software Bin Record (SBR) for logical",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Sbr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Sbr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Software Bin Record (SBR)**\n  Function:\n    Stores a count of the parts associated with a particular logical\n    bin after testing. This bin count can be for a single test site (when\n    parallel testing) or a total for all test sites.  The STDF specification\n    also supports a Hardware Bin Record (HBR) for actual physical binning. A\n    part is *physically* placed in a hardware bin after testing. A part can\n    be *logically* associated with a software bin during or after testing.",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Pmr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Pmr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Pin Map Record (PMR)**\n  Function:\n    Provides indexing of tester channel names, and maps them to physical and\n    logical pin names. Each PMR defines the information for a single channel/pin\n    combination.\n  Data Fields:\n    ======== ==== ========================================= ====================\n    Name     Type Description                               Missing/Invalid Flag",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Pgr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Pgr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Pin Group Record (PGR)**\n  Function:\n    Associates a name with a group of pins.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag\n    ======== ===== ======================================== ====================\n    REC_LEN  U*2   Bytes of data following header",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Plr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Plr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Pin List Record (PLR)**\n  Function:\n    Defines the current display radix and operating mode for a pin or pin group.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag\n    ======== ===== ======================================== ====================\n    REC_LEN  U*2   Bytes of data following header",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Rdr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Rdr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Retest Data Record (RDR)**\n  Function:\n    Signals that the data in this STDF file is for retested parts. The data in\n    this record, combined with information in the MIR, tells data filtering\n    programs what data to replace when processing retest data.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Sdr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Sdr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Site Description Record (SDR)**\n  Function:\n    Contains the configuration information for one or more test sites, connected\n    to one test head, that compose a site group.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag\n    ======== ===== ======================================== ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Wir",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Wir(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Wafer Information Record (WIR)**\n  Function:\n    Acts mainly as a marker to indicate where testing of a particular wafer\n    begins for each wafer tested by the job plan. The WIR and the Wafer\n    Results Record (WRR) bracket all the stored information pertaining\n    to one tested wafer. This record is used only when testing at wafer\n    probe. AWIR/WRR pair will have the same HEAD_NUM and SITE_GRP values.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Wrr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Wrr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Wafer Results Record (WRR)**\n  Function:\n    Contains the result information relating to each wafer tested by the\n    job plan. The WRR and the Wafer Information Record (WIR) bracket all\n    the stored information pertaining to one tested wafer. This record is\n    used only when testing at wafer probe time. A WIR/WRR pair will have\n    the same HEAD_NUM and SITE_GRP values.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Wcr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Wcr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Wafer Configuration Record (WCR)**\n  Function:\n  Contains the configuration information for the wafers tested by the job\n  plan. The WCR provides the dimensions and orientation information for\n  all wafers and dice in the lot. This record is used only when testing\n  at wafer probe time.\n  Data Fields:\n    ======== ===== ======================================== ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Pir",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Pir(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Part Information Record (PIR)**\n  Function:\n    Acts as a marker to indicate where testing of a particular part begins\n    for each part tested by the test program. The PIR and the Part ResultsRecord\n    (PRR) bracket all the stored information pertaining to one tested part.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Prr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Prr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Part Results Record (PRR)**\n  Function:\n    Contains the result information relating to each part tested by the\n    test program. The PRR and the Part Information Record (PIR) bracket\n    all the stored information pertaining to one tested part.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Tsr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Tsr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Test Synopsis Record (TSR)**\n  Function:\n    Contains the test execution and failure counts for one parametric or\n    functional test in the test program. Also contains static information,\n    such as test name. The TSR is related to the Functional Test Record\n    (FTR), the Parametric Test Record (PTR), and the Multiple Parametric\n    Test Record (MPR) by test number, head number, and site number.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Ptr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Ptr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Parametric Test Record (PTR)**\n  Function:\n    Contains the results of a single execution of a parametric test in the\n    test program. The first occurrence of this record also establishes\n    the default values for all semi-static information about the test,\n    such as limits, units, and scaling. The PTR is related to the Test\n    Synopsis Record (TSR) by test number, head number, and site number.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Mpr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Mpr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Multiple-Result Parametric Record (MPR)**\n  Function:\n    Contains the results of a single execution of a parametric test in\n    the test program where that test returns multiple values. The first\n    occurrence of this record also establishes the default values for\n    all semi-static information about the test, such as limits, units,\n    and scaling. The MPR is related to the Test Synopsis Record (TSR)\n    by test number, head number, and site number.",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Ftr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Ftr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Functional Test Record (FTR)**\n  Function:\n    Contains the results of the single execution of a functional test in the\n    test program. The first occurrence of this record also establishes the\n    default values for all semi-static information about the test. The FTR\n    is related to the Test Synopsis Record (TSR) by test number, head number,\n    and site number.\n  Data Fields:",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Bps",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Bps(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Begin Program Section Record (BPS)**\n  Function:\n    Marks the beginning of a new program section (or sequencer) in the job\n    plan.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag\n    ======== ===== ======================================== ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Eps",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Eps(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **End Program Section Record (EPS)**\n  Function:\n    Marks the end of the current program section (or sequencer) in the job\n    plan.\n  Data Fields:\n    ======== ===== ======================================== ====================\n    Name     Type  Description                              Missing/Invalid Flag\n    ======== ===== ======================================== ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Gdr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Gdr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Generic Data Record (GDR)**\n  Function:\n    Contains information that does not conform to any other record type\n    defined by the STDF specification. Such records are intended to be\n    written under the control of job plans executing on the tester. This\n    data may be used for any purpose that the user desires.\n  Data Fields:\n    ======== ===== ======================================== ====================",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "Dtr",
+        "kind": 6,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "class Dtr(RecordType, metaclass=StdfRecordMeta):\n  \"\"\"\n  **Datalog Text Record (DTR)**\n  Function:\n    Contains text information that is to be included in the datalog\n    printout. DTR's may be written under the control of a job plan:\n    for example, to highlight unexpected test results. They may also be\n    generated by the tester executive software: for example, to indicate\n    that the datalog sampling rate has changed. DTR's are placed as comments\n    in the datalog listing.",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "far",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "far = Far()\natr = Atr()\nmir = Mir()\nmrr = Mrr()\npcr = Pcr()\nhbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "atr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "atr = Atr()\nmir = Mir()\nmrr = Mrr()\npcr = Pcr()\nhbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "mir",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "mir = Mir()\nmrr = Mrr()\npcr = Pcr()\nhbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "mrr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "mrr = Mrr()\npcr = Pcr()\nhbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "pcr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "pcr = Pcr()\nhbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "hbr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "hbr = Hbr()\nsbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "sbr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "sbr = Sbr()\npmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "pmr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "pmr = Pmr()\npgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "pgr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "pgr = Pgr()\nplr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "plr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "plr = Plr()\nrdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "rdr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "rdr = Rdr()\nsdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "sdr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "sdr = Sdr()\nwir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "wir",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "wir = Wir()\nwrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "wrr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "wrr = Wrr()\nwcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "wcr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "wcr = Wcr()\npir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "pir",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "pir = Pir()\nprr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "prr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "prr = Prr()\ntsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "tsr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "tsr = Tsr()\nptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "ptr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "ptr = Ptr()\nmpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "mpr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "mpr = Mpr()\nftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "ftr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "ftr = Ftr()\nbps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,\n  mrr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "bps",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "bps = Bps()\neps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,\n  mrr,\n  pcr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "eps",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "eps = Eps()\ngdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,\n  mrr,\n  pcr,\n  hbr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "gdr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "gdr = Gdr()\ndtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,\n  mrr,\n  pcr,\n  hbr,\n  sbr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "dtr",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "dtr = Dtr()\nrecords = (\n  far,\n  atr,\n  mir,\n  mrr,\n  pcr,\n  hbr,\n  sbr,\n  pmr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "records",
+        "kind": 5,
+        "importPath": "src.pystdf.V4",
+        "description": "src.pystdf.V4",
+        "peekOfCode": "records = (\n  far,\n  atr,\n  mir,\n  mrr,\n  pcr,\n  hbr,\n  sbr,\n  pmr,\n  pgr,",
+        "detail": "src.pystdf.V4",
+        "documentation": {}
+    },
+    {
+        "label": "TextWriter",
+        "kind": 6,
+        "importPath": "src.pystdf.Writers",
+        "description": "src.pystdf.Writers",
+        "peekOfCode": "class TextWriter:\n    def __init__(self, stream=sys.stdout, delimiter='|'):\n        self.stream = stream\n        self.delimiter = delimiter\n    @staticmethod\n    def text_format(rectype, field_index, value, delimiter):\n        field_type = rectype.fieldStdfTypes[field_index]\n        if value is None:\n            return \"\"\n        elif rectype is V4.gdr:",
+        "detail": "src.pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "XmlWriter",
+        "kind": 6,
+        "importPath": "src.pystdf.Writers",
+        "description": "src.pystdf.Writers",
+        "peekOfCode": "class XmlWriter:\n    extra_entities = {'\\0': ''}\n    @staticmethod\n    def xml_format(rectype, field_index, value):\n        field_type = rectype.fieldStdfTypes[field_index]\n        if value is None:\n            return \"\"\n        elif rectype is V4.gdr:\n            return ';'.join([str(v) for v in value])\n        elif field_type[0] == 'k': # An Array of some other type",
+        "detail": "src.pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "format_by_type",
+        "kind": 2,
+        "importPath": "src.pystdf.Writers",
+        "description": "src.pystdf.Writers",
+        "peekOfCode": "def format_by_type(value, field_type):\n    if field_type in ('B1', 'N1'):\n        return '%02X' % (value)\n    else:\n        return str(value)\nclass TextWriter:\n    def __init__(self, stream=sys.stdout, delimiter='|'):\n        self.stream = stream\n        self.delimiter = delimiter\n    @staticmethod",
+        "detail": "src.pystdf.Writers",
+        "documentation": {}
+    },
+    {
+        "label": "detect_file_type",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def detect_file_type(file_path):\n    \"\"\"Rileva il tipo di file basandosi sull'estensione\"\"\"\n    if file_path.lower().endswith('.html'):\n        return 'html'\n    elif file_path.lower().endswith('.csv'):\n        return 'csv'\n    else:\n        raise ValueError(f\"Tipo di file non supportato: {file_path}\")\ndef detect_separator(file_path, max_lines=10):\n    \"\"\"Rileva il separatore CSV (, o ;)\"\"\"",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "detect_separator",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def detect_separator(file_path, max_lines=10):\n    \"\"\"Rileva il separatore CSV (, o ;)\"\"\"\n    with open(file_path, \"r\", encoding=\"utf-8\") as file:\n        for line_number in range(max_lines):\n            line = file.readline()\n            if not line:\n                break\n            # Conta le occorrenze di virgole e punti e virgola\n            comma_count = line.count(',')\n            semicolon_count = line.count(';')",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "read_html_to_dataframe",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def read_html_to_dataframe(file_path):\n    \"\"\"Legge un file HTML e converte le tabelle in DataFrame\"\"\"\n    try:\n        # Prova prima con pandas read_html\n        tables = pd.read_html(file_path, encoding='utf-8')\n        if tables:\n            # Prendi la prima tabella trovata\n            df = tables[0]\n            return df\n    except Exception as e:",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_to_dataframe",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def read_csv_to_dataframe(file_path):\n    \"\"\"Legge un file CSV con rilevamento automatico del separatore\"\"\"\n    separator, header_line = detect_separator(file_path)\n    try:\n        df = pd.read_csv(file_path, sep=separator, header=header_line, encoding='utf-8')\n    except UnicodeDecodeError:\n        # Prova con encoding alternativo\n        df = pd.read_csv(file_path, sep=separator, header=header_line, encoding='latin-1')\n    return df\ndef read_file_to_dataframe(file_path):",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "read_file_to_dataframe",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def read_file_to_dataframe(file_path):\n    \"\"\"Funzione principale per leggere qualsiasi tipo di file supportato\"\"\"\n    file_type = detect_file_type(file_path)\n    if file_type == 'html':\n        return read_html_to_dataframe(file_path)\n    elif file_type == 'csv':\n        return read_csv_to_dataframe(file_path)\n    else:\n        raise ValueError(f\"Tipo di file non supportato: {file_type}\")\ndef condition_rework(parameter, directory_path):",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "condition_rework",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def condition_rework(parameter, directory_path):\n    \"\"\"Elabora i file e crea condition.csv\"\"\"\n    # Determina il file da processare\n    if os.path.isdir(directory_path):\n        # Se è una directory, cerca file CSV o HTML\n        file_path = None\n        for filename in os.listdir(directory_path):\n            if filename.lower().endswith(('.csv', '.html')):\n                file_path = os.path.join(directory_path, filename)\n                break",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.condition",
+        "description": "src.condition",
+        "peekOfCode": "def main():\n    parameter = {\n        \"TITLE\": \"MBIST\",\n        \"COM\": \"mbist\",\n        \"FLOW\": \"EWS1\",\n        \"TYPE\": \"STD\",\n        \"PRODUCT\": \"Mosquito512K\",\n        \"CODE\": \"44E\",\n        \"LOT\": \"P6AX86\",\n        \"WAFER\": \"1\",",
+        "detail": "src.condition",
+        "documentation": {}
+    },
+    {
+        "label": "process_composite",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def process_composite(parameter, csv_name):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))\n        if str(parameter[\"COM\"]).upper() == \"ALL\":",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "process_condition",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def process_condition(parameter, stdf_folder):\n    \"\"\"\n    Process a FAKE composite for condition report and execute generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    uty.write_log(f\"Converting ANAFLOW by COM\", FILENAME)",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "process_yield",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "process_ttime",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def process_ttime(parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a FAKE composite for test time analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    match_group = tsr[\"TEST_NAM\"].str.extract(r\"(log_ttime.*)\".format(composite))",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "process_single_composite",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def process_single_composite(\n    parameter, tsr, composite, csv_file):\n    \"\"\"\n    Process a single composite and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "write_config_file",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def write_config_file(parameter):\n    \"\"\"\n    Write the configuration parameters to a JSON file.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    cfgfile = f\"./src/jupiter/cfg.json\"\n    try:\n        # Convert any Series objects in the parameter dictionary to lists\n        parameter = {",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "convert_notebook_to_html",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def convert_notebook_to_html(parameter):\n    \"\"\"\n    Convert the Jupyter notebook to HTML format.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    uty.write_log(\"Start Jupyter conversion\", FILENAME)\n    timestartsub = datetime.datetime.now()\n    str_output = (\n        parameter[\"TITLE\"]",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "rework_report",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def rework_report(parameter, dir_output, str_output):\n    \"\"\"\n    Substitute HTML title with TITLE name and add CSS for better report aspect.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    report_path = os.path.abspath(f\"{dir_output}/{str_output}.html\")\n    title = parameter[\"TITLE\"]\n    new_str = (\n        \"<title>\"",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "exec",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def exec(parameter):\n    \"\"\"\n    Execute the report generation steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    try:\n        if (\n            str(parameter[\"COM\"].upper()) == \"YIELD\"\n            or str(parameter[\"TYPE\"]).upper() == \"CONDITION\"",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "post_exec",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def post_exec(parameter, timestartsub, dir_output, str_output):\n    \"\"\"\n    Post-execution function to handle final steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    uty.write_log(\"postexec START\", FILENAME)\n    # rework_report(parameter, dir_output, str_output)\n    uty.write_log(\"postexec DONE\", FILENAME)\n    timeendsub = datetime.datetime.now()",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "resetpost",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def resetpost(file_path):\n    print(\"Reset post.json\")\n    with open(file_path, \"r\") as file:\n        data = json.load(file)\n    for item in data[\"data\"]:\n        item[\"Run\"] = \"0\"\n    with open(file_path, \"w\") as file:\n        json.dump(data, file, indent=4)\ndef get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "get_parameter",
+        "kind": 2,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "def get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]\n    # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"/\")[3:]\n    lot_pkg, waf_badge, corner = (waf_badge + \"_TTTT\").split(\"_\", 2)\n    parameter = {\n        \"TITLE\": \"\",\n        \"COM\": \"\",\n        \"FLOW\": flow.upper(),\n        \"TYPE\": mytype.upper(),\n        \"PRODUCT\": \"\",",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "FILENAME",
+        "kind": 5,
+        "importPath": "src.core",
+        "description": "src.core",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef process_composite(parameter, csv_name):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))",
+        "detail": "src.core",
+        "documentation": {}
+    },
+    {
+        "label": "Handler",
+        "kind": 6,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "class Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":\n            self.path = \"/html/index.html\"\n            load_data()\n        elif self.path == \"/index.html\":\n            self.path = \"/html/index.html\"\n        elif self.path == \"/about\":",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "ThreadingSimpleServer",
+        "kind": 6,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "class ThreadingSimpleServer(socketserver.ThreadingMixIn, socketserver.TCPServer):\n    pass\ndef stdf_api():\n    result = defaultdict(\n        lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(list)))\n    )\n    base_path = \"\\\\\\\\gpm-pe-data.gnb.st.com\\\\ENGI_MCD_STDF\"\n    for code_folder in os.listdir(base_path):\n        code_folder_path = os.path.join(base_path, code_folder)\n        if os.path.isdir(code_folder_path):",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "load_data",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def load_data():\n    process = Process(target=stdf_api)\n    process.start()\n    print(\"Reload data\")\nclass ThreadingSimpleServer(socketserver.ThreadingMixIn, socketserver.TCPServer):\n    pass\ndef stdf_api():\n    result = defaultdict(\n        lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(list)))\n    )",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "stdf_api",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def stdf_api():\n    result = defaultdict(\n        lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(list)))\n    )\n    base_path = \"\\\\\\\\gpm-pe-data.gnb.st.com\\\\ENGI_MCD_STDF\"\n    for code_folder in os.listdir(base_path):\n        code_folder_path = os.path.join(base_path, code_folder)\n        if os.path.isdir(code_folder_path):\n            for flow_folder in os.listdir(code_folder_path):\n                flow_folder_path = os.path.join(code_folder_path, flow_folder)",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "start_server",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def start_server(port, queue):\n    Handler.queue = queue\n    with ThreadingSimpleServer((\"\", port), Handler) as httpd:\n        ip = socket.gethostbyname(socket.gethostname())\n        print(f\"Serving at {ip}:{port}\")\n        httpd.serve_forever()\ndef find_available_port(start_port, max_port, queue):\n    port = start_port\n    while port <= max_port:\n        try:",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "find_available_port",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def find_available_port(start_port, max_port, queue):\n    port = start_port\n    while port <= max_port:\n        try:\n            start_server(port, queue)\n            break\n        except OSError as e:\n            if e.errno == socket.errno.EADDRINUSE:\n                print(f\"Port {port} is already in use. Trying port {port + 2}...\")\n                port += 2",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "process_data",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def process_data(queue):\n    while True:\n        data = queue.get()\n        if data is None:\n            break\n        report_generator(data)\ndef report_generator(data):\n    with open(POST_FILE, \"w\") as jsonfile:\n        json.dump(data, jsonfile, indent=4)\n    debug = False",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "report_generator",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def report_generator(data):\n    with open(POST_FILE, \"w\") as jsonfile:\n        json.dump(data, jsonfile, indent=4)\n    debug = False\n    from core import generate\n    generate(data)\n    update_run_status()\ndef update_run_status():\n    with open(POST_FILE, \"r\") as jsonfile:\n        data = json.load(jsonfile)",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "update_run_status",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def update_run_status():\n    with open(POST_FILE, \"r\") as jsonfile:\n        data = json.load(jsonfile)\n    # Iterate through the 'data' list and update 'Run' field\n    for item in data.get(\"data\", []):\n        if \"Run\" in item and item[\"Run\"] == \"1\":\n            item[\"Run\"] = \"0\"\n    # Write the updated data back to the JSON file\n    with open(POST_FILE, \"w\") as jsonfile:\n        json.dump(data, jsonfile, indent=4)",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "guihtml",
+        "kind": 2,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "def guihtml():\n    if not os.path.isfile(POST_FILE):\n        with open(POST_FILE, \"w\") as jsonfile:\n            json.dump([], jsonfile)\n    queue = Queue()\n    server_thread = threading.Thread(\n        target=find_available_port, args=(PORT, MAX_PORT, queue)\n    )\n    server_thread.daemon = True\n    server_thread.start()",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "PORT",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "PORT = 8000\nMAX_PORT = 8800\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))\nWEB_DIR = os.path.abspath(os.path.join(BASE_DIR, \"web\"))\nPOST_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/post.json\"))\nDATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_PORT",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "MAX_PORT = 8800\nBASE_DIR = os.path.dirname(os.path.abspath(__file__))\nWEB_DIR = os.path.abspath(os.path.join(BASE_DIR, \"web\"))\nPOST_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/post.json\"))\nDATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "BASE_DIR = os.path.dirname(os.path.abspath(__file__))\nWEB_DIR = os.path.abspath(os.path.join(BASE_DIR, \"web\"))\nPOST_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/post.json\"))\nDATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":\n            self.path = \"/html/index.html\"",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "WEB_DIR",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "WEB_DIR = os.path.abspath(os.path.join(BASE_DIR, \"web\"))\nPOST_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/post.json\"))\nDATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":\n            self.path = \"/html/index.html\"\n            load_data()",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "POST_FILE",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "POST_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/post.json\"))\nDATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":\n            self.path = \"/html/index.html\"\n            load_data()\n        elif self.path == \"/index.html\":",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "DATA_FILE",
+        "kind": 5,
+        "importPath": "src.guihtml",
+        "description": "src.guihtml",
+        "peekOfCode": "DATA_FILE = os.path.abspath(os.path.join(BASE_DIR, \"./resource/datalist.json\"))\nclass Handler(http.server.SimpleHTTPRequestHandler):\n    def __init__(self, *args, **kwargs):\n        super().__init__(*args, directory=WEB_DIR, **kwargs)\n    def do_GET(self):\n        if self.path == \"/\":\n            self.path = \"/html/index.html\"\n            load_data()\n        elif self.path == \"/index.html\":\n            self.path = \"/html/index.html\"",
+        "detail": "src.guihtml",
+        "documentation": {}
+    },
+    {
+        "label": "LineCountRotatingFileHandler",
+        "kind": 6,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "class LineCountRotatingFileHandler(BaseRotatingHandler):\n    def __init__(self, filename, max_lines=1000, backup_count=1, **kwargs):\n        super().__init__(filename, 'a', **kwargs)\n        self.max_lines = max_lines\n        self.backup_count = backup_count\n        self.line_count = 0\n        self._open()\n    def _open(self):\n        self.stream = open(self.baseFilename, self.mode)\n        self.line_count = sum(1 for _ in open(self.baseFilename))",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def setup_logger(name, log_file, level=logging.INFO):\n    formatter = logging.Formatter('%(asctime)s - %(message)s')\n    handler = LineCountRotatingFileHandler(log_file, max_lines=1000, backup_count=1)\n    handler.setFormatter(formatter)\n    logger = logging.getLogger(name)\n    logger.setLevel(level)\n    logger.addHandler(handler)\n    return logger\n# --==================================================-- #\n# GENERAL FUNCTION",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "get_parameter",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]\n    # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"/\")[3:]\n    lot_pkg, waf_badge, corner = (waf_badge + \"_TTTT\").split(\"_\", 2)\n    parameter = {\n        \"TITLE\": \"\",\n        \"COM\": \"\",\n        \"FLOW\": flow.upper(),\n        \"TYPE\": mytype.upper(),\n        \"PRODUCT\": \"\",",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "get_composite",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def get_composite(logger,svn_url):\n    try:\n        username = os.getlogin()\n        # username = \"terranom\"\n    except OSError:\n        username = input(\"Impossibile ottenere il nome utente automaticamente. Inserisci il tuo nome utente SVN: \")\n    password = username\n    command = [\n        \"svn\", \"cat\", svn_url, \"--username\", username, \"--password\", password,\n        \"--non-interactive\", \"--trust-server-cert\"",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "polling",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def polling(directory, stdf2csv_pipeline, csv2report_pipeline, logger):\n    product_regrx = re.compile(r\"^[A-F0-9]{3}$\")\n    allowed_flow = {\n        \"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"\n    }\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}\n    # Use a set to track already added paths\n    seen_paths = set()\n    def check_csv_folder(path):\n        std_files = [f for f in os.listdir(path) if f.endswith(\".std\") or f.endswith(\".stdf\")]",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "csv2report",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def csv2report(csv2report_pipeline, logger):\n    while True:\n        if csv2report_pipeline:\n            path = csv2report_pipeline.pop(0)\n            base_path = os.path.dirname(path)\n            report_folder = os.path.join(base_path, \"Report\")\n            os.makedirs(report_folder, exist_ok=True)\n            parameter = get_parameter(path)\n            svn_url = f\"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf\"\n            composite_list = get_composite(logger=logger,svn_url=svn_url)",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "thread_composites",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def thread_composites(composite_list, path, logger):\n    threads = []\n    for composite in composite_list:\n        # Create a copy of the parameter dictionary for each thread\n        thread_parameter = get_parameter(path)\n        thread_parameter[\"COM\"] = composite\n        thread_parameter[\"TITLE\"] = f\"{composite.upper().replace('_',' ')} {thread_parameter['FLOW'].upper()} {thread_parameter['TYPE'].lower()}\"\n        print(f\"Start Report {thread_parameter['CODE']} {thread_parameter['LOT']} {thread_parameter['WAFER']} {thread_parameter['TYPE'].lower()} {thread_parameter['COM']}\")\n        # thread = threading.Thread(target=run_report, args=(thread_parameter, logger))\n        # thread.start()",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "run_report",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def run_report(parameter, logger):\n    path=os.path.join(os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),\"csv\",os.path.basename(parameter['FILE'][parameter['WAFER']]['path']))\n    core.process_composite(parameter,path)\n    print(f\"End report {parameter['CODE']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}\")\n# --==================================================-- #\n# STDF2CSV PROCESS\n# --==================================================-- #\ndef stdf2csv(stdf2csv_pipeline, logger):\n    processes = []\n    while True:",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def stdf2csv(stdf2csv_pipeline, logger):\n    processes = []\n    while True:\n        if stdf2csv_pipeline:\n            path = stdf2csv_pipeline.pop(0)\n            process = Process(target=stdf_to_csv, args=(path, logger))\n            process.start()\n            processes.append(process)\n        else:\n            active_processes = [p for p in processes if p.is_alive()]",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def stdf_to_csv(path, logger):\n    parameter = get_parameter(path)\n    print(f\"Start stdf2csv {parameter['CODE']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}\")\n    process_stdf_to_csv(path, logger)\n    print(f\"End stdf2csv {parameter['CODE']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}\")\ndef process_stdf_to_csv(path, logger):\n    base_path = os.path.dirname(path)\n    csv_folder = os.path.join(base_path, \"csv\")\n    os.makedirs(csv_folder, exist_ok=True)\n    csv_path = os.path.join(csv_folder, os.path.basename(path))",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "process_stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def process_stdf_to_csv(path, logger):\n    base_path = os.path.dirname(path)\n    csv_folder = os.path.join(base_path, \"csv\")\n    os.makedirs(csv_folder, exist_ok=True)\n    csv_path = os.path.join(csv_folder, os.path.basename(path))\n    stdf2csv_converter(fin=os.path.join(path), fout=csv_path)\n    print(f\"Finished processing: {path}\")\n# --==================================================-- #\n# MAIN PROCESS\n# --==================================================-- #",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "def main():\n    # Initialize loggers within the main function\n    polling_logger = setup_logger('polling', 'polling.log')\n    csv2report_logger = setup_logger('csv2report', 'csv2report.log')\n    stdf2csv_logger = setup_logger('stdf2csv', 'stdf2csv.log')\n    manager = Manager()\n    stdf2csv_pipeline = manager.list()\n    csv2report_pipeline = manager.list()\n    directory = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # directory = \"/prj/ENGI_MCD_STDF\"",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "LineCountRotatingFileHandler",
+        "kind": 6,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "class LineCountRotatingFileHandler(BaseRotatingHandler):\n    def __init__(self, filename, max_lines=1000, backup_count=1, **kwargs):\n        super().__init__(filename, 'a', **kwargs)\n        self.max_lines = max_lines\n        self.backup_count = backup_count\n        self.line_count = 0\n        self._open()\n    def _open(self):\n        self.stream = open(self.baseFilename, self.mode)\n        self.line_count = sum(1 for _ in open(self.baseFilename))",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def setup_logger(name, log_file, level=logging.INFO):\n    formatter = logging.Formatter('%(asctime)s - %(message)s')\n    handler = LineCountRotatingFileHandler(log_file, max_lines=1000, backup_count=1)\n    handler.setFormatter(formatter)\n    logger = logging.getLogger(name)\n    logger.setLevel(level)\n    logger.addHandler(handler)\n    return logger\n# --==================================================-- #\n# GENERAL FUNCTION",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_parameter",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]\n    # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"/\")[3:]\n    lot_pkg, waf_badge, corner = (waf_badge + \"_TTTT\").split(\"_\", 2)\n    parameter = {\n        \"TITLE\": \"\",\n        \"COM\": \"\",\n        \"FLOW\": flow.upper(),\n        \"TYPE\": mytype.upper(),\n        \"PRODUCT\": \"\",",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_composite",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def get_composite(logger,svn_url):\n    try:\n        username = os.getlogin()\n        # username = \"terranom\"\n    except OSError:\n        username = input(\"Insert your username SVN: \")\n    password = username\n    command = [\n        \"svn\", \"cat\", svn_url, \"--username\", username, \"--password\", password,\n        \"--non-interactive\", \"--trust-server-cert\"",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "polling",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def polling(directory, queue_stdf2csv, queue_csv2report, logger):\n    product_regrx = re.compile(r\"^[A-F0-9]{3}$\")\n    allowed_flow = {\n        \"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"\n    }\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}\n    # Use a set to track already added paths\n    seen_paths = set()\n    def check_csv_folder(path):\n        std_files = [f for f in os.listdir(path) if f.endswith(\".std\") or f.endswith(\".stdf\")]",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "csv2report_worker",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def csv2report_worker(queue_csv2report,logger,lokerfile):\n    while True:\n        try:\n            path = queue_csv2report.get(timeout=30)\n        except:\n            continue\n        # print(f\"[CSV2REPORT] Generating report for: {path}\")\n        parameter = get_parameter(path)\n        svn_url = f\"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf\"\n        composite_list = get_composite(logger=logger,svn_url=svn_url)",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "run_report",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def run_report(parameter, logger):\n    path=os.path.join(os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),\"csv\",os.path.basename(parameter['FILE'][parameter['WAFER']]['path']))\n    local_parameter = copy.deepcopy(parameter)\n    core.process_composite(local_parameter,path)\n    print(f\"[CSV2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}\")\n# --==================================================-- #\n# STDF2CSV PROCESS\n# --==================================================-- #\ndef stdf2csv_worker(queue_stdf2csv, queue_csv2report, logger):\n    while True:",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv_worker",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def stdf2csv_worker(queue_stdf2csv, queue_csv2report, logger):\n    while True:\n        try:\n            path = queue_stdf2csv.get(timeout=10)\n        except:\n            continue\n        # print(f\"[STDF2CSV] Processing: {path}\")\n        stdf_to_csv(path,logger)\n        queue_csv2report.put(path)\n        queue_stdf2csv.task_done()",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def stdf_to_csv(path, logger):\n    parameter = get_parameter(path)\n    print(f\"[STDF2CSV] Start stdf2csv {parameter['CODE']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}\")\n    process_stdf_to_csv(path, logger)\n    print(f\"[STDF2CSV] End stdf2csv {parameter['CODE']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}\")\ndef process_stdf_to_csv(path, logger):\n    base_path = os.path.dirname(path)\n    csv_folder = os.path.join(base_path, \"csv\")\n    os.makedirs(csv_folder, exist_ok=True)\n    csv_path = os.path.join(csv_folder, os.path.basename(path))",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "process_stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def process_stdf_to_csv(path, logger):\n    base_path = os.path.dirname(path)\n    csv_folder = os.path.join(base_path, \"csv\")\n    os.makedirs(csv_folder, exist_ok=True)\n    csv_path = os.path.join(csv_folder, os.path.basename(path))\n    stdf2csv.stdf2csv_converter(os.path.join(path), csv_path)\n    # print(f\"[STDF2CSV] Finished processing: {path}\")\n# --==================================================-- #\n# MAIN PROCESS\n# --==================================================-- #",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pollingv2",
+        "description": "src.pollingv2",
+        "peekOfCode": "def main():\n    multiprocessing.set_start_method(\"spawn\")\n    manager = multiprocessing.Manager()\n    lokerfile=manager.dict()\n    # Initialize loggers within the main function\n    polling_logger = setup_logger('polling', 'polling.log')\n    stdf2csv_logger = setup_logger('stdf2csv', 'stdf2csv.log')\n    csv2report_logger = setup_logger('csv2report', 'csv2report.log')\n    queue_stdf2csv = multiprocessing.JoinableQueue()\n    queue_csv2report = multiprocessing.JoinableQueue()",
+        "detail": "src.pollingv2",
+        "documentation": {}
+    },
+    {
+        "label": "LineCountRotatingFileHandler",
+        "kind": 6,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "class LineCountRotatingFileHandler(BaseRotatingHandler):\n    \"\"\"\n    Custom rotating file handler that rotates log files based on line count\n    instead of file size.\n    \"\"\"\n    def __init__(self, filename, max_lines=1000, backup_count=1, **kwargs):\n        \"\"\"\n        Initialize the handler.\n        Args:\n            filename (str): Path to the log file",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def setup_logger(name, log_file, level=logging.INFO):\n    \"\"\"\n    Set up a logger with custom rotating file handler.\n    Args:\n        name (str): Logger name\n        log_file (str): Path to log file\n        level (int): Logging level\n    Returns:\n        logging.Logger: Configured logger instance\n    \"\"\"",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "get_parameter",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def get_parameter(path):\n    \"\"\"\n    Extract parameters from file path.\n    Args:\n        path (str): File path to parse\n    Returns:\n        dict: Dictionary containing extracted parameters\n    \"\"\"\n    # Split path and extract components\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\", 10)[4:]",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "get_composite",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def get_composite(logger, svn_url):\n    \"\"\"\n    Retrieve composite list from SVN repository.\n    Args:\n        logger (logging.Logger): Logger instance\n        svn_url (str): SVN repository URL\n    Returns:\n        list: List of composite names\n    \"\"\"\n    try:",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "check_condition",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def check_condition(folder_path, list_condition):\n    \"\"\"\n    Check if folder contains anaflow files and add them to condition list.\n    Args:\n        folder_path (str): Path to folder to check\n        list_condition (list): List to append found file paths\n    Returns:\n        bool: True if at least one file was found, False otherwise\n    \"\"\"\n    found = False",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "check_csv_folder",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def check_csv_folder(path, list_stdf2csv, seen_paths):\n    \"\"\"\n    Check if CSV folder needs processing and add STDF files to processing list.\n    Args:\n        path (str): Path to check\n        list_stdf2csv (list): List to append STDF file paths\n        seen_paths (set): Set of already processed paths\n    Returns:\n        bool: True if CSV folder is ready for report generation\n    \"\"\"",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "check_report_folder",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def check_report_folder(path, list_csv2report, logger):\n    \"\"\"\n    Check if report folder needs processing and add to report generation list.\n    Args:\n        path (str): Path to check\n        list_csv2report (list): List to append file paths for report generation\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    std_files = [f for f in os.listdir(path) if f.endswith((\".std\", \".stdf\"))]\n    if len(std_files) == 1:",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "polling",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def polling(directory, logger):\n    \"\"\"\n    Poll directory for new files to process.\n    Args:\n        directory (str): Root directory to poll\n        logger (logging.Logger): Logger instance\n    Returns:\n        tuple: Lists of files for STDF2CSV, CSV2Report, and condition processing\n    \"\"\"\n    # Regex patterns and allowed values",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "csv2report_worker",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def csv2report_worker(path, logger):\n    \"\"\"\n    Worker function for CSV to report conversion.\n    Args:\n        path (str): Path to STDF file\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    parameter = get_parameter(path)\n    svn_url = (f\"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf\")\n    composite_list = get_composite(logger=logger, svn_url=svn_url)",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "run_report",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def run_report(parameter, logger):\n    \"\"\"\n    Execute report generation for given parameters.\n    Args:\n        parameter (dict): Parameter dictionary\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    csv_path = os.path.join(\n        os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),\n        \"csv\",",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv_worker",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def stdf2csv_worker(path, logger):\n    \"\"\"\n    Worker function for STDF to CSV conversion.\n    Args:\n        path (str): Path to STDF file\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    stdf_to_csv(path, logger)\ndef stdf_to_csv(path, logger):\n    \"\"\"",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def stdf_to_csv(path, logger):\n    \"\"\"\n    Convert STDF file to CSV format.\n    Args:\n        path (str): Path to STDF file\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    parameter = get_parameter(path)\n    print(f\"[STDF2CSV] Start stdf2csv {parameter['CODE']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}\")\n    process_stdf_to_csv(path, logger)",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "process_stdf_to_csv",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def process_stdf_to_csv(path, logger):\n    \"\"\"\n    Process STDF file conversion to CSV.\n    Args:\n        path (str): Path to STDF file\n        logger (logging.Logger): Logger instance\n    \"\"\"\n    base_path = os.path.dirname(path)\n    csv_folder = os.path.join(base_path, \"csv\")\n    os.makedirs(csv_folder, exist_ok=True)",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pollingv3",
+        "description": "src.pollingv3",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Initialize loggers\n    polling_logger = setup_logger('polling', 'polling.log')\n    stdf2csv_logger = setup_logger('stdf2csv', 'stdf2csv.log')\n    csv2report_logger = setup_logger('csv2report', 'csv2report.log')\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    while True:",
+        "detail": "src.pollingv3",
+        "documentation": {}
+    },
+    {
+        "label": "ProcessType",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class ProcessType(Enum):\n    \"\"\"Enumeration for different processing types.\"\"\"\n    STDF2CSV = \"stdf2csv\"\n    CSV2REPORT = \"csv2report\"\n    CONDITION2REPORT = \"condition2report\"\nclass FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"\n    CONDITION = \"condition\"",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "FileType",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"\n    CONDITION = \"condition\"\n@dataclass\nclass ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "ProcessingConfig",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}\n    product_regex = re.compile(r\"^[A-F0-9]{3}$\")\n    max_lines_per_log = 1000\n    backup_count = 1\n# ==================================================\n# Logging Configuration\n# ==================================================",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "LineCountRotatingFileHandler",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class LineCountRotatingFileHandler(BaseRotatingHandler):\n    \"\"\"\n    Custom rotating file handler that rotates log files based on line count\n    instead of file size.\n    \"\"\"\n    def __init__(self, filename, max_lines=1000, backup_count=1, **kwargs):\n        \"\"\"\n        Initialize the handler.\n        Args:\n            filename (str): Path to the log file",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterExtractor",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class ParameterExtractor:\n    \"\"\"Handles parameter extraction from file paths.\"\"\"\n    @staticmethod\n    def get_parameter_from_stdf_path(path: str) -> Dict:\n        \"\"\"\n        Extract parameters from STDF file path.\n        Args:\n            path: STDF file path to parse\n        Returns:\n            Dictionary containing extracted parameters",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "CompositeManager",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class CompositeManager:\n    \"\"\"Handles composite list retrieval and validation.\"\"\"\n    @staticmethod\n    def get_composite_list(logger: logging.Logger, svn_url: str) -> List[str]:\n        \"\"\"\n        Retrieve composite list from SVN repository.\n        Args:\n            logger: Logger instance\n            svn_url: SVN repository URL\n        Returns:",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "FileProcessor",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class FileProcessor:\n    \"\"\"Handles file processing operations.\"\"\"\n    @staticmethod\n    def check_completion_marker(path: str, marker_name: str) -> bool:\n        \"\"\"\n        Check if completion marker file exists.\n        Args:\n            path: Directory path to check\n            marker_name: Name of marker file\n        Returns:",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "DirectoryPoller",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class DirectoryPoller:\n    \"\"\"Handles directory polling for new files.\"\"\"\n    def __init__(self, config: ProcessingConfig):\n        self.config = config\n    def check_condition_files(self, folder_path: str, condition_list: List[str]) -> bool:\n        \"\"\"\n        Check if folder contains a CONDITION subdirectory with anaflow files and add them to condition list.\n        Args:\n            folder_path: Path to flow folder (e.g., EWS1, EWS2, FT, etc.)\n            condition_list: List to append found file paths",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "ProcessingWorker",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class ProcessingWorker:\n    \"\"\"Base class for processing workers.\"\"\"\n    def __init__(self, process_type: ProcessType):\n        self.process_type = process_type\n    def create_title(self, parameter: Dict, composite: str) -> str:\n        \"\"\"Create title based on process type and parameters.\"\"\"\n        if self.process_type == ProcessType.CONDITION2REPORT:\n            return f\"{composite.upper().replace('_', ' ')} {parameter['FLOW'].upper()} condition\"\n        else:\n            return f\"{composite.upper().replace('_', ' ')} {parameter['FLOW'].upper()} {parameter['TYPE'].lower()}\"",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "ReportWorker",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class ReportWorker(ProcessingWorker):\n    \"\"\"Worker for report generation (CSV2REPORT and CONDITION2REPORT).\"\"\"\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Main processing function for condition report generation.\n        Updated to handle CONDITION subdirectory structure.\n        Args:\n            path: Path to condition file to process\n            logger: Logger instance\n        \"\"\"",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "STDFWorker",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class STDFWorker(ProcessingWorker):\n    \"\"\"Worker for STDF to CSV conversion.\"\"\"\n    def __init__(self):\n        super().__init__(ProcessType.STDF2CSV)\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Convert STDF file to CSV format.\n        Args:\n            path: Path to STDF file\n            logger: Logger instance",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "STDFProcessingSystem",
+        "kind": 6,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "class STDFProcessingSystem:\n    \"\"\"Main processing system that coordinates all operations.\"\"\"\n    def __init__(self, watch_path: str):\n        \"\"\"\n        Initialize the STDF processing system.\n        Args:\n            watch_path: Root directory to monitor for files\n        \"\"\"\n        self.watch_path = watch_path\n        self.config = ProcessingConfig()",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "setup_logger",
+        "kind": 2,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging.Logger:\n    \"\"\"\n    Set up a logger with custom rotating file handler.\n    Args:\n        name: Logger name\n        log_file: Path to log file\n        level: Logging level\n    Returns:\n        Configured logger instance\n    \"\"\"",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.pollingv4",
+        "description": "src.pollingv4",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:",
+        "detail": "src.pollingv4",
+        "documentation": {}
+    },
+    {
+        "label": "power_of_10",
+        "kind": 2,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "def power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "find_value",
+        "kind": 2,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "def find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")\n            return 0.1\n        elif calc_type == \"max\":\n            max_value = 0.1\n            # print(f\"Valore attuale: {value} Massimo: {max_value}\")\n            return -0.1",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "rework_stdf",
+        "kind": 2,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "def rework_stdf(parameter):\n    # print(parameter)\n    composite = parameter[\"COM\"]\n    flwtp = parameter[\"TYPE\"]\n    groosgood30 = 0\n    p = os.listdir()\n    ptr = pd.DataFrame()\n    ftr = pd.DataFrame()\n    population = pd.DataFrame()\n    ptr_dict = {}",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "def main():\n    import json\n    parameter = {\n        \"TITLE\": \"MBIST\",\n        \"COM\": \"mbist\",\n        \"FLOW\": \"EWS\",\n        \"TYPE\": \"STD\",\n        \"PRODUCT\": \"Mosquito\",\n        \"CODE\": \"44E\",\n        \"LOT\": \"P6AX86\",",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "debug",
+        "kind": 5,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "debug = False\nFILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "FILENAME",
+        "kind": 5,
+        "importPath": "src.rework_stdf",
+        "description": "src.rework_stdf",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1",
+        "detail": "src.rework_stdf",
+        "documentation": {}
+    },
+    {
+        "label": "rename_files",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):\n            base = os.path.splitext(filename)[0]\n            new_name = f\"{base}{new_ext}\"",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "convert_files",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def convert_files(folder, hex_file, option):\n    uty.write_log(f\"Extract .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return\n    for filename in os.listdir(folder):\n        if filename.endswith(\".std\"):\n            cmd = f'\"{hex_file}\" \"{os.path.join(folder, filename)}\" {option}'\n            debug and print(cmd)\n            subprocess.run(cmd, shell=True)",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "move_csv_files",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def move_csv_files(src_folder, dest_folder):\n    uty.write_log(f\"Move .csv\", FILENAME)\n    if not os.path.exists(src_folder):\n        print(f\"Error: The source folder {src_folder} does not exist.\")\n        return []\n    if not os.path.exists(dest_folder):\n        os.makedirs(dest_folder)\n    csv_name = \"\"\n    for filename in os.listdir(src_folder):\n        if filename.endswith(\".csv\"):",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "get_folder_size",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def get_folder_size(folder):\n    total_size = 0\n    for dirpath, dirnames, filenames in os.walk(folder):\n        for f in filenames:\n            fp = os.path.join(dirpath, f)\n            total_size += os.path.getsize(fp)\n    return total_size\ndef delete_related_files(csv_folder, std_file_prefix):\n    uty.write_log(f\"MAX CAHCHE remove old .csv\", FILENAME)\n    related_files = [f for f in os.listdir(csv_folder) if f.startswith(std_file_prefix)]",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "delete_related_files",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def delete_related_files(csv_folder, std_file_prefix):\n    uty.write_log(f\"MAX CAHCHE remove old .csv\", FILENAME)\n    related_files = [f for f in os.listdir(csv_folder) if f.startswith(std_file_prefix)]\n    for f in related_files:\n        os.remove(os.path.join(csv_folder, f))\ndef stdf2csv_converter(path_fin, path_fout, option=\"\"):\n    hex_file = os.path.abspath(\"src/STDF2CSV.exe\")\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" -t'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv_converter",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def stdf2csv_converter(path_fin, path_fout, option=\"\"):\n    hex_file = os.path.abspath(\"src/STDF2CSV.exe\")\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" -t'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" {option}'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)\n    move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))\ndef stdf2csv(stdf_folders, csv_folder, option=\"\"):",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv",
+        "kind": 2,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "def stdf2csv(stdf_folders, csv_folder, option=\"\"):\n    # if  os.path.exists(csv_folder):\n    #     shutil.rmtree(csv_folder)\n    if not os.path.exists(csv_folder):\n        os.makedirs(csv_folder)\n    csv_name = []\n    for stdf_folder in stdf_folders:\n        rename_files(stdf_folder, \".stdf\", \".std\")\n        std_files = [f for f in os.listdir(stdf_folder) if f.endswith('.std')]\n        existing_csv_files = list(set(f[:-8] for f in os.listdir(csv_folder) if f.endswith('.csv')))",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "debug",
+        "kind": 5,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "debug = False\nFILENAME = os.path.abspath(\"src/run.log\")\ndef rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "FILENAME",
+        "kind": 5,
+        "importPath": "src.stdf2csv",
+        "description": "src.stdf2csv",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):\n            base = os.path.splitext(filename)[0]",
+        "detail": "src.stdf2csv",
+        "documentation": {}
+    },
+    {
+        "label": "toExcel",
+        "kind": 2,
+        "importPath": "src.stdf2csvnew",
+        "description": "src.stdf2csvnew",
+        "peekOfCode": "def toExcel(fname, tables):\n    \"\"\"Esporta le tabelle da toTables a CSV\"\"\"\n    for k, v in tables.items():\n        # Assicurati che l'ordine delle colonne rispetti le specifiche\n        record = [r for r in V4.records if r.__class__.__name__.upper() == k]\n        if len(record) == 0:\n            print(\n                \"Ignora l'esportazione della tabella %s: Nessun tipo di record esistente.\"\n                % k\n            )",
+        "detail": "src.stdf2csvnew",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2csv_converter",
+        "kind": 2,
+        "importPath": "src.stdf2csvnew",
+        "description": "src.stdf2csvnew",
+        "peekOfCode": "def stdf2csv_converter(fin,fout):\n    print(\"Importing %s\" % fin)\n    dfs = STDF2DataFrame(fin)\n    print(\"Exporting to %s\" % fout)\n    toExcel(fout, dfs)\n    # if len(sys.argv) == 1:\ndef main():\n    #     print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    # else:\n    #     fin = sys.argv[1]",
+        "detail": "src.stdf2csvnew",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.stdf2csvnew",
+        "description": "src.stdf2csvnew",
+        "peekOfCode": "def main():\n    #     print(\"Usage: %s <stdf file>\" % (sys.argv[0]))\n    # else:\n    #     fin = sys.argv[1]\n    #     if len(sys.argv) > 2:\n    #         fout = sys.argv[2]\n    #     else:\n    #         fout = fin[: fin.rfind(\".\")]\n    #     print(\"Importing %s\" % fin)\n    #     dfs = STDF2DataFrame(fin)",
+        "detail": "src.stdf2csvnew",
+        "documentation": {}
+    }
+]

@@ -58,7 +58,7 @@ def process_composite(parameter, csv_name):
         print(f"Error processing composite: {e}")
 
 
-def process_condition(parameter, composite, stdf_folder):
+def process_condition(parameter, stdf_folder):
     """
     Process a FAKE composite for condition report and execute generation.
 
@@ -70,12 +70,17 @@ def process_condition(parameter, composite, stdf_folder):
     """
 
     uty.write_log(f"Converting ANAFLOW by COM", FILENAME)
+    with open("src/jupiter/personalization.json", "r") as file:
+        data = json.load(file)
+
+    product_data = data.get(parameter["CODE"], {})
+    product_name = product_data.get("product_name", {})
+    
+    parameter["PRODUCT"] = product_name
     csv_file = condition_rework(parameter, stdf_folder)
     if len(csv_file) == 0:
-        print(f"No Extaction good : {composite}")
-        uty.write_log(f"No Extaction good : {composite}", FILENAME)
+        uty.write_log(f"No Extaction good : {parameter["COM"]}", FILENAME)
         return
-    parameter["COM"] = composite
     parameter["TEST_NUM"] = ""
     parameter["CSV"] = csv_file
 
@@ -257,6 +262,13 @@ def convert_notebook_to_html(parameter):
                 os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
                 (parameter["LOT"]+"_"+parameter["WAFER"]),
                 "VOLUME",
+                "Report",
+            )
+        )
+    elif parameter["TYPE"] == "CONDITION" : 
+        dir_output = os.path.abspath(
+            os.path.join(
+                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]),
                 "Report",
             )
         )
