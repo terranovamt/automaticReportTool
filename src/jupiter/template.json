@@ -1,0 +1,316 @@
+{
+  "get_data": {
+    "prefix": ["get_data"],
+    "body": [
+      "get_data ( ",
+      "burst_index:=            ${1:1}, ",
+      "pins:=                   ${2:PINS}, ",
+      "start_vector:=           ${3:0}, ",
+      "stop_vector:=            ${4:1}, ",
+      "word_length:=            ${5:0}, ",
+      "store_var:=              ${6:}, ",
+      "bits_lsb_first:=         ${7:0}, ",
+      "words_lsb_first:=        ${8:0}, ",
+      "log_file:=               ${9:}, ",
+      "addr_value:=             ${10:0}, ",
+      "addr_pins:=              ${11:}, ",
+      "addr_start_vector:=      ${12:0}, ",
+      "addr_length:=            ${13:0}, ",
+      "addr_vec_per_bit:=       ${14:1}, ",
+      "addr_vec_inter_discard:= ${15:0}, ",
+      "addr_lsb_first:=         ${16:0}, ",
+      "user_limits:=            ${17:}, ",
+      "data_type:=              ${18:uint}, ",
+      "compare_block:=          ${19:} ",
+      ")"
+    ]
+  },
+  "set_data": {
+    "prefix": ["set_data"],
+    "body": [
+      "set_data ( ",
+      "burst_index:=            ${1:1}, ",
+      "pins:=                   ${2:PINS}, ",
+      "value:=                  ${3:VALUE}, ",
+      "start_vector:=           ${4:NUMBER}, ",
+      "word_length:=            ${5:NUMBER}, ",
+      "vec_per_bit:=            ${6:1}, ",
+      "vect_inter_discard:=     ${7:0}, ",
+      "bits_lsb_first:=         ${8:0}, ",
+      "exec_pattern:=           ${9:1}, ",
+      "addr_pins:=              ${10:}, ",
+      "addr_value:=             ${11:0}, ",
+      "addr_start_vector:=      ${12:0}, ",
+      "addr_length:=            ${13:0}, ",
+      "addr_vec_per_bit:=       ${14:1}, ",
+      "addr_vec_inter_discard:= ${15:0}, ",
+      "addr_lsb_first:=         ${16:0} ",
+      ")"
+    ]
+  },
+  "ftrim": {
+    "prefix": ["ftrim"],
+    "body": ["ftrim ( ", "target:=       ${1:TARGET}, ", "trim_pin:=     ${2:PINS}, ", "nbits:=        ${3:NBITS}, ", "start_vector:= ${4:NUMBER}, ", "meas_pin:=     ${5:PINS}, ", "nsamples:=     ${6:NUMBER}, ", "store_var:=    ${7:}, ", "limit_min:=    ${8:MIN}, ", "limit_max:=    ${9:MAX}, ", "divider:=      ${10:1}, ", "method:=       ${11:}, ", "rising_curve:= ${12:}, ", "signed_curve:= ${13:}, ", "burst_index:=  ${14:1}, ", "lookup:=       ${15:}, ", "openpins:=     ${16:} ", ")"]
+  },
+  "ftrim_ser": {
+    "prefix": ["ftrim_ser"],
+    "body": [
+      "ftrim_ser ( ",
+      "target:=       ${1:TARGET}, ",
+      "trim_pin:=     ${2:PINS}, ",
+      "nbits:=        ${3:NBITS}, ",
+      "start_vector:= ${4:NUMBER}, ",
+      "vec_per_bit:=  ${5:1}, ",
+      "lsb_first:=    ${6:1}, ",
+      "meas_pin:=     ${7:PINS}, ",
+      "nsamples:=     ${8:NUMBER}, ",
+      "store_var:=    ${9:}, ",
+      "limit_min:=    ${10:MIN}, ",
+      "limit_max:=    ${11:MAX}, ",
+      "divider:=      ${12:1}, ",
+      "method:=       ${13:}, ",
+      "rising_curve:= ${14:}, ",
+      "signed_curve:= ${15:}, ",
+      "burst_index:=  ${16:1}, ",
+      "lookup:=       ${17:}, ",
+      "openpins:=     ${18:} ",
+      ")"
+    ]
+  },
+  "itrim": {
+    "prefix": ["itrim"],
+    "body": ["itrim ( ", "target:=       ${1:TARGET}, ", "trim_pin:=     ${2:PINS}, ", "meas_pin:=     ${3:PINS}, ", "force:=        ${4:VOLTAGE}, ", "store_var:=    ${5:}, ", "limit_min:=    ${6:MIN}, ", "limit_max:=    ${7:MAX}, ", "delay:=        ${8:1}, ", "method:=       ${9:}, ", "rising_curve:= ${10:}, ", "signed_curve:= ${11:}, ", "burst_index:=  ${12:1}, ", "lookup:=       ${13:}, ", "openpins:=     ${14:} ", ")"]
+  },
+  "itrim_accurate": {
+    "prefix": ["itrim_accurate"],
+    "body": ["itrim_accurate ( ", "target:=       ${1:TARGET}, ", "trim_pin:=     ${2:PINS}, ", "meas_pin:=     ${3:PINS}, ", "force:=        ${4:VOLTAGE}, ", "store_var:=    ${5:}, ", "limit_min:=    ${6:MIN}, ", "limit_max:=    ${7:MAX}, ", "delay:=        ${8:1}, ", "method:=       ${9:}, ", "rising_curve:= ${10:}, ", "signed_curve:= ${11:}, ", "burst_index:=  ${12:1}, ", "lookup:=       ${13:}, ", "openpins:=     ${14:} ", ")"]
+  },
+  "itrim_ser": {
+    "prefix": ["itrim_ser"],
+    "body": [
+      "itrim_ser ( ",
+      "target:=       ${1:TARGET}, ",
+      "trim_pin:=     ${2:PINS}, ",
+      "nbits:=        ${3:NBITS}, ",
+      "start_vector:= ${4:NUMBER}, ",
+      "vec_per_bit:=  ${5:1}, ",
+      "lsb_first:=    ${6:1}, ",
+      "meas_pin:=     ${7:PINS}, ",
+      "force:=        ${8:VOLTAGE}, ",
+      "store_var:=    ${9:}, ",
+      "limit_min:=    ${10:MIN}, ",
+      "limit_max:=    ${11:MAX}, ",
+      "delay:=        ${12:1}, ",
+      "method:=       ${13:}, ",
+      "rising_curve:= ${14:}, ",
+      "signed_curve:= ${15:}, ",
+      "burst_index:=  ${16:1}, ",
+      "lookup:=       ${17:}, ",
+      "openpins:=     ${18:} ",
+      ")"
+    ]
+  },
+  "itrim_ser_accurate": {
+    "prefix": ["itrim_ser_accurate"],
+    "body": [
+      "itrim_ser_accurate ( ",
+      "target:=       ${1:TARGET}, ",
+      "trim_pin:=     ${2:PINS}, ",
+      "nbits:=        ${3:NBITS}, ",
+      "start_vector:= ${4:NUMBER}, ",
+      "vec_per_bit:=  ${5:1}, ",
+      "lsb_first:=    ${6:1}, ",
+      "meas_pin:=     ${7:PINS}, ",
+      "force:=        ${8:VALUE}, ",
+      "store_var:=    ${9:}, ",
+      "limit_min:=    ${10:MIN}, ",
+      "limit_max:=    ${11:MAX}, ",
+      "delay:=        ${12:1}, ",
+      "method:=       ${13:}, ",
+      "rising_curve:= ${14:}, ",
+      "signed_curve:= ${15:}, ",
+      "burst_index:=  ${16:1}, ",
+      "lookup:=       ${17:}, ",
+      "openpins:=     ${18:} ",
+      ")"
+    ]
+  },
+  "vtrim": {
+    "prefix": ["vtrim"],
+    "body": ["vtrim ( ", "target:=       ${1:TARGET}, ", "trim_pin:=     ${2:PINS}, ", "meas_pin:=     ${3:PINS}, ", "force:=        ${4:CURRENT}, ", "store_var:=    ${5:}, ", "limit_min:=    ${6:MIN}, ", "limit_max:=    ${7:MAX}, ", "delay:=        ${8:1}, ", "method:=       ${9:}, ", "rising_curve:= ${10:}, ", "signed_curve:= ${11:}, ", "burst_index:=  ${12:1}, ", "lookup:=       ${13:}, ", "openpins:=     ${14:} ", ")"]
+  },
+  "vtrim_accurate": {
+    "prefix": ["vtrim_accurate"],
+    "body": ["vtrim_accurate ( ", "target:=       ${1:TARGET}, ", "trim_pin:=     ${2:PINS}, ", "meas_pin:=     ${3:PINS}, ", "force:=        ${4:CURRENT}, ", "store_var:=    ${5:}, ", "limit_min:=    ${6:MIN}, ", "limit_max:=    ${7:MAX}, ", "delay:=        ${8:1}, ", "method:=       ${9:}, ", "rising_curve:= ${10:}, ", "signed_curve:= ${11:}, ", "burst_index:=  ${12:1}, ", "lookup:=       ${13:}, ", "openpins:=     ${14:} ", ")"]
+  },
+  "vtrim_ser": {
+    "prefix": ["vtrim_ser"],
+    "body": [
+      "vtrim_ser ( ",
+      "target:=       ${1:TARGET}, ",
+      "trim_pin:=     ${2:PINS}, ",
+      "nbits:=        ${3:NBITS}, ",
+      "start_vector:= ${4:NUMBER}, ",
+      "vec_per_bit:=  ${5:1}, ",
+      "lsb_first:=    ${6:1}, ",
+      "meas_pin:=     ${7:PINS}, ",
+      "force:=        ${8:VALUE}, ",
+      "store_var:=    ${9:}, ",
+      "limit_min:=    ${10:MIN}, ",
+      "limit_max:=    ${11:MAX}, ",
+      "delay:=        ${12:1}, ",
+      "method:=       ${13:}, ",
+      "rising_curve:= ${14:}, ",
+      "signed_curve:= ${15:}, ",
+      "burst_index:=  ${16:1}, ",
+      "lookup:=       ${17:}, ",
+      "openpins:=     ${18:} ",
+      ")"
+    ]
+  },
+  "vtrim_ser_accurate": {
+    "prefix": ["vtrim_ser_accurate"],
+    "body": [
+      "vtrim_ser_accurate ( ",
+      "target:=       ${1:TARGET}, ",
+      "trim_pin:=     ${2:PINS}, ",
+      "nbits:=        ${3:NBITS}, ",
+      "start_vector:= ${4:NUMBER}, ",
+      "vec_per_bit:=  ${5:1}, ",
+      "lsb_first:=    ${6:1}, ",
+      "meas_pin:=     ${7:PINS}, ",
+      "force:=        ${8:VALUE}, ",
+      "store_var:=    ${9:}, ",
+      "limit_min:=    ${10:MIN}, ",
+      "limit_max:=    ${11:MAX}, ",
+      "delay:=        ${12:1}, ",
+      "method:=       ${13:}, ",
+      "rising_curve:= ${14:}, ",
+      "signed_curve:= ${15:}, ",
+      "burst_index:=  ${16:1}, ",
+      "lookup:=       ${17:}, ",
+      "openpins:=     ${18:} ",
+      ")"
+    ]
+  },
+  "fmeas": {
+    "prefix": ["fmeas"],
+    "body": ["fmeas ( ", "dut_pin:=   ${1:PINS}, ", "limit_min:= ${2:MIN}, ", "limit_max:= ${3:MAX}, ", "vector:=    ${5:PATTLINE}, ", "nsamples:=  ${6:NUMBER}, ", "divider:=   ${7:1}, ", "store_var:= ${8:1}, ", "openpins:=  ${9:} ", ")"]
+  },
+  "idd_dynamic": {
+    "prefix": ["idd_dynamic"],
+    "body": ["idd_dynamic ( ", "dps:=       ${1:DPS}, ", "openpins:=  ${2:}, ", "limit_min:= ${3:MIN}, ", "limit_max:= ${4:MAX}, ", "delay:=     ${5:1}, ", "store_var:= ${6:}, ", "range:=     ${7:auto} ", ")"]
+  },
+  "idd_static": {
+    "prefix": ["idd_static"],
+    "body": ["idd_static ( ", "dps:=       ${1:DPS}, ", "openpins:=  ${2:}, ", "limit_min:= ${3:MIN}, ", "limit_max:= ${4:MAX}, ", "delay:=     ${5:1}, ", "store_var:= ${6:}, ", "range:=     ${7:auto}", ")"]
+  },
+  "iddq": {
+    "prefix": ["iddq"],
+    "body": ["iddq ( ", "dps:=       ${1:DPS}, ", "openpins:=  ${2:}, ", "limit_min:= ${3:MIN}, ", "limit_max:= ${4:MAX}, ", "vectors:=   ${5:NVECTOR}, ", "delay:=     ${6:1}, ", "nsamples:=  ${7:16} ", "store_var:= ${8:}, ", "range:=     ${9:auto} ", ")"]
+  },
+  "iddq_accurate": {
+    "prefix": ["iddq_accurate"],
+    "body": [
+      "iddq_accurate ( ",
+      "dps:=                    ${1:DPS}, ",
+      "openpins:=               ${2:}, ",
+      "limit_min:=              ${3:MIN}, ",
+      "limit_max:=              ${4:MAX}, ",
+      "delta_min:=              ${5:DELTAMIN}, ",
+      "delta_max:=              ${6:DELTAMAX}, ",
+      "vectors:=                ${7:NVECTOR}, ",
+      "get_delta_after_stress:= ${8:OFF}, ",
+      "delay:=                  ${9:1}, ",
+      "nsamples:=               ${10:64} ",
+      "store_var:=              ${11:}, ",
+      "range:=                  ${12:auto} ",
+      "get_delta_vectors:=      ${13:OFF}, ",
+      ")"
+    ]
+  },
+  "iddq_delta": {
+    "prefix": ["iddq_delta"],
+    "body": [
+      "iddq_delta ( ",
+      "dps:=                    ${1:DPS}, ",
+      "openpins:=               ${2:}, ",
+      "limit_min:=              ${3:MIN}, ",
+      "limit_max:=              ${4:MAX}, ",
+      "delta_min:=              ${5:DELTAMIN}, ",
+      "delta_max:=              ${6:DELTAMAX}, ",
+      "vectors:=                ${7:NVECTOR}, ",
+      "get_delta_after_stress:= ${8:OFF}, ",
+      "delay:=                  ${9:1}, ",
+      "nsamples:=               ${10:64} ",
+      "store_var:=              ${11:}, ",
+      "range:=                  ${12:auto} ",
+      "get_delta_vectors:=      ${13:OFF}, ",
+      ")"
+    ]
+  },
+  "imeas": {
+    "prefix": ["imeas"],
+    "body": ["imeas ( ", "pingroup:=      ${1:PINS}, ", "force_voltage:= ${2:VOLTAGE}, ", "limit_min:=     ${3:MIN}, ", "limit_max:=     ${4:MAX}, ", "delay:=         ${5:1}, ", "store_var:=     ${6:}, ", "openpins:=      ${7:} ", ")"]
+  },
+  "imeas_accurate": {
+    "prefix": ["imeas_accurate"],
+    "body": ["imeas_accurate ( ", "pingroup:=      ${1:PINS}, ", "force_voltage:= ${2:VOLTAGE}, ", "limit_min:=     ${3:MIN}, ", "limit_max:=     ${4:MAX}, ", "delay:=         ${5:1}, ", "store_var:=     ${6:}, ", "openpins:=      ${7:}, ", "range:=         ${8:auto}, ", "measure_mode:=  ${9:parallel} ", ")"]
+  },
+  "vmeas": {
+    "prefix": ["vmeas"],
+    "body": ["vmeas ( ", "pingroup:=      ${1:PINS}, ", "force_current:= ${2:CURRENTE}, ", "limit_min:=     ${3:MIN}, ", "limit_max:=     ${4:MAX}, ", "delay:=         ${5:1}, ", "store_var:=     ${6:}, ", "openpins:=      ${7:}, ", "range:=         ${8:auto}, ", "precharge:=     ${9:auto}, ", "load_pin:=      ${10:}, ", "load_current:=  ${11:0}, ", "measure_mode:=  ${12:parallel}, ", "vterm:=         ${13:}", ")"]
+  },
+  "vmeas_accurate": {
+    "prefix": ["vmeas_accurate"],
+    "body": ["vmeas_accurate ( ", "pingroup:=      ${1:PINS}, ", "force_current:= ${2:CURRENTE}, ", "limit_min:=     ${3:MIN}, ", "limit_max:=     ${4:MAX}, ", "delay:=         ${5:1}, ", "store_var:=     ${6:1}, ", "openpins:=      ${7:} ", "range:=         ${8:auto}, ", "precharge:=     ${9:auto}, ", "measure_mode:=  ${10:parallel} ", ")"]
+  },
+  "assign_value": {
+    "prefix": ["assign_value"],
+    "body": ["assign_value ( ", "varname:= ${1:TARGET}, ", "value:=   ${2:VALUE} ", ")"]
+  },
+  "functest": {
+    "prefix": ["functest"],
+    "body": ["functest ( ", "compare_block:= ${1:TARGET}", ")"]
+  },
+  "functest_source": {
+    "prefix": ["functest_source"],
+    "body": ["functest_source ( ", "instrument:=    ${1:}, ", "compare_block:= default_cb, ", "mode:=          ${2:}, ", "sourcepins:=    ${3:PIN}, ", "source:=        ${4:VALUEtoSOURCE}, ", "open_pins:=      ", ")"]
+  },
+  "calc_equation": {
+    "prefix": ["calc_equation"],
+    "body": ["calc_equation ( ", "equation:=  ${1:EQUATION}, ", "varname:=   ${2:TARGET}, ", "limit_min:= ${3:}, ", "limit_max:= ${4:}, ", "unit:=      ${5:} ", ")"]
+  },
+  "search_level": {
+    "prefix": ["search_level"],
+    "body": ["search_level ( ", "spec:=          ${1:SPECIFIC}, ", "start:=         ${2:START_LEV}, ", "stop:=          ${3:STOP_LEV}, ", "resolution:=    ${4:RESOLUTION}, ", "algorithm:=     ${5:}, ", "store_var:=     ${6:none}, ", "limit_min:=     ${7:none}, ", "limit_max:=     ${8:none}, ", "compare_block:= ${9:default_cb}, ", "openpins:=       ", ")"]
+  },
+  "search_event": {
+    "prefix": ["search_event"],
+    "body": ["search_event ( ", "pin_name:=      ${1:PINS}, ", "edge_type:=     ${2:}, ", "limit_min:=     ${3:MIN}, ", "limit_max:=     ${4:MAX}, ", "store_var:=     ${5:}, ", "openpins:=      ${6:} ", ")"]
+  },
+  "Scan_Datalog_YT": {
+    "prefix": ["Scan_Datalog_YT"],
+    "body": [
+      "Scan_Datalog_YT ( ",
+      "VddCore_Pin_List:=    ${1:PIN}, ",
+      "VddPad_Pin_List:=     ${2:PIN}, ",
+      "Scanout_Pin_Group:=   ${3:PGRscanout}, ",
+      "Slipt_Number:=        ${4:0}, ",
+      "Cycles_Offset:=       ${5:0}, ",
+      "Expected_Value:=      ${6:yes}, ",
+      "STDF_Datalog:=        ${7:no}, ",
+      "Nb_Fails:=            ${8:20000}, ",
+      "YT_Config_File_Name:= ${9:Yield_Tracker.cfg}, ",
+      "Activeted_Wafers:=    ${10:@}, ",
+      "Datalog_1_over:=      ${11:1}, ",
+      "Shift_Frep:=          ${12:FREQ_SHIFT}, ",
+      "Capture_Freq:=        ${13:FREQ_SHIFT} ",
+      ")"
+    ]
+  },
+  "set_relay": {
+    "prefix": ["set_relay"],
+    "body": ["[TESTNUMBER] ${1:none}, ", "[BYP] none", "[BIN] none", "[SBNR] none", "[TAG] none", "[TIM] short", "[LEV] pwrdown", "[FUNC] set_relay ( ", "relay:= ${2:relay1 relay2 }, ", "value:= ${3:}, ", "delay:= ${4:3} ", ")", "[TEST] ${5:testname}"]
+  }
+}
