@@ -518,7 +518,7 @@ class DirectoryPoller:
             return False
             
         # Look for STDF files
-        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf"))]
+        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))]
         
         if len(std_files) == 1:
             csv_folder_path = os.path.join(path, "csv")
@@ -547,7 +547,7 @@ class DirectoryPoller:
             csv_list: List to append file paths for report generation
             logger: Logger instance
         """
-        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf"))]
+        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))]
         
         if len(std_files) == 1:
             report_folder_path = os.path.join(path, "Report")
@@ -649,11 +649,21 @@ class DirectoryPoller:
                 if index < max_iterations and not printed_something:
                     # Sposta il cursore su di 2 righe per sovrascrivere percentuale e prodotto
                     print("\033[A\033[A", end='', flush=True)
+                    print("")
+                    print("")
+                    print("\033[A\033[A", end='', flush=True)
                     
             # Se non è l'ultimo elemento e non sono state stampate righe, sovrascrive
             if index == max_iterations and not printed_something:
                 # Sposta il cursore su di 2 righe per sovrascrivere percentuale e prodotto
-                print("\033[A\033[A\n\n\033[A\033[A", end='', flush=True)
+                # print("\033[A\033[A\n\n\033[A\033[A", end='', flush=True)
+                
+                # print("\033[2A\033[2K\n\033[2K\033[2A", end='', flush=True)
+                print("\033[A\033[A", end='', flush=True)
+                print("                                                                                                    ")
+                print("                                                                                                    ")
+                print("\033[A\033[A", end='', flush=True)
+                
         
             # Stampa finale
             False and print("[Polling] Completed")
@@ -892,7 +902,7 @@ class ReportWorker(ProcessingWorker):
             """
             if os.path.exists(file_path):
                 try:
-                    print(f"[ERROR] reading {file_path}")
+                    # print(f"[ERROR] reading {file_path}")
                     return pd.read_csv(file_path, usecols=usecols, low_memory=False)
                 except Exception as e:
                     print(f"[ERROR] Error reading {file_path}: {e}")
