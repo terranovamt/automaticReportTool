@@ -1,9 +1,0 @@
-pandas
-numpy
-plotly
-matplotlib
-scipy
-IPython
-beautifulsoup4
-jupyter
-plotly_express

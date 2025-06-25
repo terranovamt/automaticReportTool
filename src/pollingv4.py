@@ -7,8 +7,6 @@ converting them to CSV format and generating reports based on composite configur
 
 import copy
 import logging
-import multiprocessing
-import multiprocessing.managers
 import os
 import re
 import subprocess
@@ -17,10 +15,11 @@ import json
 import pandas as pd
 from enum import Enum
 from dataclasses import dataclass
-from typing import List, Dict, Set, Tuple, Optional
+from typing import List, Dict, Set, Tuple
 
 import core
 import stdf2csv
+import shmoo
 
 # ==================================================
 # Constants and Configuration
@@ -31,12 +30,14 @@ class ProcessType(Enum):
     STDF2CSV = "stdf2csv"
     CSV2REPORT = "csv2report"
     CONDITION2REPORT = "condition2report"
+    SHMOO = "shmoo"
 
 class FileType(Enum):
     """Enumeration for file types."""
     STDF = "stdf"
     CSV = "csv"
     CONDITION = "condition"
+    SHMOO = "shmoo"
 
 @dataclass
 class ProcessingConfig:
@@ -529,12 +530,20 @@ class DirectoryPoller:
                 if len(csv_files) > 8:
                     return True
                     
-            # Add STDF file to processing list if not already processed
-            std_file_path = os.path.join(path, std_files[0])
-            if std_file_path not in seen_paths:
-                print(f"[Polling] New STDF found: {std_files[0]}")
-                stdf_list.append(std_file_path)
-                seen_paths.add(std_file_path)
+            f = std_files[0]
+            new_name = f.rsplit('.', 1)[0] + ".std"
+            old_path = os.path.join(path, f)
+            new_path = os.path.join(path, new_name)
+
+            if f.lower() != new_name.lower() and not os.path.exists(new_path):
+                os.rename(old_path, new_path)
+            else:
+                new_path = old_path
+
+            if new_path not in seen_paths:
+                print(f"[Polling] New STDF found: {new_name}")
+                stdf_list.append(new_path)
+                seen_paths.add(new_path)
                 
         return False
 
@@ -580,7 +589,42 @@ class DirectoryPoller:
                     print(f"[Polling] New CSV found: {std_files[0]}")
                     csv_list.append(std_file_path)
 
-    def poll_directory(self, directory: str, logger: logging.Logger) -> Tuple[List[str], List[str], List[str]]:
+    def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
+        """
+        Check if folder contains a SHMOO subdirectory and add it to shmoo list.
+        
+        Args:
+            folder_path: Path to flow folder (e.g., EWS1, EWS2, FT, etc.)
+            shmoo_list: List to append found folder paths
+            
+        Returns:
+            True if at least one folder was found
+        """
+        found = False
+        
+        # Look for SHMOO subdirectory within the flow folder
+        shmoo_folder_path = os.path.join(folder_path, "SHMOO")
+        
+        if os.path.isdir(shmoo_folder_path):
+            # Skip if no .shm files found in SHMOO folder
+            shm_files = [f for f in os.listdir(shmoo_folder_path) if f.endswith('.shm')]
+            if shm_files:  # Se ci sono file .shm, è un nuovo SHMOO
+                clean_path = shmoo_folder_path.replace(
+                    "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
+                ).replace("\\", " ")
+                print(f"[Polling] New SHMOO found: {clean_path}")
+                shmoo_list.append(shmoo_folder_path)
+                found = True
+            else:  # Nessun file .shm trovato, salta
+                clean_path = shmoo_folder_path.replace(
+                    "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
+                ).replace("\\", " ")
+                False and print(f"[Polling] No .shm files in {clean_path}")
+
+        
+        return found
+
+    def poll_directory(self, directory: str, logger: logging.Logger) -> Tuple[List[str], List[str], List[str], List[str]]:
         """
         Poll directory for new files to process with advanced progress display.
         
@@ -589,13 +633,49 @@ class DirectoryPoller:
             logger: Logger instance
             
         Returns:
-            Tuple of lists for STDF2CSV, CSV2Report, and condition processing
+            Tuple of lists for STDF2CSV, CSV2Report, condition, and shmoo processing
         """
+        import time
+        
         # Initialize lists and tracking sets
         seen_paths = set()
         stdf_list = []
         csv_list = []
         condition_list = []
+        shmoo_list = []  
+        
+        # Progress tracking
+        start_time = time.time()
+        last_progress_time = 0
+        
+        def _show_product_progress(current: int, total: int, product_name: str, start_time: float):
+            """Show progress bar with product name and performance metrics"""
+            nonlocal last_progress_time
+            current_time = time.time()
+            
+            # Update only every 0.1 seconds to avoid performance impact
+            if current_time - last_progress_time < 0.1 and current < total:
+                return
+                
+            percentage = (current / total) * 100 if total > 0 else 0
+            
+            # Progress bar visualization
+            bar_width = 30
+            if percentage >= 98.0:
+                filled = bar_width
+            else:
+                filled = int(bar_width * current / total) if total > 0 else 0
+            bar = '█' * filled + '░' * (bar_width - filled)
+            
+            # Truncate product name if too long
+            max_product_len = 3
+            display_product = product_name[:max_product_len] + "..." if len(product_name) > max_product_len else product_name
+            
+            progress_text = f"Product: {display_product:<5} [{bar}] {percentage:5.1f}% | {current}/{total}"
+            
+            print(f"\r{progress_text}", end='', flush=True)
+            last_progress_time = current_time
+        
         False and print("[Polling] Search valid paths...")
         
         # Walk through directory structure
@@ -603,21 +683,20 @@ class DirectoryPoller:
             matching_dirs = [d for d in dirs if self.config.product_regex.match(d)]
             max_iterations = len(matching_dirs)
             
-            for index, product in enumerate(matching_dirs, start=1):
-                # Calcola la percentuale
-                percentage = int((index / max_iterations) * 100)
+            if max_iterations == 0:
+                continue
                 
-                # Stampa percentuale e prodotto
-                print(f"{percentage}%")
-                print(f"{product}")
+            for index, product in enumerate(matching_dirs, start=1):
+                # Show progress with product name
+                _show_product_progress(index, max_iterations, product, start_time)
                 
                 product_path = os.path.join(root, product)
                 printed_something = False
                 
                 if os.path.isdir(product_path):
                     # Cattura stdout per verificare se vengono stampate righe
-                    import sys
                     from io import StringIO
+                    import sys
                     
                     # Salva lo stdout originale
                     original_stdout = sys.stdout
@@ -630,7 +709,7 @@ class DirectoryPoller:
                         # Elabora la directory del prodotto
                         self._process_product_directory(
                             product_path, product, stdf_list, csv_list, 
-                            condition_list, seen_paths, logger
+                            condition_list, shmoo_list, seen_paths, logger 
                         )
                     finally:
                         # Ripristina stdout originale
@@ -639,42 +718,31 @@ class DirectoryPoller:
                     # Ottieni l'output catturato
                     output_content = captured_output.getvalue()
                     
-                    # Se c'è output, stampalo e segnala che è stato stampato qualcosa
+                    # Se c'è output, stampalo mantenendo la progress bar
                     if output_content.strip():
-                        print("\033[A\033[A", end='', flush=True)
+                        # Clear the progress line
+                        print('\r' + ' ' * 120, end='\r', flush=True)
+                        
+                        # Print the captured output
                         print(output_content, end='')
                         printed_something = True
+                        
+                        # Reshow progress bar if not the last item
+                        if index < max_iterations:
+                            _show_product_progress(index, max_iterations, product, start_time)
+            
+            # Clear the final progress line when done
+            if max_iterations > 0:
+                print('\r' + ' ' * 120, end='\r', flush=True)
                 
-                # Se non è l'ultimo elemento e non sono state stampate righe, sovrascrive
-                if index < max_iterations and not printed_something:
-                    # Sposta il cursore su di 2 righe per sovrascrivere percentuale e prodotto
-                    print("\033[A\033[A", end='', flush=True)
-                    print("")
-                    print("")
-                    print("\033[A\033[A", end='', flush=True)
-                    
-            # Se non è l'ultimo elemento e non sono state stampate righe, sovrascrive
-            if index == max_iterations and not printed_something:
-                # Sposta il cursore su di 2 righe per sovrascrivere percentuale e prodotto
-                # print("\033[A\033[A\n\n\033[A\033[A", end='', flush=True)
-                
-                # print("\033[2A\033[2K\n\033[2K\033[2A", end='', flush=True)
-                print("\033[A\033[A", end='', flush=True)
-                print("                                                                                                    ")
-                print("                                                                                                    ")
-                print("\033[A\033[A", end='', flush=True)
-                
-        
-            # Stampa finale
             False and print("[Polling] Completed")
             break
             
-        return stdf_list, csv_list, condition_list
-
+        return stdf_list, csv_list, condition_list, shmoo_list
     def _process_product_directory(self, product_path: str, product: str, 
-                                 stdf_list: List[str], csv_list: List[str], 
-                                 condition_list: List[str], seen_paths: Set[str], 
-                                 logger: logging.Logger):
+                                stdf_list: List[str], csv_list: List[str], 
+                                condition_list: List[str], shmoo_list: List[str],
+                                seen_paths: Set[str], logger: logging.Logger):
         """Process a single product directory."""
         productcut_regex = re.compile(rf"^{product}[A-Z]$")
         
@@ -685,12 +753,12 @@ class DirectoryPoller:
                 if os.path.isdir(productcut_path):
                     self._process_productcut_directory(
                         productcut_path, stdf_list, csv_list, 
-                        condition_list, seen_paths, logger
+                        condition_list, shmoo_list, seen_paths, logger 
                     )
-
+                    
     def _process_productcut_directory(self, productcut_path: str, stdf_list: List[str], 
-                                    csv_list: List[str], condition_list: List[str], 
-                                    seen_paths: Set[str], logger: logging.Logger):
+                                csv_list: List[str], condition_list: List[str], 
+                                shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):
         """Process a single productcut directory."""
         for flow in os.listdir(productcut_path):
             flow_path = os.path.join(productcut_path, flow)
@@ -698,25 +766,28 @@ class DirectoryPoller:
             if flow in self.config.allowed_flow and os.path.isdir(flow_path):
                 # Process EWS flows
                 if flow.startswith("EWS"):
-                    self._process_ews_flow(flow_path, stdf_list, csv_list, condition_list, seen_paths, logger)
+                    self._process_ews_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
                 # Process non-EWS flows
                 else:
-                    self._process_standard_flow(flow_path, stdf_list, csv_list, condition_list, seen_paths, logger)
+                    self._process_standard_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
 
     def _process_ews_flow(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
-                     condition_list: List[str], seen_paths: Set[str], logger: logging.Logger):
+                 condition_list: List[str], shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):  
         """
         Process EWS flow directory.
-        Updated to check for CONDITION subdirectory.
+        Updated to check for CONDITION and SHMOO subdirectory.
         """
         # Check for condition files in CONDITION subdirectory
         self.check_condition_files(flow_path, condition_list)
         
+        # Check for shmoo folders in SHMOO subdirectory 
+        self.check_shmoo_folders(flow_path, shmoo_list)
+        
         for lot in os.listdir(flow_path):
             lot_path = os.path.join(flow_path, lot)
             
-            # Skip the CONDITION directory when processing lots
-            if lot == "CONDITION":
+            # Skip the CONDITION and SHMOO directory when processing lots  
+            if lot in ["CONDITION", "SHMOO"]:
                 continue
                 
             if os.path.isdir(lot_path):
@@ -728,21 +799,23 @@ class DirectoryPoller:
                     if (lot_wafer_regex.match(wafer) and os.path.isdir(wafer_path)):
                         self._process_wafer_subfolders(wafer_path, stdf_list, csv_list, seen_paths, logger)
 
-
     def _process_standard_flow(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
-                          condition_list: List[str], seen_paths: Set[str], logger: logging.Logger):
+                      condition_list: List[str], shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):  
         """
         Process standard (non-EWS) flow directory.
-        Updated to check for CONDITION subdirectory.
+        Updated to check for CONDITION and SHMOO subdirectory.
         """
         # Check for condition files in CONDITION subdirectory
         self.check_condition_files(flow_path, condition_list)
         
+        # Check for shmoo folders in SHMOO subdirectory 
+        self.check_shmoo_folders(flow_path, shmoo_list)
+        
         for package in os.listdir(flow_path):
             package_path = os.path.join(flow_path, package)
             
-            # Skip the CONDITION directory when processing packages
-            if package == "CONDITION":
+            # Skip the CONDITION and SHMOO directory when processing packages  
+            if package in ["CONDITION", "SHMOO"]:
                 continue
             
             if (os.path.isdir(package_path) and 
@@ -1002,6 +1075,42 @@ class STDFWorker(ProcessingWorker):
         os.makedirs(csv_folder, exist_ok=True)
         csv_path = os.path.join(csv_folder, os.path.basename(path))
         stdf2csv.stdf2csv_converter(path, csv_path)
+        
+class ShmooWorker(ProcessingWorker):
+    """Worker for SHMOO processing."""
+    
+    def __init__(self):
+        super().__init__(ProcessType.SHMOO)
+
+    def process_file(self, directory_path: str, logger: logging.Logger):
+        """
+        Process SHMOO directory.
+        
+        Args:
+            directory_path: Path to SHMOO directory
+            logger: Logger instance
+        """
+        clean_path = directory_path.replace(
+            "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
+        ).replace("\\", " ")
+        
+        print(f"[SHMOO] Start processing SHMOO directory: {clean_path}")
+        
+        try:
+            shmoo.ShmooVisualizer().process_shmoo_files(directory_path)
+            
+            print(f"[SHMOO] End processing SHMOO directory: {clean_path}")
+            
+        except ImportError:
+            error_msg = f"[SHMOO] ERROR: shmoo library not found for {clean_path}"
+            print(error_msg)
+            logger.error(error_msg)
+        except Exception as e:
+            error_msg = f"[SHMOO] ERROR processing {clean_path}: {e}"
+            print(error_msg)
+            logger.error(error_msg)
+            
+
 # ==================================================
 # Main Processing System
 # ==================================================
@@ -1024,13 +1133,15 @@ class STDFProcessingSystem:
         self.stdf_worker = STDFWorker()
         self.csv_worker = ReportWorker(ProcessType.CSV2REPORT)
         self.condition_worker = ReportWorker(ProcessType.CONDITION2REPORT)
+        self.shmoo_worker = ShmooWorker() 
         
         # Initialize loggers
-        self.polling_logger = setup_logger('polling', 'polling.log')
-        self.stdf2csv_logger = setup_logger('stdf2csv', 'stdf2csv.log')
-        self.csv2report_logger = setup_logger('csv2report', 'csv2report.log')
-        self.condition2report_logger = setup_logger('condition2report', 'condition2report.log')
-    
+        self.polling_logger = setup_logger('polling', 'log/polling.log')
+        self.stdf2csv_logger = setup_logger('stdf2csv', 'log/stdf2csv.log')
+        self.csv2report_logger = setup_logger('csv2report', 'log/csv2report.log')
+        self.condition2report_logger = setup_logger('condition2report', 'log/condition2report.log')
+        self.shmoo_logger = setup_logger('shmoo', 'log/shmoo.log') 
+
     def process_stdf_files(self, stdf_list: List[str]):
         """
         Process STDF files for conversion to CSV.
@@ -1072,25 +1183,41 @@ class STDFProcessingSystem:
             except Exception as e:
                 self.condition2report_logger.error(f"Error generating condition report for {condition_file}: {e}")
                 print(f"[ERROR] Condition report generation failed for {condition_file}: {e}")
-    
+                
+    def process_shmoo_files(self, shmoo_list: List[str]):
+        """
+        Process SHMOO directories.
+        
+        Args:
+            shmoo_list: List of SHMOO directory paths to process
+        """
+        for shmoo_dir in shmoo_list:
+            try:
+                self.shmoo_worker.process_file(shmoo_dir, self.shmoo_logger)
+            except Exception as e:
+                self.shmoo_logger.error(f"Error processing SHMOO directory {shmoo_dir}: {e}")
+                print(f"[ERROR] SHMOO processing failed for {shmoo_dir}: {e}")
+
     def run_single_cycle(self):
         """
         Execute a single processing cycle.
         
         Returns:
-            Tuple of (stdf_count, csv_count, condition_count) processed
+            Tuple of (stdf_count, csv_count, condition_count, shmoo_count) processed
         """
         # Poll for new files
-        stdf_list, csv_list, condition_list = self.poller.poll_directory(
+        stdf_list, csv_list, condition_list, shmoo_list = self.poller.poll_directory( 
             self.watch_path, self.polling_logger
         )
         
         # Process files
-        self.process_stdf_files(stdf_list)
-        self.process_csv_files(csv_list)
         self.process_condition_files(condition_list)
+        self.process_shmoo_files(shmoo_list)
+        self.process_csv_files(csv_list)
+        self.process_stdf_files(stdf_list)
         
-        return len(stdf_list), len(csv_list), len(condition_list)
+        return len(stdf_list), len(csv_list), len(condition_list), len(shmoo_list) 
+
     
     def run_continuous(self, sleep_interval: int = 60):
         """
@@ -1111,13 +1238,13 @@ class STDFProcessingSystem:
                 False and print(f"\n[SYSTEM] Starting cycle {cycle_count}")
                 
                 # Run processing cycle
-                stdf_count, csv_count, condition_count = self.run_single_cycle()
+                stdf_count, csv_count, condition_count, shmoo_count = self.run_single_cycle() 
                 
                 # Report cycle results
-                total_processed = stdf_count + csv_count + condition_count
+                total_processed = stdf_count + csv_count + condition_count + shmoo_count 
                 if total_processed > 0:
                     print(f"[SYSTEM] Cycle {cycle_count} completed: "
-                         f"STDF={stdf_count}, CSV={csv_count}, Condition={condition_count}")
+                        f"STDF={stdf_count}, CSV={csv_count}, Condition={condition_count}, SHMOO={shmoo_count}") 
                 else:
                     False and print(f"[SYSTEM] Cycle {cycle_count} completed: No files to process")
                 
