@@ -2,6 +2,7 @@
 *.std
 *.stdf
 *.csv
+*.code-workspace
 Report/**
 STDF/**
 **test**

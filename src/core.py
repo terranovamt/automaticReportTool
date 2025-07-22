@@ -278,7 +278,7 @@ def convert_notebook_to_html(parameter):
     jupiter_path = os.path.abspath(f"./src/jupiter/{str(parameter['TYPE']).upper()}.ipynb")
 
     cmd = f'"C:\\Program Files\\Python\\python.exe" "C:\\Program Files\\Python\\Scripts\\jupyter-nbconvert.exe" ./src/jupiter/{str(parameter["TYPE"]).upper()}.ipynb --execute --no-input --to html --output "{dir_output}/{str_output}" '
-    print("[NbConvertApp]",dir_output,str_output)
+    print("[NbConvertApp] Converting ",str_output)
     if (
         subprocess.call(
             args=cmd,

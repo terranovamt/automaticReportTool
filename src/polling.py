@@ -917,7 +917,6 @@ class ReportWorker(ProcessingWorker):
             report_path = FileProcessor.get_report_path(path, parameter, self.process_type)
             
             if not os.path.isfile(report_path):
-                self._log_start_message(parameter)
                 try:
                     # Passa df_stdf e csv_path già preparati
                     self._run_report_generation(parameter, path, logger, df_stdf, csv_path)
@@ -1028,6 +1027,7 @@ class ReportWorker(ProcessingWorker):
             csv_path: CSV file path (for CSV2REPORT)
         """
         local_parameter = copy.deepcopy(parameter)
+        self._log_start_message(parameter)
         
         if self.process_type == ProcessType.CSV2REPORT:
             # Usa i dati già caricati invece di rileggerli
