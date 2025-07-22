@@ -1035,7 +1035,7 @@ class ReportWorker(ProcessingWorker):
             print(f"[CSV2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
                  f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
         else:
-            core.process_condition(local_parameter, path)
+            core.process_condition(local_parameter, path, df_stdf)
             print(f"[CONDITION2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
                  f"{parameter['COM']} condition")
 
