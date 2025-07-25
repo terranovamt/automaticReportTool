@@ -739,6 +739,7 @@ class DirectoryPoller:
             break
             
         return stdf_list, csv_list, condition_list, shmoo_list
+    
     def _process_product_directory(self, product_path: str, product: str, 
                                 stdf_list: List[str], csv_list: List[str], 
                                 condition_list: List[str], shmoo_list: List[str],
@@ -826,7 +827,6 @@ class DirectoryPoller:
                     
                     if os.path.isdir(badge_path):
                         self._process_wafer_subfolders(badge_path, stdf_list, csv_list, seen_paths, logger)
-
 
     def _process_wafer_subfolders(self, base_path: str, stdf_list: List[str], csv_list: List[str], 
                                  seen_paths: Set[str], logger: logging.Logger):
