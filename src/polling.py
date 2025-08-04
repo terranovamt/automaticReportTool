@@ -42,8 +42,8 @@ class FileType(Enum):
 @dataclass
 class ProcessingConfig:
     """Configuration for processing operations."""
-    allowed_flow = {"EWS1", "EWS2", "EWS3", "EWSDIE", "FT", "FT1", "FT2", "FIAB", "QC", "FA"}
-    allowed_package = {"QFP", "QFN", "DIP", "WLCSP", "CSP"}
+    allowed_flow = {"EWS1", "EWS2", "EWS3", "EWSDIE", "FT", "FT1", "FT2", "FIAB", "QC", "FA", "EWSCHAR"}
+    allowed_package = {"QFP", "QFN", "DIP", "WLCSP", "CSP", "BGA"}
     product_regex = re.compile(r"^[A-F0-9]{3}$")
     max_lines_per_log = 1000
     backup_count = 1
@@ -173,8 +173,21 @@ class ParameterExtractor:
             Dictionary containing extracted parameters
         """
         # Split path and extract components
-        product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split("\\", 10)[4:]
-        lot_pkg, waf_badge, corner = (waf_badge + "_TTTT").split("_", 2)
+        splitted = path.split("\\")[4:]
+
+        if len(splitted) == 7:
+            product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = splitted
+        elif len(splitted) == 5:
+            product, productcut, flow, waf_badge_combined, stdname = splitted
+            mytype = "CHAR"
+            waf_badge = waf_badge_combined
+        else:
+            raise ValueError(f"Formato path non supportato: {len(splitted)} componenti in {path}")
+
+        parts = (waf_badge + "_TTTT").split("_")[:-1]
+        lot_pkg = parts[0]
+        waf_badge = parts[1] if len(parts) > 1 else ""
+        corner = parts[2] if len(parts) > 2 and parts[2] != "TTTT" else "TTTT"
 
         return ParameterExtractor._create_parameter_dict(
             product=product,
@@ -545,6 +558,30 @@ class DirectoryPoller:
                 stdf_list.append(new_path)
                 seen_paths.add(new_path)
                 
+        else :
+            for f in std_files:
+                csv_folder_path = os.path.join(path, "csv")
+                
+                # Check if CSV files already exist for this file
+                if os.path.isdir(csv_folder_path):
+                    csv_files = [cf for cf in os.listdir(csv_folder_path) if cf.endswith(".csv")]
+                    if len(csv_files) > 8:
+                        continue  # Skip to next
+                        
+                new_name = f.rsplit('.', 1)[0] + ".std"
+                old_path = os.path.join(path, f)
+                new_path = os.path.join(path, new_name)
+                
+                if f.lower() != new_name.lower() and not os.path.exists(new_path):
+                    os.rename(old_path, new_path)
+                else:
+                    new_path = old_path
+                    
+                if new_path not in seen_paths:
+                    print(f"[Polling] New STDF found: {new_name}")
+                    stdf_list.append(new_path)
+                    seen_paths.add(new_path)
+            
         return False
 
     def check_report_folder(self, path: str, csv_list: List[str], logger: logging.Logger):
@@ -766,12 +803,29 @@ class DirectoryPoller:
             
             if flow in self.config.allowed_flow and os.path.isdir(flow_path):
                 # Process EWS flows
-                if flow.startswith("EWS"):
+                if flow == "EWSCHAR":
+                    self._process_ews_char(flow_path, stdf_list, csv_list, seen_paths, logger)
+                elif flow.startswith("EWS"):
                     self._process_ews_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
                 # Process non-EWS flows
                 else:
                     self._process_standard_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
 
+    def _process_ews_char(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
+                seen_paths: Set[str], logger: logging.Logger):  
+        """
+        Process EWS flow directory.
+        Updated to check for CONDITION and SHMOO subdirectory.
+        """
+        
+        for wafer in os.listdir(flow_path):
+            wafer_path = os.path.join(flow_path, wafer)
+
+            if os.path.isdir(wafer_path):
+                if self.check_csv_folder(wafer_path, stdf_list, seen_paths):
+                    self.check_report_folder(wafer_path, csv_list, logger)
+
+    
     def _process_ews_flow(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
                  condition_list: List[str], shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):  
         """
@@ -1009,10 +1063,10 @@ class ReportWorker(ProcessingWorker):
     def _log_start_message(self, parameter: Dict):
         """Log start message for report generation."""
         if self.process_type == ProcessType.CSV2REPORT:
-            print(f"[CSV2REPORT] Start Report {parameter['CODE']} {parameter['FLOW']} "
+            print(f"[CSV2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
                  f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
         else:
-            print(f"[CONDITION2REPORT] Start Report {parameter['CODE']} {parameter['FLOW']} "
+            print(f"[CONDITION2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
                  f"{parameter['COM']} condition")
 
     def _run_report_generation(self, parameter: Dict, path: str, logger: logging.Logger, df_stdf: Dict = None, csv_path: str = None):
@@ -1028,20 +1082,20 @@ class ReportWorker(ProcessingWorker):
         """
         local_parameter = copy.deepcopy(parameter)
         self._log_start_message(parameter)
-        
+
         if self.process_type == ProcessType.CSV2REPORT:
             # Usa i dati già caricati invece di rileggerli
             core.process_composite(local_parameter, csv_path, df_stdf)
-            print(f"[CSV2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
+            print(f"[CSV2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
                  f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
         else:
             core.process_condition(local_parameter, path, df_stdf)
-            print(f"[CONDITION2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
+            print(f"[CONDITION2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
                  f"{parameter['COM']} condition")
 
 class STDFWorker(ProcessingWorker):
     """Worker for STDF to CSV conversion."""
-    
+
     def __init__(self):
         super().__init__(ProcessType.STDF2CSV)
 
@@ -1054,12 +1108,12 @@ class STDFWorker(ProcessingWorker):
             logger: Logger instance
         """
         parameter = ParameterExtractor.get_parameter_from_stdf_path(path)
-        print(f"[STDF2CSV] Start stdf2csv {parameter['CODE']} {parameter['FLOW']} "
+        print(f"[STDF2CSV] Start stdf2csv {parameter['CUT']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
-        
+
         self._convert_stdf_to_csv(path, logger)
-        
-        print(f"[STDF2CSV] End stdf2csv {parameter['CODE']} {parameter['FLOW']} "
+
+        print(f"[STDF2CSV] End stdf2csv {parameter['CUT']} {parameter['FLOW']} "
              f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
 
     def _convert_stdf_to_csv(self, path: str, logger: logging.Logger):
@@ -1109,7 +1163,7 @@ class ShmooWorker(ProcessingWorker):
             error_msg = f"[SHMOO] ERROR processing {clean_path}: {e}"
             print(error_msg)
             logger.error(error_msg)
-            
+
 
 # ==================================================
 # Main Processing System
@@ -1117,7 +1171,7 @@ class ShmooWorker(ProcessingWorker):
 
 class STDFProcessingSystem:
     """Main processing system that coordinates all operations."""
-    
+
     def __init__(self, watch_path: str):
         """
         Initialize the STDF processing system.
@@ -1218,7 +1272,6 @@ class STDFProcessingSystem:
         
         return len(stdf_list), len(csv_list), len(condition_list), len(shmoo_list) 
 
-    
     def run_continuous(self, sleep_interval: int = 60):
         """
         Run the processing system continuously.

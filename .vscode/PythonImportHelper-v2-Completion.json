@@ -630,7 +630,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"\n    CONDITION = \"condition\"\n    SHMOO = \"shmoo\"\n@dataclass\nclass ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}",
+        "peekOfCode": "class FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"\n    CONDITION = \"condition\"\n    SHMOO = \"shmoo\"\n@dataclass\nclass ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\", \"EWSCHAR\"}",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -639,7 +639,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}\n    product_regex = re.compile(r\"^[A-F0-9]{3}$\")\n    max_lines_per_log = 1000\n    backup_count = 1\n# ==================================================\n# Logging Configuration\n# ==================================================",
+        "peekOfCode": "class ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\", \"EWSCHAR\"}\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\", \"BGA\"}\n    product_regex = re.compile(r\"^[A-F0-9]{3}$\")\n    max_lines_per_log = 1000\n    backup_count = 1\n# ==================================================\n# Logging Configuration\n# ==================================================",
         "detail": "src.polling",
         "documentation": {}
     },

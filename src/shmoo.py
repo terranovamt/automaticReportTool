@@ -49,7 +49,7 @@ class ShmooVisualizer:
             if current < total and eta > 0:
                 progress_text += f" | ETA: {eta:4.0f}s"
             else:
-                progress_text += " | Complete!  "
+                progress_text += "                     "
         
             # Write to same line for live updates
             sys.stdout.write(progress_text)
