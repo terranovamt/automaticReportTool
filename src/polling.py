@@ -139,6 +139,10 @@ def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging
     Returns:
         Configured logger instance
     """
+    log_dir = os.path.dirname(log_file)
+    if log_dir and not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
     config = ProcessingConfig()
     formatter = logging.Formatter('%(asctime)s - %(message)s')
     handler = LineCountRotatingFileHandler(
