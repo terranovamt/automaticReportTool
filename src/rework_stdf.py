@@ -541,6 +541,7 @@ def rework_stdf(parameter,df_stdf):
     )
     ftr.drop(["TestNumber"], axis="columns", inplace=True, errors="ignore")
 
+    os.makedirs("./src/jupiter/tmp", exist_ok=True)
     ptr.to_csv(os.path.abspath("./src/jupiter/tmp/ptr.csv"), index=False)
     ftr.to_csv(os.path.abspath("./src/jupiter/tmp/ftr.csv"), index=False)
 

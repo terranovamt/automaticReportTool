@@ -238,14 +238,22 @@ def convert_notebook_to_html(parameter):
         parameter["TITLE"]
     )
     if parameter["TYPE"] == "YIELD" or parameter["TYPE"]=="TTIME": 
-        dir_output = os.path.abspath(
-            os.path.join(
-                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
-                (parameter["LOT"]+"_"+parameter["WAFER"]),
-                "VOLUME",
-                "Report",
+        if parameter["FLOW"].contain("CHAR"): 
+            dir_output = os.path.abspath(
+                os.path.join(
+                    os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
+                    "Report",
+                )
             )
-        )
+        else:
+            dir_output = os.path.abspath(
+                os.path.join(
+                    os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
+                    (parameter["LOT"]+"_"+parameter["WAFER"]),
+                    "VOLUME",
+                    "Report",
+                )
+            )
     elif parameter["TYPE"] == "CONDITION" : 
         dir_output = os.path.abspath(
             os.path.join(
