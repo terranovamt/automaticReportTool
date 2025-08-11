@@ -77,7 +77,6 @@ def color_kurtosis(val):
     return ""
 
 
-# Customize cell colors
 def color_cp(val):
     try:
         val = float(val)
@@ -334,8 +333,10 @@ def create_heatmap(td, gradientcolor, xwafer, ywafer):
 
     fig.show()
 
+
 def freedman_diaconis_rule(data):
     import numpy as np
+
     data = data.dropna()  # Rimuove NaN
     data = data[np.isfinite(data)]  # Rimuove inf e -inf
 
@@ -347,7 +348,6 @@ def freedman_diaconis_rule(data):
     bin_width = 2 * iqr / np.cbrt(n)
     data_range = data.max() - data.min()
     return int(np.ceil(data_range / bin_width))
-    
 
 
 def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):

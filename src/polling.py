@@ -27,30 +27,51 @@ import char
 # Constants and Configuration
 # ==================================================
 
+FLUSH = " " * 200
+
+
 class ProcessType(Enum):
     """Enumeration for different processing types."""
+
     STDF2CSV = "stdf2csv"
     CSV2REPORT = "csv2report"
     CONDITION2REPORT = "condition2report"
     SHMOO = "shmoo"
     CHAR = "char"
 
+
 class FileType(Enum):
     """Enumeration for file types."""
+
     STDF = "stdf"
     CSV = "csv"
     CONDITION = "condition"
     SHMOO = "shmoo"
     CHAR = "char"
 
+
 @dataclass
 class ProcessingConfig:
     """Configuration for processing operations."""
-    allowed_flow = {"EWS1", "EWS2", "EWS3", "EWSDIE", "FT", "FT1", "FT2", "FIAB", "QC", "FA", "EWSCHAR"}
+
+    allowed_flow = {
+        "EWS1",
+        "EWS2",
+        "EWS3",
+        "EWSDIE",
+        "FT",
+        "FT1",
+        "FT2",
+        "FIAB",
+        "QC",
+        "FA",
+        "EWSCHAR",
+    }
     allowed_package = {"QFP", "QFN", "DIP", "WLCSP", "CSP", "BGA"}
     product_regex = re.compile(r"^[A-F0-9]{3}$")
     max_lines_per_log = 1000
     backup_count = 1
+
 
 # ==================================================
 # Logging Configuration
@@ -58,23 +79,24 @@ class ProcessingConfig:
 
 from logging.handlers import BaseRotatingHandler
 
+
 class LineCountRotatingFileHandler(BaseRotatingHandler):
     """
     Custom rotating file handler that rotates log files based on line count
     instead of file size.
     """
-    
+
     def __init__(self, filename, max_lines=1000, backup_count=1, **kwargs):
         """
         Initialize the handler.
-        
+
         Args:
             filename (str): Path to the log file
             max_lines (int): Maximum number of lines before rotation
             backup_count (int): Number of backup files to keep
             **kwargs: Additional keyword arguments for BaseRotatingHandler
         """
-        super().__init__(filename, 'a', **kwargs)
+        super().__init__(filename, "a", **kwargs)
         self.max_lines = max_lines
         self.backup_count = backup_count
         self.line_count = 0
@@ -89,10 +111,10 @@ class LineCountRotatingFileHandler(BaseRotatingHandler):
     def shouldRollover(self, record):
         """
         Determine if log file should be rotated.
-        
+
         Args:
             record: Log record
-            
+
         Returns:
             bool: True if rotation should occur
         """
@@ -102,7 +124,7 @@ class LineCountRotatingFileHandler(BaseRotatingHandler):
         """Perform the log file rotation."""
         if self.stream:
             self.stream.close()
-            
+
         # Rotate existing backup files
         for i in range(self.backup_count - 1, 0, -1):
             sfn = f"{self.baseFilename}.{i}"
@@ -111,7 +133,7 @@ class LineCountRotatingFileHandler(BaseRotatingHandler):
                 if os.path.exists(dfn):
                     os.remove(dfn)
                 os.rename(sfn, dfn)
-                
+
         # Move current log to backup
         dfn = self.baseFilename + ".1"
         if os.path.exists(dfn):
@@ -122,7 +144,7 @@ class LineCountRotatingFileHandler(BaseRotatingHandler):
     def emit(self, record):
         """
         Emit a log record and increment line count.
-        
+
         Args:
             record: Log record to emit
         """
@@ -131,15 +153,16 @@ class LineCountRotatingFileHandler(BaseRotatingHandler):
         super().emit(record)
         self.line_count += 1
 
+
 def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging.Logger:
     """
     Set up a logger with custom rotating file handler.
-    
+
     Args:
         name: Logger name
         log_file: Path to log file
         level: Logging level
-        
+
     Returns:
         Configured logger instance
     """
@@ -148,11 +171,9 @@ def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging
         os.makedirs(log_dir)
 
     config = ProcessingConfig()
-    formatter = logging.Formatter('%(asctime)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
     handler = LineCountRotatingFileHandler(
-        log_file, 
-        max_lines=config.max_lines_per_log, 
-        backup_count=config.backup_count
+        log_file, max_lines=config.max_lines_per_log, backup_count=config.backup_count
     )
     handler.setFormatter(formatter)
 
@@ -162,26 +183,30 @@ def setup_logger(name: str, log_file: str, level: int = logging.INFO) -> logging
 
     return logger
 
+
 # ==================================================
 # Parameter Extraction and Processing
 # ==================================================
 
+
 class ParameterExtractor:
     """Handles parameter extraction from file paths."""
-    
+
     @staticmethod
     def get_parameter_from_stdf_path(path: str) -> Dict:
         """
         Extract parameters from STDF file path.
-        
+
         Args:
             path: STDF file path to parse
-            
+
         Returns:
             Dictionary containing extracted parameters
         """
         # Split path and extract components
-        splitted = path.split("\\")[4:]
+        path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
+        path = path.replace(".\\STDF\\", "")
+        splitted = path.split("\\")[:]
 
         if len(splitted) == 7:
             product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = splitted
@@ -190,7 +215,9 @@ class ParameterExtractor:
             mytype = "CHAR"
             waf_badge = waf_badge_combined
         else:
-            raise ValueError(f"Formato path non supportato: {len(splitted)} componenti in {path}")
+            raise ValueError(
+                f"Formato path non supportato: {len(splitted)} componenti in {path}"
+            )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
         lot_pkg = parts[0]
@@ -206,7 +233,7 @@ class ParameterExtractor:
             waf_badge=waf_badge,
             corner=corner,
             stdname=stdname,
-            path=path
+            path=path,
         )
 
     @staticmethod
@@ -214,15 +241,15 @@ class ParameterExtractor:
         """
         Extract parameters from condition file path.
         Updated to handle the CONDITION subdirectory structure.
-        
+
         Args:
             path: Condition file path to parse (e.g., .../EWS1/CONDITION/anaflow.csv)
-            
+
         Returns:
             Dictionary containing extracted parameters
         """
         path_parts = path.split("\\")
-        
+
         # Find the relevant parts - look for PRODUCTCUT pattern and get flow from parent of CONDITION
         product, productcut, flow = "UNK", "UNKA", "UNKNOWN"
         for i, part in enumerate(path_parts):
@@ -232,12 +259,14 @@ class ParameterExtractor:
                 # Look for flow directory before CONDITION
                 for j in range(i + 1, len(path_parts)):
                     if path_parts[j] == "CONDITION" and j > i + 1:
-                        flow = path_parts[j - 1]  # Flow is the directory before CONDITION
+                        flow = path_parts[
+                            j - 1
+                        ]  # Flow is the directory before CONDITION
                         break
                 break
-        
+
         filename = os.path.basename(path)
-        
+
         return ParameterExtractor._create_parameter_dict(
             product=product,
             productcut=productcut,
@@ -247,21 +276,23 @@ class ParameterExtractor:
             waf_badge="CONDITION",
             corner="CONDITION",
             stdname=filename,
-            path=path
+            path=path,
         )
-    
+
     def get_parameter(path):
         """
         Extract parameters from file path.
-        
+
         Args:
             path (str): File path to parse
-            
+
         Returns:
             dict: Dictionary containing extracted parameters
         """
         # Split path and extract components
-        splitted = path.split("\\")[4:]
+        path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
+        path = path.replace(".\\STDF\\", "")
+        splitted = path.split("\\")[:]
 
         if len(splitted) == 7:
             product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = splitted
@@ -273,9 +304,11 @@ class ParameterExtractor:
             product, productcut, flow, waf_badge_combined = splitted
             mytype = "CHAR"
             waf_badge = waf_badge_combined
-            stdname= path
+            stdname = path
         else:
-            raise ValueError(f"Formato path non supportato: {len(splitted)} componenti in {path}")
+            raise ValueError(
+                f"Formato path non supportato: {len(splitted)} componenti in {path}"
+            )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
         lot_pkg = parts[0]
@@ -310,14 +343,23 @@ class ParameterExtractor:
         return parameter
 
     @staticmethod
-    def _create_parameter_dict(product: str, productcut: str, flow: str, mytype: str,
-                             lot_pkg: str, waf_badge: str, corner: str, stdname: str, path: str) -> Dict:
+    def _create_parameter_dict(
+        product: str,
+        productcut: str,
+        flow: str,
+        mytype: str,
+        lot_pkg: str,
+        waf_badge: str,
+        corner: str,
+        stdname: str,
+        path: str,
+    ) -> Dict:
         """
         Create standardized parameter dictionary.
-        
+
         Args:
             Various parameter components
-            
+
         Returns:
             Standardized parameter dictionary
         """
@@ -346,22 +388,24 @@ class ParameterExtractor:
             "CSV": stdname,
         }
 
+
 # ==================================================
 # SVN and Composite Management
 # ==================================================
 
+
 class CompositeManager:
     """Handles composite list retrieval and validation."""
-    
+
     @staticmethod
     def get_composite_list(logger: logging.Logger, svn_url: str) -> List[str]:
         """
         Retrieve composite list from SVN repository.
-        
+
         Args:
             logger: Logger instance
             svn_url: SVN repository URL
-            
+
         Returns:
             List of composite names
         """
@@ -373,8 +417,15 @@ class CompositeManager:
         password = username
 
         command = [
-            "svn", "cat", svn_url, "--username", username, "--password", password,
-            "--non-interactive", "--trust-server-cert"
+            "svn",
+            "cat",
+            svn_url,
+            "--username",
+            username,
+            "--password",
+            password,
+            "--non-interactive",
+            "--trust-server-cert",
         ]
 
         try:
@@ -391,48 +442,49 @@ class CompositeManager:
     def should_skip_composite(parameter: Dict, process_type: ProcessType) -> bool:
         """
         Determine if composite should be skipped based on type and process.
-        
+
         Args:
             parameter: Parameter dictionary
             process_type: Type of processing
-            
+
         Returns:
             True if composite should be skipped
         """
         composite = parameter.get("COM", "")
         param_type = parameter.get("TYPE", "").upper()
-        
+
         # Common skips
         if composite in ["INIT", "FLH_TOOLS"]:
             return True
-            
+
         # Process-specific skips
         if process_type == ProcessType.CSV2REPORT:
-            return (
-                ("X30" in param_type and "TTIME" in composite) or
-                ("X30" in param_type and "YIELD" in composite)
+            return ("X30" in param_type and "TTIME" in composite) or (
+                "X30" in param_type and "YIELD" in composite
             )
         elif process_type in (ProcessType.CONDITION2REPORT, ProcessType.CHAR):
             return composite in ["TTIME", "YIELD"]
-            
+
         return False
+
 
 # ==================================================
 # File Processing Utilities
 # ==================================================
 
+
 class FileProcessor:
     """Handles file processing operations."""
-    
+
     @staticmethod
     def check_completion_marker(path: str, marker_name: str) -> bool:
         """
         Check if completion marker file exists.
-        
+
         Args:
             path: Directory path to check
             marker_name: Name of marker file
-            
+
         Returns:
             True if marker exists
         """
@@ -444,7 +496,7 @@ class FileProcessor:
         """
         Create completion marker file.
         Updated to handle CONDITION subdirectory properly.
-        
+
         Args:
             path: Directory path (for condition files, this should be the CONDITION directory)
             marker_name: Name of marker file
@@ -457,82 +509,89 @@ class FileProcessor:
             file.write(content)
 
     @staticmethod
-    def get_report_path(base_path: str, parameter: Dict, process_type: ProcessType) -> str:
+    def get_report_path(
+        base_path: str, parameter: Dict, process_type: ProcessType
+    ) -> str:
         """
         Generate report file path based on parameters and process type.
-        
+
         Args:
             base_path: Base directory path
             parameter: Parameter dictionary
             process_type: Type of processing
-            
+
         Returns:
             Report file path
         """
         if process_type == ProcessType.CSV2REPORT:
             base_report_path = os.path.join(os.path.dirname(base_path), "Report")
-            
+
             if "TTIME" in parameter["COM"] or "YIELD" in parameter["COM"]:
                 return os.path.join(base_report_path, parameter["TITLE"] + ".html")
             else:
                 return os.path.join(
-                    base_report_path, 
-                    parameter["TYPE"].upper(), 
-                    parameter["TITLE"] + ".html"
+                    base_report_path,
+                    parameter["TYPE"].upper(),
+                    parameter["TITLE"] + ".html",
                 )
         elif process_type == ProcessType.CHAR:
             base_report_path = os.path.join(os.path.dirname(base_path), "Report")
-            
-            if "TTIME" in parameter["COM"] or "YIELD" in parameter["COM"]:
-                return os.path.join(base_report_path, parameter["TITLE"] + ".html")
-            else:
-                return os.path.join(
-                    base_report_path, 
-                    parameter["TYPE"].upper(), 
-                    parameter["TITLE"] + ".html"
-                )
+            destinationfolder = (
+                base_report_path.split(parameter["FLOW"])[0]
+                + parameter["FLOW"]
+                + "\\Report"
+            )
+            return destinationfolder
         elif process_type == ProcessType.CONDITION2REPORT:
             base_report_path = os.path.join(os.path.dirname(base_path), "Report")
             return os.path.join(base_report_path, parameter["TITLE"] + ".html")
-        
+
         return ""
+
 
 # ==================================================
 # Polling System
 # ==================================================
 
+
 class DirectoryPoller:
     """Handles directory polling for new files."""
-    
+
     def __init__(self, config: ProcessingConfig):
         self.config = config
 
-    def check_condition_files(self, folder_path: str, condition_list: List[str]) -> bool:
+    def check_condition_files(
+        self, folder_path: str, condition_list: List[str]
+    ) -> bool:
         """
         Check if folder contains a CONDITION subdirectory with anaflow files and add them to condition list.
-        
+
         Args:
             folder_path: Path to flow folder (e.g., EWS1, EWS2, FT, etc.)
             condition_list: List to append found file paths
-            
+
         Returns:
             True if at least one file was found
         """
         found = False
-        
+
         # Look for CONDITION subdirectory within the flow folder
         condition_folder_path = os.path.join(folder_path, "CONDITION")
-        
+
         if os.path.isdir(condition_folder_path):
             for file in os.listdir(condition_folder_path):
                 file_path = os.path.join(condition_folder_path, file)
                 # Check for anaflow files (case insensitive) with .csv or .html extension
-                if (not os.path.isdir(file_path) and 
-                    file.lower().startswith("anaflow") and 
-                    file.lower().endswith(('.csv', '.html'))):
-                    
+                if (
+                    not os.path.isdir(file_path)
+                    and file.lower().startswith("anaflow")
+                    and file.lower().endswith((".csv", ".html"))
+                ):
+
                     # Skip if already processed (check marker in CONDITION folder, not flow folder)
-                    if not FileProcessor.check_completion_marker(condition_folder_path, "REPORT DONE.txt"):
+                    if not FileProcessor.check_completion_marker(
+                        condition_folder_path, "REPORT DONE.txt"
+                    ):
                         clean_path = file_path.replace(
                             "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
                         ).replace("\\", " ")
@@ -540,23 +599,25 @@ class DirectoryPoller:
                         clean_path
                         condition_list.append(file_path)
                         found = True
-                    else :
+                    else:
                         clean_path = condition_folder_path.replace(
                             "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
                         ).replace("\\", " ")
                         False and print(f"[Polling] REPORT DONE {clean_path}")
-        
+
         return found
 
-    def check_csv_folder(self, path: str, stdf_list: List[str], seen_paths: Set[str]) -> bool:
+    def check_csv_folder(
+        self, path: str, stdf_list: List[str], seen_paths: Set[str]
+    ) -> bool:
         """
         Check if CSV folder needs processing and add STDF files to processing list.
-        
+
         Args:
             path: Path to check
             stdf_list: List to append STDF file paths
             seen_paths: Set of already processed paths
-            
+
         Returns:
             True if CSV folder is ready for report generation
         """
@@ -567,21 +628,25 @@ class DirectoryPoller:
             ).replace("\\", " ")
             False and print(f"[Polling] REPORT DONE {clean_path}")
             return False
-            
+
         # Look for STDF files
-        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))]
-        
+        std_files = [
+            f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))
+        ]
+
         if len(std_files) == 1:
             csv_folder_path = os.path.join(path, "csv")
-            
+
             # Check if CSV files already exist
             if os.path.isdir(csv_folder_path):
-                csv_files = [f for f in os.listdir(csv_folder_path) if f.endswith(".csv")]
+                csv_files = [
+                    f for f in os.listdir(csv_folder_path) if f.endswith(".csv")
+                ]
                 if len(csv_files) > 8:
                     return True
-                    
+
             f = std_files[0]
-            new_name = f.rsplit('.', 1)[0] + ".std"
+            new_name = f.rsplit(".", 1)[0] + ".std"
             old_path = os.path.join(path, f)
             new_path = os.path.join(path, new_name)
 
@@ -594,57 +659,73 @@ class DirectoryPoller:
                 print(f"[Polling] New STDF found: {new_name}")
                 stdf_list.append(new_path)
                 seen_paths.add(new_path)
-                
+
         else:
             if len(std_files) == 0:
                 return False
-            if FileProcessor.check_completion_marker(os.path.dirname(path), "REPORT DONE.txt"):
+            if FileProcessor.check_completion_marker(
+                os.path.dirname(path), "REPORT DONE.txt"
+            ):
                 clean_path = path.replace(
                     "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
                 ).replace("\\", " ")
                 False and print(f"[Polling] REPORT DONE {clean_path}")
                 return False
-            all_ready = True 
+            all_ready = True
             for f in std_files:
                 csv_folder_path = os.path.join(path, "csv")
-                
+
                 if os.path.isdir(csv_folder_path):
-                    csv_files = [cf for cf in os.listdir(csv_folder_path) if cf.endswith(".csv") and cf.startswith(f)]
+                    csv_files = [
+                        cf
+                        for cf in os.listdir(csv_folder_path)
+                        if cf.endswith(".csv") and cf.startswith(f)
+                    ]
                     if len(csv_files) <= 8:
-                        all_ready = False  
+                        all_ready = False
                     else:
                         continue
-                
-                new_name = f.rsplit('.', 1)[0] + ".std"
+                else:
+                    all_ready = False
+
+                new_name = f.rsplit(".", 1)[0] + ".std"
                 old_path = os.path.join(path, f)
                 new_path = os.path.join(path, new_name)
-                
+
                 if f.lower() != new_name.lower() and not os.path.exists(new_path):
                     os.rename(old_path, new_path)
                 else:
                     new_path = old_path
-                    
+
                 if new_path not in seen_paths:
                     print(f"[Polling] New STDF found: {new_name}")
                     stdf_list.append(new_path)
                     seen_paths.add(new_path)
-            
+
             if all_ready:
                 return True
-            
+
         return False
 
-    def check_report_folder(self, path: str, csv_list: List[str], char_list: List[str], logger: logging.Logger):
+    def check_report_folder(
+        self,
+        path: str,
+        csv_list: List[str],
+        char_list: List[str],
+        logger: logging.Logger,
+    ):
         """
         Check if report folder needs processing and add to report generation list.
-        
+
         Args:
             path: Path to check
             csv_list: List to append file paths for report generation
             logger: Logger instance
         """
-        std_files = [f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))]
-        
+        std_files = [
+            f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))
+        ]
+
         if len(std_files) == 1:
             report_folder_path = os.path.join(path, "Report")
             std_file_path = os.path.join(path, std_files[0])
@@ -654,10 +735,16 @@ class DirectoryPoller:
                 csv_list.append(std_file_path)
             else:
                 # Check for missing composite reports
-                parameter = ParameterExtractor.get_parameter_from_stdf_path(std_file_path)
-                svn_url = ( f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/"
-                            f"{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf")
-                composite_list = CompositeManager.get_composite_list(logger=logger, svn_url=svn_url)
+                parameter = ParameterExtractor.get_parameter_from_stdf_path(
+                    std_file_path
+                )
+                svn_url = (
+                    f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/"
+                    f"{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf"
+                )
+                composite_list = CompositeManager.get_composite_list(
+                    logger=logger, svn_url=svn_url
+                )
 
                 # Collect all HTML files in Report directory
                 html_files = []
@@ -675,7 +762,7 @@ class DirectoryPoller:
                 if missing_composites:
                     print(f"[Polling] New CSV found: {std_files[0]}")
                     csv_list.append(std_file_path)
-        else: 
+        else:
             if len(std_files) == 0:
                 return
             char_list.append(path)
@@ -684,22 +771,22 @@ class DirectoryPoller:
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
         """
         Check if folder contains a SHMOO subdirectory and add it to shmoo list.
-        
+
         Args:
             folder_path: Path to flow folder (e.g., EWS1, EWS2, FT, etc.)
             shmoo_list: List to append found folder paths
-            
+
         Returns:
             True if at least one folder was found
         """
         found = False
-        
+
         # Look for SHMOO subdirectory within the flow folder
         shmoo_folder_path = os.path.join(folder_path, "SHMOO")
-        
+
         if os.path.isdir(shmoo_folder_path):
             # Skip if no .shm files found in SHMOO folder
-            shm_files = [f for f in os.listdir(shmoo_folder_path) if f.endswith('.shm')]
+            shm_files = [f for f in os.listdir(shmoo_folder_path) if f.endswith(".shm")]
             if shm_files:  # Se ci sono file .shm, è un nuovo SHMOO
                 clean_path = shmoo_folder_path.replace(
                     "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
@@ -713,271 +800,364 @@ class DirectoryPoller:
                 ).replace("\\", " ")
                 False and print(f"[Polling] No .shm files in {clean_path}")
 
-        
         return found
 
-    def poll_directory(self, directory: str, logger: logging.Logger) -> Tuple[List[str], List[str], List[str], List[str]]:
+    def poll_directory(
+        self, directory: str, logger: logging.Logger
+    ) -> Tuple[List[str], List[str], List[str], List[str]]:
         """
         Poll directory for new files to process with advanced progress display.
-        
+
         Args:
             directory: Root directory to poll
             logger: Logger instance
-            
+
         Returns:
             Tuple of lists for STDF2CSV, CSV2Report, condition, and shmoo processing
         """
         import time
-        
+
         # Initialize lists and tracking sets
         seen_paths = set()
         stdf_list = []
         csv_list = []
         condition_list = []
-        shmoo_list = []  
-        char_list = []  
-        
+        shmoo_list = []
+        char_list = []
+
         # Progress tracking
         start_time = time.time()
         last_progress_time = 0
-        
-        def _show_product_progress(current: int, total: int, product_name: str, start_time: float):
+
+        def _show_product_progress(
+            current: int, total: int, product_name: str, start_time: float
+        ):
             """Show progress bar with product name and performance metrics"""
             nonlocal last_progress_time
             current_time = time.time()
-            
+
             # Update only every 0.1 seconds to avoid performance impact
             if current_time - last_progress_time < 0.1 and current < total:
                 return
-                
+
             percentage = (current / total) * 100 if total > 0 else 0
-            
+
             # Progress bar visualization
             bar_width = 30
             if percentage >= 98.0:
                 filled = bar_width
             else:
                 filled = int(bar_width * current / total) if total > 0 else 0
-            bar = '█' * filled + '░' * (bar_width - filled)
-            
+            bar = "█" * filled + "░" * (bar_width - filled)
+
             # Truncate product name if too long
             max_product_len = 3
-            display_product = product_name[:max_product_len] + "..." if len(product_name) > max_product_len else product_name
-            
+            display_product = (
+                product_name[:max_product_len] + "..."
+                if len(product_name) > max_product_len
+                else product_name
+            )
+
             progress_text = f"Product: {display_product:<5} [{bar}] {percentage:5.1f}% | {current}/{total}"
-            
-            print(f"\r{progress_text}", end='', flush=True)
+
+            print(f"\r{progress_text}", end="", flush=True)
             last_progress_time = current_time
-            
+
         def _read_product_list_from_file(root_dir):
             config_file = os.path.join(root_dir, "ARTstdf_Product.cnf")
             if not os.path.isfile(config_file):
                 return None  # File non esiste
-            
+
             with open(config_file, "r") as f:
                 content = f.read().strip()
-            
+
             # Rimuovi parentesi quadre e spazi
             content = content.strip("[] \n\r\t")
-            
+
             # Dividi per virgola e rimuovi spazi e virgole residue
-            items = [item.strip().rstrip(',') for item in content.split(",") if item.strip()]
-            
+            items = [
+                item.strip().rstrip(",") for item in content.split(",") if item.strip()
+            ]
+
             return items
-        
+
         False and print("[Polling] Search valid paths...")
-        
 
         # Walk through directory structure
         for root, dirs, files in os.walk(directory):
             matching_dirs = [d for d in dirs if self.config.product_regex.match(d)]
-            
+
             product_list_from_file = _read_product_list_from_file(root)
-            
+
             if product_list_from_file is not None:
-                matching_dirs = [d for d in matching_dirs if d in product_list_from_file]
-            
+                matching_dirs = [
+                    d for d in matching_dirs if d in product_list_from_file
+                ]
+
             max_iterations = len(matching_dirs)
             if max_iterations == 0:
                 continue
-                
+
             for index, product in enumerate(matching_dirs, start=1):
                 # Show progress with product name
                 _show_product_progress(index, max_iterations, product, start_time)
-                
+
                 product_path = os.path.join(root, product)
                 printed_something = False
-                
+
                 if os.path.isdir(product_path):
                     # Cattura stdout per verificare se vengono stampate righe
                     from io import StringIO
                     import sys
-                    
+
                     # Salva lo stdout originale
                     original_stdout = sys.stdout
-                    
+
                     # Crea un buffer per catturare l'output
                     captured_output = StringIO()
                     sys.stdout = captured_output
-                    
+
                     try:
                         # Elabora la directory del prodotto
                         self._process_product_directory(
-                            product_path, product, stdf_list, csv_list, 
-                            condition_list, shmoo_list, char_list, seen_paths, logger 
+                            product_path,
+                            product,
+                            stdf_list,
+                            csv_list,
+                            condition_list,
+                            shmoo_list,
+                            char_list,
+                            seen_paths,
+                            logger,
                         )
                     finally:
                         # Ripristina stdout originale
                         sys.stdout = original_stdout
-                    
+
                     # Ottieni l'output catturato
                     output_content = captured_output.getvalue()
-                    
+
                     # Se c'è output, stampalo mantenendo la progress bar
                     if output_content.strip():
                         # Clear the progress line
-                        print('\r' + ' ' * 120, end='\r', flush=True)
-                        
+                        print("\r" + " " * 120, end="\r", flush=True)
+
                         # Print the captured output
-                        print(output_content, end='')
+                        print(output_content, end="")
                         printed_something = True
-                        
+
                         # Reshow progress bar if not the last item
                         if index < max_iterations:
-                            _show_product_progress(index, max_iterations, product, start_time)
+                            _show_product_progress(
+                                index, max_iterations, product, start_time
+                            )
 
             # Clear the final progress line when done
             if max_iterations > 0:
-                print('\r' + ' ' * 120, end='\r', flush=True)
-                
+                print("\r" + " " * 120, end="\r", flush=True)
+
             False and print("[Polling] Completed")
             break
 
         return stdf_list, csv_list, condition_list, shmoo_list, char_list
-    
-    def _process_product_directory(self, product_path: str, product: str, 
-                                stdf_list: List[str], csv_list: List[str], 
-                                condition_list: List[str], shmoo_list: List[str], char_list: List[str],
-                                seen_paths: Set[str], logger: logging.Logger):
+
+    def _process_product_directory(
+        self,
+        product_path: str,
+        product: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        condition_list: List[str],
+        shmoo_list: List[str],
+        char_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """Process a single product directory."""
         productcut_regex = re.compile(rf"^{product}[A-Z]$")
-        
+
         for productcut in os.listdir(product_path):
             if productcut_regex.match(productcut):
                 productcut_path = os.path.join(product_path, productcut)
-                
+
                 if os.path.isdir(productcut_path):
                     self._process_productcut_directory(
-                        productcut_path, stdf_list, csv_list, 
-                        condition_list, shmoo_list, char_list, seen_paths, logger 
+                        productcut_path,
+                        stdf_list,
+                        csv_list,
+                        condition_list,
+                        shmoo_list,
+                        char_list,
+                        seen_paths,
+                        logger,
                     )
-                    
-    def _process_productcut_directory(self, productcut_path: str, stdf_list: List[str], 
-                                csv_list: List[str], condition_list: List[str], 
-                                shmoo_list: List[str], char_list: List[str], seen_paths: Set[str], logger: logging.Logger):
+
+    def _process_productcut_directory(
+        self,
+        productcut_path: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        condition_list: List[str],
+        shmoo_list: List[str],
+        char_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """Process a single productcut directory."""
         for flow in os.listdir(productcut_path):
             flow_path = os.path.join(productcut_path, flow)
-            
+
             if flow in self.config.allowed_flow and os.path.isdir(flow_path):
                 # Process EWS flows
                 if flow == "EWSCHAR":
-                    self._process_ews_char(flow_path, stdf_list, csv_list, char_list, seen_paths, logger)
+                    self._process_ews_char(
+                        flow_path, stdf_list, csv_list, char_list, seen_paths, logger
+                    )
                 elif flow.startswith("EWS"):
-                    self._process_ews_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
+                    self._process_ews_flow(
+                        flow_path,
+                        stdf_list,
+                        csv_list,
+                        condition_list,
+                        shmoo_list,
+                        seen_paths,
+                        logger,
+                    )
                 # Process non-EWS flows
                 else:
-                    self._process_standard_flow(flow_path, stdf_list, csv_list, condition_list, shmoo_list, seen_paths, logger)
+                    self._process_standard_flow(
+                        flow_path,
+                        stdf_list,
+                        csv_list,
+                        condition_list,
+                        shmoo_list,
+                        seen_paths,
+                        logger,
+                    )
 
-    def _process_ews_char(self, flow_path: str, stdf_list: List[str], csv_list: List[str], char_list: List[str],
-                seen_paths: Set[str], logger: logging.Logger):  
+    def _process_ews_char(
+        self,
+        flow_path: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        char_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """
         Process EWS flow directory.
         Updated to check for CONDITION and SHMOO subdirectory.
         """
-        
+
         for wafer in os.listdir(flow_path):
             wafer_path = os.path.join(flow_path, wafer)
 
             if os.path.isdir(wafer_path):
                 if self.check_csv_folder(wafer_path, stdf_list, seen_paths):
                     self.check_report_folder(wafer_path, csv_list, char_list, logger)
-                    return
 
-    
-    def _process_ews_flow(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
-                 condition_list: List[str], shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):  
+    def _process_ews_flow(
+        self,
+        flow_path: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        condition_list: List[str],
+        shmoo_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """
         Process EWS flow directory.
         Updated to check for CONDITION and SHMOO subdirectory.
         """
         # Check for condition files in CONDITION subdirectory
         self.check_condition_files(flow_path, condition_list)
-        
-        # Check for shmoo folders in SHMOO subdirectory 
+
+        # Check for shmoo folders in SHMOO subdirectory
         self.check_shmoo_folders(flow_path, shmoo_list)
-        
+
         for lot in os.listdir(flow_path):
             lot_path = os.path.join(flow_path, lot)
-            
-            # Skip the CONDITION and SHMOO directory when processing lots  
+
+            # Skip the CONDITION and SHMOO directory when processing lots
             if lot in ["CONDITION", "SHMOO"]:
                 continue
-                
+
             if os.path.isdir(lot_path):
                 lot_wafer_regex = re.compile(rf"^{lot}_([0][1-9]|1[0-9]|2[0-5])$")
-                
+
                 for wafer in os.listdir(lot_path):
                     wafer_path = os.path.join(lot_path, wafer)
-                    
-                    if (lot_wafer_regex.match(wafer) and os.path.isdir(wafer_path)):
-                        self._process_wafer_subfolders(wafer_path, stdf_list, csv_list, seen_paths, logger)
 
-    def _process_standard_flow(self, flow_path: str, stdf_list: List[str], csv_list: List[str], 
-                      condition_list: List[str], shmoo_list: List[str], seen_paths: Set[str], logger: logging.Logger):  
+                    if lot_wafer_regex.match(wafer) and os.path.isdir(wafer_path):
+                        self._process_wafer_subfolders(
+                            wafer_path, stdf_list, csv_list, seen_paths, logger
+                        )
+
+    def _process_standard_flow(
+        self,
+        flow_path: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        condition_list: List[str],
+        shmoo_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """
         Process standard (non-EWS) flow directory.
         Updated to check for CONDITION and SHMOO subdirectory.
         """
         # Check for condition files in CONDITION subdirectory
         self.check_condition_files(flow_path, condition_list)
-        
-        # Check for shmoo folders in SHMOO subdirectory 
+
+        # Check for shmoo folders in SHMOO subdirectory
         self.check_shmoo_folders(flow_path, shmoo_list)
-        
+
         for package in os.listdir(flow_path):
             package_path = os.path.join(flow_path, package)
-            
-            # Skip the CONDITION and SHMOO directory when processing packages  
+
+            # Skip the CONDITION and SHMOO directory when processing packages
             if package in ["CONDITION", "SHMOO"]:
                 continue
-            
-            if (os.path.isdir(package_path) and 
-                any(pkg in package for pkg in self.config.allowed_package)):
-                
+
+            if os.path.isdir(package_path) and any(
+                pkg in package for pkg in self.config.allowed_package
+            ):
+
                 for badge in os.listdir(package_path):
                     badge_path = os.path.join(package_path, badge)
-                    
-                    if os.path.isdir(badge_path):
-                        self._process_wafer_subfolders(badge_path, stdf_list, csv_list, seen_paths, logger)
 
-    def _process_wafer_subfolders(self, base_path: str, stdf_list: List[str], csv_list: List[str], 
-                                 seen_paths: Set[str], logger: logging.Logger):
+                    if os.path.isdir(badge_path):
+                        self._process_wafer_subfolders(
+                            badge_path, stdf_list, csv_list, seen_paths, logger
+                        )
+
+    def _process_wafer_subfolders(
+        self,
+        base_path: str,
+        stdf_list: List[str],
+        csv_list: List[str],
+        seen_paths: Set[str],
+        logger: logging.Logger,
+    ):
         """Process wafer subfolders (x30, VOLUME)."""
         for subfolder in ["x30", "VOLUME"]:
             subfolder_path = os.path.join(base_path, subfolder)
-            
+
             if os.path.isdir(subfolder_path):
                 if self.check_csv_folder(subfolder_path, stdf_list, seen_paths):
                     self.check_report_folder(subfolder_path, csv_list, [], logger)
+
 
 # ==================================================
 # Processing Workers
 # ==================================================
 
+
 class ProcessingWorker:
     """Base class for processing workers."""
-    
+
     def __init__(self, process_type: ProcessType):
         self.process_type = process_type
 
@@ -991,22 +1171,21 @@ class ProcessingWorker:
     def get_completion_marker_info(self) -> Tuple[str, str]:
         """Get completion marker file name and content."""
         return (
-                "REPORT DONE.txt",
-                "IF YOU READ THIS ALL REPORT HAVE BEEN GENERATED \n"
-                "THIS FOLDER WILL BE SKIPPED\n"
-                "IN CASE DELETE THIS FILE END REPORT YOU WANT TO REGENERATE AND WAIT"
-            )
-            
-        
+            "REPORT DONE.txt",
+            "IF YOU READ THIS ALL REPORT HAVE BEEN GENERATED \n"
+            "THIS FOLDER WILL BE SKIPPED\n"
+            "IN CASE DELETE THIS FILE END REPORT YOU WANT TO REGENERATE AND WAIT",
+        )
+
     def read_csv_to_dataframe(self, parameter: Dict, csv_path: str) -> Dict:
         """
         Legge i file CSV e restituisce un dizionario di DataFrame.
         CORREZIONE: Rimossa la definizione di funzione annidata e corretti i parametri.
-        
+
         Args:
             parameter: Dizionario dei parametri contenente le informazioni del file
             csv_path: Percorso base del file CSV
-            
+
         Returns:
             Dict: Dizionario contenente i DataFrame dei file CSV
         """
@@ -1014,13 +1193,15 @@ class ProcessingWorker:
         try:
             with open("src/jupiter/personalization.json", "r") as file:
                 data = json.load(file)
-            
+
             # Recupera il nome del prodotto
             product_data = data.get(parameter["CODE"], {})
             product_name = product_data.get("product_name", "")
             parameter["PRODUCT"] = product_name
         except FileNotFoundError:
-            print("[WARNING] personalization.json not found, using default product name")
+            print(
+                "[WARNING] personalization.json not found, using default product name"
+            )
             parameter["PRODUCT"] = parameter.get("CODE", "")
         except Exception as e:
             print(f"[ERROR] Error reading personalization.json: {e}")
@@ -1029,11 +1210,11 @@ class ProcessingWorker:
         def read_csv_file(file_path: str, usecols=None) -> pd.DataFrame:
             """
             Funzione helper per leggere un file CSV.
-            
+
             Args:
                 file_path: Percorso del file CSV
                 usecols: Colonne da leggere (opzionale)
-                
+
             Returns:
                 DataFrame o DataFrame vuoto se il file non esiste
             """
@@ -1049,7 +1230,9 @@ class ProcessingWorker:
                 return pd.DataFrame()
 
         # Legge tutti i file CSV necessari
-        ptr = read_csv_file(f"{csv_path}.ptr.csv", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15])
+        ptr = read_csv_file(
+            f"{csv_path}.ptr.csv", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15]
+        )
         ftr = read_csv_file(f"{csv_path}.ftr.csv", usecols=[0, 1, 4, 23])
         mir = read_csv_file(f"{csv_path}.mir.csv")
         prr = read_csv_file(f"{csv_path}.prr.csv")
@@ -1065,19 +1248,20 @@ class ProcessingWorker:
             "prr": prr,
             "pcr": pcr,
             "hbr": hbr,
-            "sbr": sbr
+            "sbr": sbr,
         }
 
         return df_stdf
 
+
 class ReportWorker(ProcessingWorker):
     """Worker for report generation (CSV2REPORT and CONDITION2REPORT)."""
-    
+
     def process_file(self, path: str, logger: logging.Logger):
         """
         Main processing function for condition report generation.
         Updated to handle CONDITION subdirectory structure.
-        
+
         Args:
             path: Path to condition file to process
             logger: Logger instance
@@ -1086,63 +1270,88 @@ class ReportWorker(ProcessingWorker):
             parameter = ParameterExtractor.get_parameter(path)
         else:
             parameter = ParameterExtractor.get_parameter_from_condition_path(path)
-        
+
         # Get composite list
-        svn_url = (f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/"
-                f"{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf")
-        composite_list = CompositeManager.get_composite_list(logger=logger, svn_url=svn_url)
-        
+        svn_url = (
+            f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/"
+            f"{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf"
+        )
+        composite_list = CompositeManager.get_composite_list(
+            logger=logger, svn_url=svn_url
+        )
+
         df_stdf = None
         csv_path = None
         if self.process_type == ProcessType.CSV2REPORT:
             csv_path = os.path.join(
-                os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),
+                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]),
                 "csv",
-                os.path.basename(parameter['FILE'][parameter['WAFER']]['path'])
+                os.path.basename(parameter["FILE"][parameter["WAFER"]]["path"]),
             )
             df_stdf = self.read_csv_to_dataframe(parameter, csv_path)
-        
+
         # Process each composite
         for composite in composite_list:
             parameter["COM"] = composite
             parameter["TITLE"] = self.create_title(parameter, composite)
-            
+
             # Skip if composite should be skipped
             if CompositeManager.should_skip_composite(parameter, self.process_type):
                 continue
-                
-            report_path = FileProcessor.get_report_path(path, parameter, self.process_type)
-            
+
+            report_path = FileProcessor.get_report_path(
+                path, parameter, self.process_type
+            )
+
             if not os.path.isfile(report_path):
                 try:
                     # Passa df_stdf e csv_path già preparati
-                    self._run_report_generation(parameter, path, logger, df_stdf, csv_path)
+                    self._run_report_generation(
+                        parameter, path, logger, df_stdf, csv_path
+                    )
                 except Exception as e:
-                    print(f"[{self.process_type.value.upper()}] Error in {composite}: {e}")
+                    print(
+                        f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
+                    )
             else:
-                print(f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}")
-        
+                print(
+                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}"
+                )
+
         # Create completion marker in the CONDITION directory (parent of the file)
         if self.process_type == ProcessType.CONDITION2REPORT:
             condition_directory = os.path.dirname(path)
         else:
             condition_directory = os.path.dirname(path)
         marker_name, marker_content = self.get_completion_marker_info()
-        FileProcessor.create_completion_marker(condition_directory, marker_name, marker_content)
+        FileProcessor.create_completion_marker(
+            condition_directory, marker_name, marker_content
+        )
 
     def _log_start_message(self, parameter: Dict):
         """Log start message for report generation."""
         if self.process_type == ProcessType.CSV2REPORT:
-            print(f"[CSV2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
-                 f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
+            print(
+                f"[CSV2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
+                f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}"
+            )
         else:
-            print(f"[CONDITION2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
-                 f"{parameter['COM']} condition")
+            print(
+                f"[CONDITION2REPORT] Start Report {parameter['CUT']} {parameter['FLOW']} "
+                f"{parameter['COM']} condition"
+            )
 
-    def _run_report_generation(self, parameter: Dict, path: str, logger: logging.Logger, df_stdf: Dict = None, csv_path: str = None):
+    def _run_report_generation(
+        self,
+        parameter: Dict,
+        path: str,
+        logger: logging.Logger,
+        df_stdf: Dict = None,
+        csv_path: str = None,
+    ):
         """
         Run the actual report generation.
-        
+
         Args:
             parameter: Parameter dictionary
             path: File path
@@ -1156,12 +1365,17 @@ class ReportWorker(ProcessingWorker):
         if self.process_type == ProcessType.CSV2REPORT:
             # Usa i dati già caricati invece di rileggerli
             core.process_composite(local_parameter, csv_path, df_stdf)
-            print(f"[CSV2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
-                 f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}")
+            print(
+                f"[CSV2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
+                f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}"
+            )
         else:
             core.process_condition(local_parameter, path, df_stdf)
-            print(f"[CONDITION2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
-                 f"{parameter['COM']} condition")
+            print(
+                f"[CONDITION2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
+                f"{parameter['COM']} condition"
+            )
+
 
 class STDFWorker(ProcessingWorker):
     """Worker for STDF to CSV conversion."""
@@ -1172,24 +1386,28 @@ class STDFWorker(ProcessingWorker):
     def process_file(self, path: str, logger: logging.Logger):
         """
         Convert STDF file to CSV format.
-        
+
         Args:
             path: Path to STDF file
             logger: Logger instance
         """
         parameter = ParameterExtractor.get_parameter_from_stdf_path(path)
-        print(f"[STDF2CSV] Start stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-             f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
+        print(
+            f"[STDF2CSV] Start stdf2csv {parameter['CUT']} {parameter['FLOW']} "
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}"
+        )
 
         self._convert_stdf_to_csv(path, logger)
 
-        print(f"[STDF2CSV] End stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-             f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}")
+        print(
+            f"[STDF2CSV] End stdf2csv {parameter['CUT']} {parameter['FLOW']} "
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}"
+        )
 
     def _convert_stdf_to_csv(self, path: str, logger: logging.Logger):
         """
         Process STDF file conversion to CSV.
-        
+
         Args:
             path: Path to STDF file
             logger: Logger instance
@@ -1199,17 +1417,18 @@ class STDFWorker(ProcessingWorker):
         os.makedirs(csv_folder, exist_ok=True)
         csv_path = os.path.join(csv_folder, os.path.basename(path))
         stdf2csv.stdf2csv_converter(path, csv_path)
-        
+
+
 class ShmooWorker(ProcessingWorker):
     """Worker for SHMOO processing."""
-    
+
     def __init__(self):
         super().__init__(ProcessType.SHMOO)
 
     def process_file(self, directory_path: str, logger: logging.Logger):
         """
         Process SHMOO directory.
-        
+
         Args:
             directory_path: Path to SHMOO directory
             logger: Logger instance
@@ -1217,14 +1436,14 @@ class ShmooWorker(ProcessingWorker):
         clean_path = directory_path.replace(
             "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
         ).replace("\\", " ")
-        
+
         print(f"[SHMOO] Start processing SHMOO directory: {clean_path}")
-        
+
         try:
             shmoo.ShmooVisualizer().process_shmoo_files(directory_path)
-            
+
             print(f"[SHMOO] End processing SHMOO directory: {clean_path}")
-            
+
         except ImportError:
             error_msg = f"[SHMOO] ERROR: shmoo library not found for {clean_path}"
             print(error_msg)
@@ -1234,13 +1453,14 @@ class ShmooWorker(ProcessingWorker):
             print(error_msg)
             logger.error(error_msg)
 
+
 class CharWorker(ProcessingWorker):
-    
+
     def process_file(self, path: str, logger: logging.Logger):
         """
         Main processing function for condition report generation.
         Updated to handle CONDITION subdirectory structure.
-        
+
         Args:
             path: Path to condition file to process
             logger: Logger instance
@@ -1248,66 +1468,51 @@ class CharWorker(ProcessingWorker):
         parameter = ParameterExtractor.get_parameter(path)
 
         # Get composite list
-        svn_url = (f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf")
-        composite_list = CompositeManager.get_composite_list(logger=logger, svn_url=svn_url)
-        
+        svn_url = f"svn://mcd-pe-svn.gnb.st.com/prj/ENGI_MCD_SVN/TPI_REPO/trunk/{parameter['CUT']}/{parameter['FLOW']}/cnf/composites.cnf"
+        composite_list = CompositeManager.get_composite_list(
+            logger=logger, svn_url=svn_url
+        )
+        composite_list.remove("TTIME") if "TTIME" in composite_list else None
+        if len(composite_list) == 0: 
+            print(
+                        f"[{self.process_type.value.upper()}] No composite found"
+                    )
         for composite in composite_list:
             parameter["COM"] = composite
             parameter["TITLE"] = self.create_title(parameter, composite)
             local_parameter = copy.deepcopy(parameter)
-            
+
             # Skip if composite should be skipped
             if CompositeManager.should_skip_composite(parameter, self.process_type):
                 continue
-                
-            report_path = FileProcessor.get_report_path(path, parameter, self.process_type)
-            
-            if not os.path.isfile(report_path):
+
+            report_path = FileProcessor.get_report_path(
+                path, parameter, self.process_type
+            )
+
+            if not os.path.isdir(os.path.join(report_path, composite)):
                 try:
-                    char.run(path=path,parameter=local_parameter,composite=composite)
+                    char.run(
+                        path=report_path, parameter=local_parameter, composite=composite
+                    )
                 except Exception as e:
-                    print(f"[{self.process_type.value.upper()}] Error in {composite}: {e}")
+                    print(
+                        f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
+                    )
             else:
-                print(f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}")
-        
-        mainfolder = path.split("CHAR")[0]+"CHAR"
+                print(f"[{self.process_type.value.upper()}] Report done {composite}")
+                continue
+            char.gen_mainmenu(parameter=parameter, path=report_path)
+            # break  # UNCOMMET IF ONE COMP
+        mainfolder = path.split("CHAR")[0] + "CHAR"
         marker_name, marker_content = self.get_completion_marker_info()
-        FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
-        
-        # df_stdf = None
-        # csv_path = None
-        
-        #     csv_path = os.path.join(
-        #         os.path.dirname(parameter['FILE'][parameter['WAFER']]['path']),
-        #         "csv",
-        #         os.path.basename(parameter['FILE'][parameter['WAFER']]['path'])
-        #     )
-        #     df_stdf = self.read_csv_to_dataframe(parameter, csv_path)
-        
-        # # Process each composite
-        # for composite in composite_list:
-        #     parameter["COM"] = composite
-        #     parameter["TITLE"] = self.create_title(parameter, composite)
-            
-        #     # Skip if composite should be skipped
-        #     if CompositeManager.should_skip_composite(parameter, self.process_type):
-        #         continue
-                
-        #     report_path = FileProcessor.get_report_path(path, parameter, self.process_type)
-            
-        #     if not os.path.isfile(report_path):
-        #         try:
-        #             # Passa df_stdf e csv_path già preparati
-        #             self._run_report_generation(parameter, path, logger, df_stdf, csv_path)
-        #         except Exception as e:
-        #             print(f"[{self.process_type.value.upper()}] Error in {composite}: {e}")
-        #     else:
-        #         print(f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}")
-                
+        # FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
+
 
 # ==================================================
 # Main Processing System
 # ==================================================
+
 
 class STDFProcessingSystem:
     """Main processing system that coordinates all operations."""
@@ -1315,32 +1520,34 @@ class STDFProcessingSystem:
     def __init__(self, watch_path: str):
         """
         Initialize the STDF processing system.
-        
+
         Args:
             watch_path: Root directory to monitor for files
         """
         self.watch_path = watch_path
         self.config = ProcessingConfig()
         self.poller = DirectoryPoller(self.config)
-        
+
         # Initialize workers
         self.stdf_worker = STDFWorker()
         self.csv_worker = ReportWorker(ProcessType.CSV2REPORT)
         self.condition_worker = ReportWorker(ProcessType.CONDITION2REPORT)
-        self.shmoo_worker = ShmooWorker() 
-        self.char_worker = CharWorker(ProcessType.CHAR) 
-        
+        self.shmoo_worker = ShmooWorker()
+        self.char_worker = CharWorker(ProcessType.CHAR)
+
         # Initialize loggers
-        self.polling_logger = setup_logger('polling', 'log/polling.log')
-        self.stdf2csv_logger = setup_logger('stdf2csv', 'log/stdf2csv.log')
-        self.csv2report_logger = setup_logger('csv2report', 'log/csv2report.log')
-        self.condition2report_logger = setup_logger('condition2report', 'log/condition2report.log')
-        self.shmoo_logger = setup_logger('shmoo', 'log/shmoo.log') 
-                
+        self.polling_logger = setup_logger("polling", "log/polling.log")
+        self.stdf2csv_logger = setup_logger("stdf2csv", "log/stdf2csv.log")
+        self.csv2report_logger = setup_logger("csv2report", "log/csv2report.log")
+        self.condition2report_logger = setup_logger(
+            "condition2report", "log/condition2report.log"
+        )
+        self.shmoo_logger = setup_logger("shmoo", "log/shmoo.log")
+
     def process_stdf_files(self, stdf_list: List[str]):
         """
         Process STDF files for conversion to CSV.
-        
+
         Args:
             stdf_list: List of STDF file paths to process
         """
@@ -1348,13 +1555,15 @@ class STDFProcessingSystem:
             try:
                 self.stdf_worker.process_file(stdf_file, self.stdf2csv_logger)
             except Exception as e:
-                self.stdf2csv_logger.error(f"Error processing STDF file {stdf_file}: {e}")
+                self.stdf2csv_logger.error(
+                    f"Error processing STDF file {stdf_file}: {e}"
+                )
                 print(f"[ERROR] STDF processing failed for {stdf_file}: {e}")
-    
+
     def process_csv_files(self, csv_list: List[str]):
         """
         Process CSV files for report generation.
-        
+
         Args:
             csv_list: List of CSV file paths to process
         """
@@ -1362,13 +1571,15 @@ class STDFProcessingSystem:
             try:
                 self.csv_worker.process_file(csv_file, self.csv2report_logger)
             except Exception as e:
-                self.csv2report_logger.error(f"Error generating report for {csv_file}: {e}")
+                self.csv2report_logger.error(
+                    f"Error generating report for {csv_file}: {e}"
+                )
                 print(f"[ERROR] CSV report generation failed for {csv_file}: {e}")
 
     def process_char_files(self, char_list: List[str]):
         """
         Process CHAR files for report generation.
-        
+
         Args:
             char_list: List of CHAR file paths to process
         """
@@ -1376,27 +1587,35 @@ class STDFProcessingSystem:
             try:
                 self.char_worker.process_file(char_path, self.csv2report_logger)
             except Exception as e:
-                self.csv2report_logger.error(f"Error generating report for {char_path}: {e}")
+                self.csv2report_logger.error(
+                    f"Error generating report for {char_path}: {e}"
+                )
                 print(f"[ERROR] CSV report generation failed for {char_path}: {e}")
-    
+
     def process_condition_files(self, condition_list: List[str]):
         """
         Process condition files for report generation.
-        
+
         Args:
             condition_list: List of condition file paths to process
         """
         for condition_file in condition_list:
             try:
-                self.condition_worker.process_file(condition_file, self.condition2report_logger)
+                self.condition_worker.process_file(
+                    condition_file, self.condition2report_logger
+                )
             except Exception as e:
-                self.condition2report_logger.error(f"Error generating condition report for {condition_file}: {e}")
-                print(f"[ERROR] Condition report generation failed for {condition_file}: {e}")
-                
+                self.condition2report_logger.error(
+                    f"Error generating condition report for {condition_file}: {e}"
+                )
+                print(
+                    f"[ERROR] Condition report generation failed for {condition_file}: {e}"
+                )
+
     def process_shmoo_files(self, shmoo_list: List[str]):
         """
         Process SHMOO directories.
-        
+
         Args:
             shmoo_list: List of SHMOO directory paths to process
         """
@@ -1404,63 +1623,78 @@ class STDFProcessingSystem:
             try:
                 self.shmoo_worker.process_file(shmoo_dir, self.shmoo_logger)
             except Exception as e:
-                self.shmoo_logger.error(f"Error processing SHMOO directory {shmoo_dir}: {e}")
+                self.shmoo_logger.error(
+                    f"Error processing SHMOO directory {shmoo_dir}: {e}"
+                )
                 print(f"[ERROR] SHMOO processing failed for {shmoo_dir}: {e}")
 
     def run_single_cycle(self):
         """
         Execute a single processing cycle.
-        
+
         Returns:
             Tuple of (stdf_count, csv_count, condition_count, shmoo_count) processed
         """
         # Poll for new files
-        stdf_list, csv_list, condition_list, shmoo_list, char_list = self.poller.poll_directory( 
-            self.watch_path, self.polling_logger
+        stdf_list, csv_list, condition_list, shmoo_list, char_list = (
+            self.poller.poll_directory(self.watch_path, self.polling_logger)
         )
-        
+
         # Process files
         self.process_condition_files(condition_list)
         self.process_shmoo_files(shmoo_list)
         self.process_csv_files(csv_list)
         self.process_stdf_files(stdf_list)
         self.process_char_files(char_list)
-        
-        return len(stdf_list), len(csv_list), len(condition_list), len(shmoo_list) 
+
+        return (
+            len(stdf_list),
+            len(csv_list),
+            len(condition_list),
+            len(shmoo_list),
+            len(char_list),
+        )
 
     def run_continuous(self, sleep_interval: int = 60):
         """
         Run the processing system continuously.
-        
+
         Args:
             sleep_interval: Time to sleep between polling cycles (seconds)
         """
         print(f"[SYSTEM] Starting STDF Processing System")
         print(f"[SYSTEM] Monitoring directory: {self.watch_path}")
         False and print(f"[SYSTEM] Polling interval: {sleep_interval} seconds")
-        
+
         cycle_count = 0
-        
         while True:
             try:
                 cycle_count += 1
                 False and print(f"\n[SYSTEM] Starting cycle {cycle_count}")
-                
+
                 # Run processing cycle
-                stdf_count, csv_count, condition_count, shmoo_count = self.run_single_cycle() 
-                
+                stdf_count, csv_count, condition_count, shmoo_count, char_count = (
+                    self.run_single_cycle()
+                )
+
                 # Report cycle results
-                total_processed = stdf_count + csv_count + condition_count + shmoo_count 
+                total_processed = (
+                    stdf_count + csv_count + condition_count + shmoo_count + char_count
+                )
                 if total_processed > 0:
-                    print(f"[SYSTEM] Cycle {cycle_count} completed: "
-                        f"STDF={stdf_count}, CSV={csv_count}, Condition={condition_count}, SHMOO={shmoo_count}") 
+                    print(
+                        f"[SYSTEM] Cycle {cycle_count} completed: "
+                        f"STDF={stdf_count}, Report={csv_count + char_count}, Condition={condition_count}, SHMOO={shmoo_count}"
+                    )
                 else:
-                    False and print(f"[SYSTEM] Cycle {cycle_count} completed: No files to process")
-                
+                    False and print(
+                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process"
+                    )
+
                 # Sleep before next cycle
                 False and print(f"[SYSTEM] Sleeping for {sleep_interval} seconds...")
                 time.sleep(sleep_interval)
-                
+
             except KeyboardInterrupt:
                 print(f"\n[SYSTEM] Shutdown requested by user")
                 break
@@ -1470,26 +1704,30 @@ class STDFProcessingSystem:
                 print(f"[SYSTEM] Continuing after error...")
                 time.sleep(sleep_interval)
 
+
 # ==================================================
 # Main Process
 # ==================================================
 
+
 def main():
     """Main execution function."""
     # Set watch path
-    watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    watch_path = r".\STDF"
     # Alternative path for Unix systems: watch_path = "/prj/ENGI_MCD_STDF"
-    
+
     # Create and run the processing system
     processing_system = STDFProcessingSystem(watch_path)
-    
+
     try:
         processing_system.run_continuous()
     except Exception as e:
         print(f"[MAIN] Fatal error: {e}")
         return 1
-    
+
     return 0
+
 
 if __name__ == "__main__":
     exit(main())

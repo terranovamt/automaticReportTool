@@ -1,0 +1,135 @@
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ui-font-color0);
+}
+h1,
+h2 {
+  font-style: normal;
+}
+.contentconteiner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+}
+.btn {
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  flex: 1;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  padding: 10px 15px;
+  border-radius: 12px 0;
+  height: auto;
+  max-width: auto;
+  background: var(--ui-font-color1);
+  color: var(--ui-font-color0);
+  font-weight: bold;
+  justify-content: center;
+}
+
+.btn:hover {
+  text-decoration: none;
+  background: var(--ui-font-color0);
+  color: var(--ui-font-color1);
+}
+
+.container-top {
+  --offset: 100px;
+  --fade: 80px;
+  display: flex;
+  align-items: flex-end;
+  width: 60px;
+  justify-self: end;
+  justify-content: flex-end;
+}
+#progress {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  height: 70px;
+  width: 70px;
+  display: none;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1;
+}
+#progress-value {
+  display: block;
+  height: calc(100% - 15px);
+  width: calc(100% - 15px);
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 35px;
+  color: var(--ui-font-color0);
+}
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+:root {
+  --ui-font-color0: #03234b;
+  --ui-font-color1: #ffd200;
+  --ui-font-color2: #3cb4e6;
+  --ui-font-color3: #e6007e;
+  --ui-font-color4: #49b170;
+  --layout-color0: #ffffff;
+  --md-grey-100: #eeeff1;
+  --ui-font-size1: 13px;
+  --content-font-family: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none;
+  color: var(--ui-font-color0);
+  font-family: var(--content-font-family);
+  font-size: var(--ui-font-size1);
+  table-layout: fixed;
+  margin: 10px;
+}
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  unicode-bidi: isolate;
+  border-color: inherit;
+}
+tbody tr:nth-child(odd) {
+  background: var(--layout-color0);
+}
+tbody tr:nth-child(even) {
+  background: var(--md-grey-100);
+}
+
+td,
+th,
+tr {
+  vertical-align: middle;
+  padding: 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}

@@ -5,6 +5,7 @@ import datetime
 import numpy as np
 import pandas as pd
 
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "jupiter"))
 import jupiter.utility as uty
 
@@ -52,7 +53,7 @@ def find_value(value, calc_type):
             return value - (value * 0.1)
 
 
-def rework_stdf(parameter,df_stdf):
+def rework_stdf(parameter, df_stdf):
     # print(parameter)
     composite = parameter["COM"]
     flwtp = parameter["TYPE"]
@@ -87,11 +88,11 @@ def rework_stdf(parameter,df_stdf):
     XY_Lot6 = product_data.get("XY_Lot6", {})
     xwafer = product_data.get("xwafer", [0, 200])
     ywafer = product_data.get("ywafer", [0, 200])
-    
+
     parameter["PRODUCT"] = product_name
 
-    base_path=os.path.dirname(parameter['CSV'])
-    
+    base_path = os.path.dirname(parameter["CSV"])
+
     # ----------==================================================---------- #
     # Read extracted file
     # ----------==================================================---------- #
@@ -155,7 +156,9 @@ def rework_stdf(parameter,df_stdf):
                 .set_index("PartID")["RESULT"]
                 .astype(int)
                 .apply(lambda x: x << 8)
-            ) + tmpptr[tmpptr["TEST_NUM"] == XY_XL].set_index("PartID")["RESULT"].astype(
+            ) + tmpptr[tmpptr["TEST_NUM"] == XY_XL].set_index("PartID")[
+                "RESULT"
+            ].astype(
                 int
             )
 
@@ -164,7 +167,9 @@ def rework_stdf(parameter,df_stdf):
                 .set_index("PartID")["RESULT"]
                 .astype(int)
                 .apply(lambda x: x << 8)
-            ) + tmpptr[tmpptr["TEST_NUM"] == XY_YL].set_index("PartID")["RESULT"].astype(
+            ) + tmpptr[tmpptr["TEST_NUM"] == XY_YL].set_index("PartID")[
+                "RESULT"
+            ].astype(
                 int
             )
 
@@ -186,13 +191,28 @@ def rework_stdf(parameter,df_stdf):
 
             value = "".join(
                 chr(int(tmpptr[tmpptr["TEST_NUM"] == var]["RESULT"].mode().iloc[0]))
-                for var in [XY_Lot0, XY_Lot1, XY_Lot2, XY_Lot3, XY_Lot4, XY_Lot5, XY_Lot6]
+                for var in [
+                    XY_Lot0,
+                    XY_Lot1,
+                    XY_Lot2,
+                    XY_Lot3,
+                    XY_Lot4,
+                    XY_Lot5,
+                    XY_Lot6,
+                ]
             )
             parameter["EWSLOT"] = value + " (FT lot " + parameter["LOT"] + ")"
         else:
-            parameter["EWSWAFER"] = str(mir.SBLOT_ID[0]).rjust(2, '0') if not pd.isna(mir.SBLOT_ID[0]) else str(parameter["WAFER"]).rjust(2, '0')
-            parameter["EWSLOT"] = str(mir.LOT_ID[0]) if not pd.isna(mir.LOT_ID[0]) else str(parameter["LOT"])
-
+            parameter["EWSWAFER"] = (
+                str(mir.SBLOT_ID[0]).rjust(2, "0")
+                if not pd.isna(mir.SBLOT_ID[0])
+                else str(parameter["WAFER"]).rjust(2, "0")
+            )
+            parameter["EWSLOT"] = (
+                str(mir.LOT_ID[0])
+                if not pd.isna(mir.LOT_ID[0])
+                else str(parameter["LOT"])
+            )
 
     except Exception as e:
         print(f"ERROR: UID Test number wrong ({e})")
@@ -334,7 +354,9 @@ def rework_stdf(parameter,df_stdf):
             )
 
             tmpptr["RESULT"] = tmpptr["RESULT"].astype(float)
-            tmpptr["RESULT"] = tmpptr["RESULT"] * tmpptr["RES_SCAL"].apply(power_of_10).astype(float)
+            tmpptr["RESULT"] = tmpptr["RESULT"] * tmpptr["RES_SCAL"].apply(
+                power_of_10
+            ).astype(float)
 
             tmpptr["HI_LIMIT"] = tmpptr["HI_LIMIT"].astype(float)
             tmpptr["HI_LIMIT"] = round(
