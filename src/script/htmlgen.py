@@ -52,7 +52,7 @@ def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
             return value * (1 - adjustment_percent)  # Less positive
 
 
-def detect_clamps(subset, limits, std_multiplier=0.9, adjustment_percent=0.01):
+def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
     """
     Detect clamp values using improved distance-based algorithm.
 
@@ -61,13 +61,15 @@ def detect_clamps(subset, limits, std_multiplier=0.9, adjustment_percent=0.01):
     2. Find second min and second max
     3. Calculate distance between extreme and second extreme
     4. If distance > (std_deviation * std_multiplier), it's likely a clamp
-    5. Set threshold by adjusting extreme value by adjustment_percent
-    6. Filter values beyond threshold
+    5. If no limits are set: remove all detected clamps
+    6. If limits are set: remove clamps only if they violate the limits
+    7. Set threshold by adjusting extreme value by adjustment_percent
+    8. Filter values beyond threshold
 
     Args:
         subset: DataFrame subset for specific corner/temperature
         limits: Dict with 'low' and 'high' limit values
-        std_multiplier: Multiplier for std deviation to determine clamp distance (default 0.9)
+        std_multiplier: Multiplier for std deviation to determine clamp distance (default 1.9)
         adjustment_percent: Percentage to adjust threshold from extreme value (default 0.01 = 1%)
 
     Returns:
@@ -108,12 +110,18 @@ def detect_clamps(subset, limits, std_multiplier=0.9, adjustment_percent=0.01):
         # Check if distance is significant compared to standard deviation
         is_min_clamp = distance_min > (std_dev * std_multiplier)
 
-        # Additional check: if limits exist, min should violate low limit
-        violates_limit = not has_limits or (
-            limits["low"] != 0 and min_val < limits["low"]
-        )
+        # Determine if we should remove this clamp based on limits
+        should_remove_min_clamp = False
 
-        if is_min_clamp and violates_limit:
+        if is_min_clamp:
+            if not has_limits:
+                # No limits set: remove all detected clamps
+                should_remove_min_clamp = True
+            else:
+                # Limits exist: remove clamp only if it violates low limit
+                should_remove_min_clamp = limits["low"] != 0 and min_val < limits["low"]
+
+        if should_remove_min_clamp:
             # Calculate threshold by adjusting minimum value
             threshold_min = calculate_clamp_threshold(
                 min_val, "min", adjustment_percent
@@ -139,12 +147,20 @@ def detect_clamps(subset, limits, std_multiplier=0.9, adjustment_percent=0.01):
         # Check if distance is significant compared to standard deviation
         is_max_clamp = distance_max > (std_dev * std_multiplier)
 
-        # Additional check: if limits exist, max should violate high limit
-        violates_limit = not has_limits or (
-            limits["high"] != 0 and max_val > limits["high"]
-        )
+        # Determine if we should remove this clamp based on limits
+        should_remove_max_clamp = False
 
-        if is_max_clamp and violates_limit:
+        if is_max_clamp:
+            if not has_limits:
+                # No limits set: remove all detected clamps
+                should_remove_max_clamp = True
+            else:
+                # Limits exist: remove clamp only if it violates high limit
+                should_remove_max_clamp = (
+                    limits["high"] != 0 and max_val > limits["high"]
+                )
+
+        if should_remove_max_clamp:
             # Calculate threshold by adjusting maximum value
             threshold_max = calculate_clamp_threshold(
                 max_val, "max", adjustment_percent
@@ -225,7 +241,7 @@ def calculate_yield_metrics(data, limits):
     return {"yield": yield_data["yield_pct"], "fail_count": yield_data["fail_count"]}
 
 
-def process_test_data(td):
+def process_ptr(td):
     """
     Main function to process test data and calculate statistics with improved clamp detection.
 
@@ -245,6 +261,11 @@ def process_test_data(td):
     td = td.copy()
     td["°C"] = td["°C"].astype("str")
     td["Unit"] = td["Unit"].fillna("")
+
+    # Verifica e filtra condizionalmente
+    unique_splits = set(td["Split"].unique())
+    if len(unique_splits) > 1:
+        td = td[td["Split"] != "Standard"]
 
     print(HEAD, f"Data prepared - {len(td)} rows", FLUSH, end="\r", flush=True)
 
@@ -293,9 +314,7 @@ def process_test_data(td):
                 continue
 
             # Detect and remove clamps using improved algorithm
-            clamps_min, clamps_max, clean_subset = detect_clamps(
-                subset, limits, std_multiplier=0.9, adjustment_percent=0.01
-            )
+            clamps_min, clamps_max, clean_subset = detect_clamps(subset, limits)
 
             # Debug clamp detection
             if not clamps_min.empty:
@@ -333,10 +352,14 @@ def process_test_data(td):
         flush=True,
     )
 
+    # Sort prima del pivot_table
+    filtered_data["°C"] = pd.to_numeric(filtered_data["°C"], errors="coerce")
+    filtered_data_sorted = filtered_data.sort_values(by=["°C", "Corner", "Split"])
+
     stats = pd.pivot_table(
-        filtered_data,
+        filtered_data_sorted,
         values="Value",
-        index=["°C", "Corner"],
+        index=["°C", "Corner", "Split"],
         aggfunc={"Value": ["size", "min", "max", "mean", "std"]},
     ).round(3)
 
@@ -349,7 +372,10 @@ def process_test_data(td):
     stats["unit"] = units
 
     # Fill missing std with 0
-    stats["std"] = stats["std"].fillna(0)
+    if "std" in stats:
+        stats["std"] = stats["std"].fillna(0)
+    else:
+        stats["std"] = 0
 
     print(
         HEAD,
@@ -410,66 +436,81 @@ def process_test_data(td):
             filtered_data.groupby(["°C", "Corner"])["Value"].apply(kurtosis).round(3)
         )
     else:
-        # Initialize as object type to handle mixed data types
         stats["Kurtosis"] = "-"
 
+    # Initialize clamp columns
+    stats["Clamps Min Count"] = 0
+    stats["Clamps Min Threshold"] = 0.0
+    stats["Clamps Max Count"] = 0
+    stats["Clamps Max Threshold"] = 0.0
+
     # Add clamp information ONLY if clamps exist
-    has_min_clamps = not all_clamps_min.empty
-    has_max_clamps = not all_clamps_max.empty
-
-    print(
-        HEAD,
-        f"Adding clamp info - Min clamps: {has_min_clamps}, Max clamps: {has_max_clamps}",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
-
-    if has_min_clamps:
-        clamp_min_counts = (
-            all_clamps_min.groupby(["°C", "Corner"])["Value"]
-            .count()
-            .reindex(stats.index, fill_value=0)
-        )
-        clamp_min_thresholds = (
-            all_clamps_min.groupby(["°C", "Corner"])["clamp_threshold"]
-            .mean()
-            .reindex(stats.index, fill_value=0)
-        )
-        stats["Clamps Min Count"] = clamp_min_counts.astype(int)
-        stats["Clamps Min Threshold"] = clamp_min_thresholds.round(3)
+    if total_min_clamps > 0:
         print(
             HEAD,
-            f"Min clamps added to stats - Total count: {clamp_min_counts.sum()}",
+            f"Processing {total_min_clamps} min clamps",
             FLUSH,
             end="\r",
             flush=True,
         )
 
-    if has_max_clamps:
-        clamp_max_counts = (
-            all_clamps_max.groupby(["°C", "Corner"])["Value"]
-            .count()
-            .reindex(stats.index, fill_value=0)
+        # Convert clamp data °C to numeric to match stats
+        all_clamps_min["°C"] = pd.to_numeric(all_clamps_min["°C"], errors="coerce")
+
+        # Group clamps by temperature and corner
+        clamp_min_grouped = all_clamps_min.groupby(["°C", "Corner"]).agg(
+            {"Value": "count", "clamp_threshold": "min"}
         )
-        clamp_max_thresholds = (
-            all_clamps_max.groupby(["°C", "Corner"])["clamp_threshold"]
-            .mean()
-            .reindex(stats.index, fill_value=0)
-        )
-        stats["Clamps Max Count"] = clamp_max_counts.astype(int)
-        stats["Clamps Max Threshold"] = clamp_max_thresholds.round(3)
+
+        # Update stats for each combination with clamps
+        for (temp, corner), group_data in clamp_min_grouped.iterrows():
+            mask = (stats.index.get_level_values(0) == temp) & (
+                stats.index.get_level_values(1) == corner
+            )
+
+            if mask.any():
+                stats.loc[mask, "Clamps Min Count"] = int(group_data["Value"])
+                stats.loc[mask, "Clamps Min Threshold"] = round(
+                    group_data["clamp_threshold"], 3
+                )
+
+    # Process MAX clamps
+    if total_max_clamps > 0:
         print(
             HEAD,
-            f"Max clamps added to stats - Total count: {clamp_max_counts.sum()}",
+            f"Processing {total_max_clamps} max clamps",
             FLUSH,
             end="\r",
             flush=True,
         )
 
-    if not has_min_clamps and not has_max_clamps:
-        print(HEAD, f"No clamps detected - clean dataset", FLUSH, end="\r", flush=True)
+        # Convert clamp data °C to numeric to match stats
+        all_clamps_max["°C"] = pd.to_numeric(all_clamps_max["°C"], errors="coerce")
 
+        # Group clamps by temperature and corner
+        clamp_max_grouped = all_clamps_max.groupby(["°C", "Corner"]).agg(
+            {"Value": "count", "clamp_threshold": "max"}
+        )
+
+        # Update stats for each combination with clamps
+        for (temp, corner), group_data in clamp_max_grouped.iterrows():
+            mask = (stats.index.get_level_values(0) == temp) & (
+                stats.index.get_level_values(1) == corner
+            )
+
+            if mask.any():
+                stats.loc[mask, "Clamps Max Count"] = int(group_data["Value"])
+                stats.loc[mask, "Clamps Max Threshold"] = round(
+                    group_data["clamp_threshold"], 3
+                )
+
+    # Handle NaN values in clamp columns - replace with 0
+    stats["Clamps Min Count"] = stats["Clamps Min Count"].fillna(0).astype(int)
+    stats["Clamps Max Count"] = stats["Clamps Max Count"].fillna(0).astype(int)
+    stats["Clamps Min Threshold"] = stats["Clamps Min Threshold"].fillna(0.0)
+    stats["Clamps Max Threshold"] = stats["Clamps Max Threshold"].fillna(0.0)
+
+    # Rename columns
     stats = stats.rename(
         columns={
             "max": "Max",
@@ -478,24 +519,40 @@ def process_test_data(td):
             "std": "Std",
             "count": "Tested Part",
         },
-    )[
-        [
-            "Tested Part",
-            "Low Limit",
-            "Min",
-            "Mean",
-            "Max",
-            "High Limit",
-            "Std",
-            "unit",
-            "Cp",
-            "Cpk",
-            "Yield",
-            "min3sigma",
-            "max3sigma",
-            "Kurtosis",
-        ]
+    )
+
+    # Define base columns
+    base_columns = [
+        "Tested Part",
+        "Low Limit",
+        "Min",
+        "Mean",
+        "Max",
+        "High Limit",
+        "Std",
+        "unit",
+        "Cp",
+        "Cpk",
+        "Yield",
+        "min3sigma",
+        "max3sigma",
+        "Kurtosis",
     ]
+
+    # Determine which clamp columns to include
+    final_columns = base_columns.copy()
+
+    # Check if min clamp columns should be included (not all zeros)
+    if (stats["Clamps Min Count"] > 0).any():
+        final_columns.extend(["Clamps Min Count", "Clamps Min Threshold"])
+
+    # Check if max clamp columns should be included (not all zeros)
+    if (stats["Clamps Max Count"] > 0).any():
+        final_columns.extend(["Clamps Max Count", "Clamps Max Threshold"])
+
+    # Select only existing columns
+    existing_columns = [col for col in final_columns if col in stats.columns]
+    stats = stats[existing_columns]
 
     print(
         HEAD,
@@ -506,6 +563,110 @@ def process_test_data(td):
     )
 
     return stats, filtered_data
+
+
+def calculate_yield(x):
+    """Calcola la resa in percentuale con formato ottimizzato."""
+    pass_count = (x == 1).sum()
+    total = len(x)
+    return f"{pass_count / total * 100:.2f} %" if total > 0 else "0.00 %"
+
+
+def get_metric_order():
+    """Definisce l'ordine delle metriche per il sorting."""
+    return {"PASS": 1, "FAIL": 2, "Gross": 3, "Yield": 4}
+
+
+def process_ftr(td):
+    """
+    Main function to process test data and calculate statistics with improved clamp detection.
+
+    Args:
+        td: Input DataFrame with test data
+
+    Returns:
+        DataFrame with statistical summary and conditional clamp information
+    """
+    print(HEAD, f"Starting test data processing...", FLUSH, end="\r", flush=True)
+
+    if td.empty:
+        print(HEAD, f"Empty dataframe received", FLUSH, end="\r", flush=True)
+        return pd.DataFrame()
+
+    # Data preparation
+    td = td.copy()
+    td["°C"] = td["°C"].astype("str")
+
+    print(HEAD, f"Data prepared - {len(td)} rows", FLUSH, end="\r", flush=True)
+
+    # Calculate pivot table with statistics ON FILTERED DATA (without clamps)
+    print(
+        HEAD,
+        f"Calculating statistics on {len(td)} filtered data points",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+
+    # Aggregazione ottimizzata con funzioni più efficienti
+    pv = (
+        td.groupby(["°C", "Corner", "Split"], as_index=False)
+        .agg(
+            {
+                "RESULT": [
+                    ("PASS", lambda x: (x == 1).sum()),
+                    ("Gross", "size"),
+                    ("Yield", calculate_yield),
+                ]
+            }
+        )
+        .round(2)
+    )
+
+    # Flatten delle colonne multi-level
+    pv.columns = ["°C", "Corner", "Split", "PASS", "Gross", "Yield"]
+
+    # Melt più efficiente con liste predefinte
+    metrics = ["PASS", "Gross", "Yield"]
+    id_columns = ["°C", "Corner", "Split"]
+
+    pv_melted = pd.melt(
+        pv,
+        id_vars=id_columns,
+        value_vars=metrics,
+        var_name="Metric",
+        value_name="Value",
+    )
+
+    # Sort prima del pivot
+    pv_melted["°C"] = pd.to_numeric(pv_melted["°C"], errors="coerce")
+    pv_melted_sorted = pv_melted.sort_values(by=["°C", "Corner", "Metric"])
+
+    # Pivot ottimizzato
+    pv_pivot = pv_melted_sorted.pivot(
+        index=["°C", "Corner", "Metric"], columns="Split", values="Value"
+    ).reset_index()
+
+    # Sorting ottimizzato usando map invece di apply
+    metric_order = get_metric_order()
+    pv_pivot["Sort_Code"] = pv_pivot["Metric"].map(metric_order)
+
+    # Sorting e cleanup finale
+    stats = (
+        pv_pivot.sort_values(["°C", "Corner", "Sort_Code"])
+        .drop("Sort_Code", axis=1)
+        .set_index(["°C", "Corner", "Metric"])
+    )
+
+    print(
+        HEAD,
+        f"Test data processing completed successfully",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+
+    return stats, td
 
 
 def get_web_content(filename):
@@ -573,7 +734,7 @@ def gen_menu(parameter, destinationfolder):
     <head>
         <meta charset="UTF-8">
         <title>{parameter["CUT"]} CHAR</title>
-        <link rel="shortcut icon" type="image/png" href="/etc/clientlibs/st-site/media/app/images/favicon.ico">
+        <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
         <style>{get_web_content("style.css")}</style>
     </head>
     <body style="margin: auto; max-width: 1200px;">
@@ -630,7 +791,14 @@ def gen_ptr(tname, parameter, df_stdf, path):
 
     td = pd.DataFrame(df_stdf["ptr"][(df_stdf["ptr"]["TestName"] == tname)])
 
-    stats, td = process_test_data(td)
+    stats, td = process_ptr(td)
+    print(
+        HEAD,
+        f"Generat graph",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
     stats.rename(
         columns={
             "max": "Max",
@@ -665,13 +833,13 @@ def gen_ptr(tname, parameter, df_stdf, path):
         units = td["Unit"].unique()[0]
 
     # Get the unique values from the 'pltype' column
-    pl_types = pd.unique(td['pltype'])
+    pl_types = pd.unique(td["pltype"])
 
     # Check if there is more than one unique value and if "SPLIT" is one of them
     if len(pl_types) > 1 and "SPLIT" in pl_types:
         # Filter the DataFrame to only include rows where 'pltype' is 'SPLIT'
-        td_split = td[td['pltype'] == 'SPLIT']
-        fig = graph.combined_hist_heatmap_box(
+        td_split = td[td["pltype"] == "SPLIT"]
+        fig = graph.boxploth(
             td_split,
             ll,
             ul,
@@ -680,14 +848,14 @@ def gen_ptr(tname, parameter, df_stdf, path):
             xwafer,
             ywafer,
         )
-    
+
     else:
         # fig = graph.std_hist(td, ll, ul, units, STPalette)
         # fig.show()
         # fig.write_html("grafico.html")
 
-        fig = graph.combined_hist_heatmap_box(
-            td_split,
+        fig = graph.boxploth(
+            td,
             ll,
             ul,
             units,
@@ -696,10 +864,19 @@ def gen_ptr(tname, parameter, df_stdf, path):
             ywafer,
         )
 
+    print(
+        HEAD,
+        f"Generate html",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+
     html_plot = pyo.plot(
         fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
     )
-    html_table = graph.generate_colored_table(stats)
+    html_js = graph.js()
+    html_table = graph.generate_colored_ptrtable(stats)
 
     # Sample HTML content for the file
     html_content = f"""
@@ -708,16 +885,25 @@ def gen_ptr(tname, parameter, df_stdf, path):
     <head>
         <meta charset="UTF-8">
         <title>{parameter["COM"].replace("_"," ")} {parameter["CUT"]} CHAR</title>
-        <link rel="shortcut icon" type="image/png" href="/etc/clientlibs/st-site/media/app/images/favicon.ico">
+        <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
         <style>{get_web_content("style.css")}</style>
     </head>
     <body>
         {get_web_content("navbar.html")}
         {html_plot} 
         {html_table} 
+    <script>
+        {html_js} 
+    </script>
     """
     # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
-
+    print(
+        HEAD,
+        f"Write html",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
@@ -732,6 +918,80 @@ def gen_ptr(tname, parameter, df_stdf, path):
 
 def gen_ftr(tname, parameter, df_stdf, path):
     file_path = os.path.join(path, parameter["COM"], f"{tname.replace(":","_")}.html")
+    td = pd.DataFrame(df_stdf["ftr"][(df_stdf["ftr"]["TestName"] == tname)])
+
+    stats, td = process_ftr(td)
+    print(
+        HEAD,
+        f"Generat graph",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+    stats.rename(
+        columns={
+            "max": "Max",
+            "min": "Min",
+            "mean": "Mean",
+            "std": "Std",
+            "count": "Tested Part",
+        },
+        inplace=True,
+    )
+
+    STPalette = {
+        "-40": "#03234B",
+        "-10": "#3CB4E6",
+        "30": "#49B170",
+        "60": "#A4C238",
+        "90": "#FFD200",
+        "110": "#F3693F",
+        "130": "#ED355F",
+        "140": "#E6007E",
+    }
+    xwafer = [19, 152]
+    ywafer = [21, 173]
+
+    # Get the unique values from the 'pltype' column
+    pl_types = pd.unique(td["pltype"])
+
+    # Check if there is more than one unique value and if "SPLIT" is one of them
+    if len(pl_types) > 1 and "SPLIT" in pl_types:
+        # Filter the DataFrame to only include rows where 'pltype' is 'SPLIT'
+        td_split = td[td["pltype"] == "SPLIT"]
+        fig = graph.scatter(
+            td_split,
+            STPalette,
+            xwafer,
+            ywafer,
+        )
+
+    else:
+        # fig = graph.std_hist(td, ll, ul, units, STPalette)
+        # fig.show()
+        # fig.write_html("grafico.html")
+
+        fig = graph.scatter(
+            td,
+            STPalette,
+            xwafer,
+            ywafer,
+        )
+
+    print(
+        HEAD,
+        f"Generate html",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+
+    html_plot = pyo.plot(
+        fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
+    )
+    html_js = graph.js()
+    html_table = graph.generate_colored_ftrtable(stats)
+    # html_table = ""
 
     # Sample HTML content for the file
     html_content = f"""
@@ -740,15 +1000,25 @@ def gen_ftr(tname, parameter, df_stdf, path):
     <head>
         <meta charset="UTF-8">
         <title>{parameter["COM"].replace("_"," ")} {parameter["CUT"]} CHAR</title>
-        <link rel="shortcut icon" type="image/png" href="/etc/clientlibs/st-site/media/app/images/favicon.ico">
+        <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
         <style>{get_web_content("style.css")}</style>
     </head>
     <body>
         {get_web_content("navbar.html")}
-        <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2> 
+        {html_plot} 
+        {html_table} 
+    <script>
+        {html_js} 
+    </script>
     """
-
-    print(HEAD, f"Generate {tname}... ", FLUSH, end="\r", flush=True)
+    # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
+    print(
+        HEAD,
+        f"Write html",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
@@ -777,7 +1047,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     <head>
         <meta charset="UTF-8">
         <title>{parameter["COM"].replace("_"," ")} {parameter["CUT"]} CHAR</title>
-        <link rel="shortcut icon" type="image/png" href="/etc/clientlibs/st-site/media/app/images/favicon.ico">
+        <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
         <style>{get_web_content("style.css")}</style>
     </head>
     <body style="margin: auto; max-width: 1200px;">
@@ -970,7 +1240,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
 def main_graph(DEBUG):
     td = pd.read_csv("./src/td.csv")
 
-    stats, td = process_test_data(td)
+    stats, td = process_ptr(td)
     print(HEAD, f"Generate graph... ", FLUSH, end="\r", flush=True)
     STPalette = {
         "-40": "#03234B",
@@ -1012,7 +1282,73 @@ def main_graph(DEBUG):
     print(stats)
 
 
+def main_ftr():
+    parameter = {
+        "TITLE": "PMU EWSCHAR char",
+        "COM": "STDF",
+        "FLOW": "EWSCHAR",
+        "TYPE": "CHAR",
+        "PRODUCT": "",
+        "CODE": "44E",
+        "LOT": "Q445172",
+        "WAFER": "05",
+        "CUT": "44EZ",
+        "REVISION": "0.1",
+        "FILE": {
+            "05": {
+                "corner": "TTTT",
+                "path": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_SSTT",
+            }
+        },
+        "AUTHOR": "Matteo Terranova",
+        "MAIL": "matteo.terranova@st.com",
+        "SITE": "Catania",
+        "GROUP": "MDRF - EP - GPAM",
+        "TEST_NUM": "",
+        "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
+    }
+    td = pd.read_csv("./src/df_stdf_ftr_SAFr.csv")
+    path = "./"
+    tname = "SA_1"
+    df_stdf = {}
+    df_stdf["ftr"] = td
+
+    gen_ftr(tname, parameter, df_stdf, path)
+
+
 def main_ptr():
+    parameter = {
+        "TITLE": "PMU EWSCHAR char",
+        "COM": "STDF",
+        "FLOW": "EWSCHAR",
+        "TYPE": "CHAR",
+        "PRODUCT": "",
+        "CODE": "44E",
+        "LOT": "Q445172",
+        "WAFER": "05",
+        "CUT": "44EZ",
+        "REVISION": "0.1",
+        "FILE": {
+            "05": {
+                "corner": "TTTT",
+                "path": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_SSTT",
+            }
+        },
+        "AUTHOR": "Matteo Terranova",
+        "MAIL": "matteo.terranova@st.com",
+        "SITE": "Catania",
+        "GROUP": "MDRF - EP - GPAM",
+        "TEST_NUM": "",
+        "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
+    }
+    td = pd.read_csv("./src/df_stdf_ptr_PMB.csv")
+    path = "./"
+    tname = "GET_DATA:SVT_P0_SpeedN"
+    df_stdf = {}
+    df_stdf["ptr"] = td
+
+    gen_ptr(tname, parameter, df_stdf, path)
+
     parameter = {
         "TITLE": "PMU EWSCHAR char",
         "COM": "STDF",
@@ -1041,7 +1377,15 @@ def main_ptr():
     path = "./"
     tname = "MEAS_OBL_LDO:pa7"
     df_stdf = {}
-    df_stdf["ptr"]= td
+    df_stdf["ptr"] = td
+
+    gen_ptr(tname, parameter, df_stdf, path)
+
+    td = pd.read_csv("./src/td.csv")
+    path = "./"
+    tname = "OPEN_PE:pa0"
+    df_stdf = {}
+    df_stdf["ptr"] = td
 
     gen_ptr(tname, parameter, df_stdf, path)
 
@@ -1049,4 +1393,5 @@ def main_ptr():
 if __name__ == "__main__":
     DEBUG = True
     main_ptr()
+    main_ftr()
     # main_graph(DEBUG)
