@@ -49,6 +49,14 @@ def read_csv_to_dataframe(parameter, csv_path):
         end="\r",
         flush=True,
     )
+    ptr = pd.DataFrame()
+    ftr = pd.DataFrame()
+    mir = pd.DataFrame()
+    prr = pd.DataFrame()
+    pcr = pd.DataFrame()
+    hbr = pd.DataFrame()
+    sbr = pd.DataFrame()
+    tsr = pd.DataFrame()
     ptr = read_csv_file(
         f"{csv_path}.ptr.csv", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15]
     )
@@ -67,46 +75,46 @@ def read_csv_to_dataframe(parameter, csv_path):
         end="\r",
         flush=True,
     )
-    mir = read_csv_file(f"{csv_path}.mir.csv")
-    print(
-        HEAD,
-        f"Reading... {os.path.basename(csv_path)}.prr.csv",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
-    prr = read_csv_file(f"{csv_path}.prr.csv")
-    print(
-        HEAD,
-        f"Reading... {os.path.basename(csv_path)}.pcr.csv",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
-    pcr = read_csv_file(f"{csv_path}.pcr.csv")
-    print(
-        HEAD,
-        f"Reading... {os.path.basename(csv_path)}.hbr.csv",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
-    hbr = read_csv_file(f"{csv_path}.hbr.csv")
-    print(
-        HEAD,
-        f"Reading... {os.path.basename(csv_path)}.sbr.csv",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
-    sbr = read_csv_file(f"{csv_path}.sbr.csv")
-    print(
-        HEAD,
-        f"Reading... {os.path.basename(csv_path)}.tsr.csv",
-        FLUSH,
-        end="\r",
-        flush=True,
-    )
+    # mir = read_csv_file(f"{csv_path}.mir.csv")
+    # print(
+    #     HEAD,
+    #     f"Reading... {os.path.basename(csv_path)}.prr.csv",
+    #     FLUSH,
+    #     end="\r",
+    #     flush=True,
+    # )
+    # prr = read_csv_file(f"{csv_path}.prr.csv")
+    # print(
+    #     HEAD,
+    #     f"Reading... {os.path.basename(csv_path)}.pcr.csv",
+    #     FLUSH,
+    #     end="\r",
+    #     flush=True,
+    # )
+    # pcr = read_csv_file(f"{csv_path}.pcr.csv")
+    # print(
+    #     HEAD,
+    #     f"Reading... {os.path.basename(csv_path)}.hbr.csv",
+    #     FLUSH,
+    #     end="\r",
+    #     flush=True,
+    # )
+    # hbr = read_csv_file(f"{csv_path}.hbr.csv")
+    # print(
+    #     HEAD,
+    #     f"Reading... {os.path.basename(csv_path)}.sbr.csv",
+    #     FLUSH,
+    #     end="\r",
+    #     flush=True,
+    # )
+    # sbr = read_csv_file(f"{csv_path}.sbr.csv")
+    # print(
+    #     HEAD,
+    #     f"Reading... {os.path.basename(csv_path)}.tsr.csv",
+    #     FLUSH,
+    #     end="\r",
+    #     flush=True,
+    # )
     tsr = read_csv_file(f"{csv_path}.tsr.csv")
 
     # Crea un dizionario per accedere ai DataFrame
