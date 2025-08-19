@@ -551,7 +551,7 @@ def combined_hist_heatmap(
 def color_cpk(val):
     """Color function for Cpk values"""
     if val == "-":
-        return 
+        return
     try:
         val = float(val)
     except (ValueError, TypeError):
@@ -631,7 +631,7 @@ def color_yield(val):
 def color_kurtosis(val):
     """Color function for Kurtosis values"""
     if val == "-":
-        return 
+        return
     try:
         val = float(val)
     except (ValueError, TypeError):
@@ -654,7 +654,7 @@ def color_kurtosis(val):
 def color_cp(val):
     """Color function for Cp values"""
     if val == "-":
-        return 
+        return
     try:
         val = float(val)
     except (ValueError, TypeError):
@@ -1593,6 +1593,18 @@ def boxploth(
     )
 
     # =========================
+    # CALCOLA I LIMITI GLOBALI PER L'ASSE X
+    # =========================
+    global_min = td["Value"].min()
+    global_max = td["Value"].max()
+
+    # Aggiungi un piccolo margine (3% del range)
+    value_range = global_max - global_min
+    margin = value_range * 0.03
+    x_min = global_min - margin
+    x_max = global_max + margin
+
+    # =========================
     # PARTE 1: BOX PLOT con facet per Split
     # =========================
     for split_idx, split in enumerate(all_split):
@@ -1652,10 +1664,13 @@ def boxploth(
         boxmode="group",
     )
 
-    # Configura assi
+    # =========================
+    # CONFIGURA ASSI CON LIMITI UNIFICATI
+    # =========================
     for split_idx in range(n_splits):
         fig.update_xaxes(
             title=f"Value ({units}) - Split: {all_split[split_idx]}",
+            range=[x_min, x_max],  # Applica i limiti unificati
             row=split_idx + 1,
             col=1,
         )

@@ -75,46 +75,46 @@ def read_csv_to_dataframe(parameter, csv_path):
         end="\r",
         flush=True,
     )
-    # mir = read_csv_file(f"{csv_path}.mir.csv")
-    # print(
-    #     HEAD,
-    #     f"Reading... {os.path.basename(csv_path)}.prr.csv",
-    #     FLUSH,
-    #     end="\r",
-    #     flush=True,
-    # )
-    # prr = read_csv_file(f"{csv_path}.prr.csv")
-    # print(
-    #     HEAD,
-    #     f"Reading... {os.path.basename(csv_path)}.pcr.csv",
-    #     FLUSH,
-    #     end="\r",
-    #     flush=True,
-    # )
-    # pcr = read_csv_file(f"{csv_path}.pcr.csv")
-    # print(
-    #     HEAD,
-    #     f"Reading... {os.path.basename(csv_path)}.hbr.csv",
-    #     FLUSH,
-    #     end="\r",
-    #     flush=True,
-    # )
-    # hbr = read_csv_file(f"{csv_path}.hbr.csv")
-    # print(
-    #     HEAD,
-    #     f"Reading... {os.path.basename(csv_path)}.sbr.csv",
-    #     FLUSH,
-    #     end="\r",
-    #     flush=True,
-    # )
-    # sbr = read_csv_file(f"{csv_path}.sbr.csv")
-    # print(
-    #     HEAD,
-    #     f"Reading... {os.path.basename(csv_path)}.tsr.csv",
-    #     FLUSH,
-    #     end="\r",
-    #     flush=True,
-    # )
+    mir = read_csv_file(f"{csv_path}.mir.csv")
+    print(
+        HEAD,
+        f"Reading... {os.path.basename(csv_path)}.prr.csv",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+    prr = read_csv_file(f"{csv_path}.prr.csv")
+    print(
+        HEAD,
+        f"Reading... {os.path.basename(csv_path)}.pcr.csv",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+    pcr = read_csv_file(f"{csv_path}.pcr.csv")
+    print(
+        HEAD,
+        f"Reading... {os.path.basename(csv_path)}.hbr.csv",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+    hbr = read_csv_file(f"{csv_path}.hbr.csv")
+    print(
+        HEAD,
+        f"Reading... {os.path.basename(csv_path)}.sbr.csv",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
+    sbr = read_csv_file(f"{csv_path}.sbr.csv")
+    print(
+        HEAD,
+        f"Reading... {os.path.basename(csv_path)}.tsr.csv",
+        FLUSH,
+        end="\r",
+        flush=True,
+    )
     tsr = read_csv_file(f"{csv_path}.tsr.csv")
 
     # Crea un dizionario per accedere ai DataFrame
@@ -289,7 +289,7 @@ def rework_stdf_multiple(parameter, corner_folders):
             try:
                 df_stdf = read_csv_to_dataframe(parameter=parameter, csv_path=csv_file)
                 if df_stdf is None:
-                    continue
+                    return
 
                 file_data = process_single_file(
                     csv_file, corner_name, parameter, df_stdf
@@ -297,15 +297,20 @@ def rework_stdf_multiple(parameter, corner_folders):
 
                 # Append to master collections
                 for key in all_data.keys():
-                    if hasattr(file_data[key], "empty"):
-                        if not file_data[key].empty:
-                            all_data[key].append(file_data[key])
-                    elif len(file_data[key]) > 0:
-                        all_data[key].append(file_data[key])
+                    if file_data is None:
+                        return {}, {}
+                    if key not in file_data:
+                        continue
+                    else:
+                        value = file_data[key]
+                        if hasattr(value, "empty") and not value.empty:
+                            all_data[key].append(value)
+                        elif hasattr(value, "__len__") and len(value) > 0:
+                            all_data[key].append(value)
 
             except Exception as e:
                 print(f"[ERROR] processing {csv_file}: {e}")
-                continue
+                return {}, {}
 
     # Consolidate all data
     consolidated_data = {}
@@ -565,7 +570,6 @@ def process_consolidated_data(
             # remove in test all
             if not testsplit.empty:
                 tmpptr = tmpptr.loc[~tmpptr["TEST_TXT"].str.match(regexsplit)]
-            # print(testsplit)
             # ----------==================================================---------- #
 
             # ----------==================================================---------- #
@@ -577,7 +581,31 @@ def process_consolidated_data(
             )
             test["pltype"] = "STD"
             test = test[test["COM"].notna()]
-            # uty.write_log("Rework FTR all test done", FILENAME)
+            # ----------==================================================---------- #
+
+            # ----------==================================================---------- #
+            # Rework Test name - Versione corretta con formattazione cifre
+            print(HEAD, f"Create Split column... ", FLUSH, end="\r", flush=True)
+            test = test.sort_values(["TEST_TXT", "TEST_NUM"]).reset_index(drop=True)
+            test["_temp_rank"] = (
+                test.groupby("TEST_TXT", sort=False)["TEST_NUM"]
+                .rank(method="dense")
+                .astype(int)
+                - 1
+            )
+            mask = (
+                test.groupby("TEST_TXT", sort=False)["TEST_NUM"].transform("nunique")
+                > 1
+            )
+            test["Split"] = ""
+            for group_name, group_data in test[mask].groupby("TEST_TXT"):
+                group_indices = group_data.index
+                digits = len(str(group_data["_temp_rank"].max() + 1))
+                test.loc[group_indices, "Split"] = "Code" + test.loc[
+                    group_indices, "_temp_rank"
+                ].astype(str).str.zfill(digits)
+            test.loc[mask, "pltype"] = "SPLIT"
+            test.drop("_temp_rank", axis=1, inplace=True)
             # ----------==================================================---------- #
 
         else:
@@ -590,7 +618,6 @@ def process_consolidated_data(
             )
             test["pltype"] = "STD"
             test = test[test["COM"].notna()]
-            # uty.write_log("Rework FTR all test done", FILENAME)
             # ----------==================================================---------- #
 
         # ----------==================================================---------- #
@@ -641,7 +668,6 @@ def process_consolidated_data(
             clearptr.fillna({"Split": "Standard"}, inplace=True)
             ptr_dict[parameter["CSV"]] = clearptr
             # ptrtname = clearptr["TestName"].unique()
-            # uty.write_log("PTR all done", FILENAME)
         # ----------==================================================---------- #
 
         # ----------==================================================---------- #
@@ -663,7 +689,6 @@ def process_consolidated_data(
         testsplit["pltype"] = "SPLIT"
         if not testsplit.empty:
             tmpftr = tmpftr.loc[~tmpftr["TEST_TXT"].str.match(regexsplit)]
-        # uty.write_log("Rework ftr Vdd done", FILENAME)
         # ----------==================================================---------- #
 
         # ----------==================================================---------- #
@@ -675,7 +700,6 @@ def process_consolidated_data(
         )
         test["pltype"] = "STD"
         test = test[test["COM"].notna()]
-        # uty.write_log("Rework FTR all test done", FILENAME)
         # ----------==================================================---------- #
 
         # ----------==================================================---------- #
@@ -714,7 +738,6 @@ def process_consolidated_data(
             # )
             ftr_dict[parameter["CSV"]] = clearftr
             # ftrtname = clearftr["TestName"].unique()
-            # uty.write_log("FTR all done", FILENAME)
         # ----------==================================================---------- #
 
     print(HEAD, f"Save dataframe... ", FLUSH, end="\r", flush=True)
@@ -805,6 +828,11 @@ def run(path, parameter, composite, DEBUG=False):
     print(HEAD, f"Found {len(corner_folders)} folders to process", end="\r", flush=True)
 
     parameter, df_stdf = rework_stdf_multiple(parameter, corner_folders)
+
+    if not parameter and not df_stdf:
+        print(HEAD, "No test found... ", FLUSH, end="\r", flush=True)
+        return
+
     print(HEAD, f"Start Report generation... ", FLUSH, end="\r", flush=True)
     run_report(parameter, df_stdf, path)
 

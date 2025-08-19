@@ -634,7 +634,7 @@ class DirectoryPoller:
             f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))
         ]
 
-        if len(std_files) == 1:
+        if len(std_files) == 1 and not "CHAR" in path:
             csv_folder_path = os.path.join(path, "csv")
 
             # Check if CSV files already exist
@@ -726,7 +726,7 @@ class DirectoryPoller:
             f for f in os.listdir(path) if f.endswith((".std", ".stdf", ".STDF"))
         ]
 
-        if len(std_files) == 1:
+        if len(std_files) == 1 and not "CHAR" in path:
             report_folder_path = os.path.join(path, "Report")
             std_file_path = os.path.join(path, std_files[0])
 
@@ -766,7 +766,7 @@ class DirectoryPoller:
             if len(std_files) == 0:
                 return
             char_list.append(path)
-            print(f"[Polling] New CHAR found: {os.path.dirname(path)}")
+            print(f"[Polling] New CHAR found: {path}")
 
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
         """
@@ -1315,7 +1315,7 @@ class ReportWorker(ProcessingWorker):
                     )
             else:
                 print(
-                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}"
+                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}",FLUSH
                 )
 
         # Create completion marker in the CONDITION directory (parent of the file)
@@ -1473,10 +1473,8 @@ class CharWorker(ProcessingWorker):
             logger=logger, svn_url=svn_url
         )
         composite_list.remove("TTIME") if "TTIME" in composite_list else None
-        if len(composite_list) == 0: 
-            print(
-                        f"[{self.process_type.value.upper()}] No composite found"
-                    )
+        if len(composite_list) == 0:
+            print(f"[{self.process_type.value.upper()}] No composite found")
         for composite in composite_list:
             parameter["COM"] = composite
             parameter["TITLE"] = self.create_title(parameter, composite)
@@ -1500,13 +1498,13 @@ class CharWorker(ProcessingWorker):
                         f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
                     )
             else:
-                print(f"[{self.process_type.value.upper()}] Report done {composite}")
+                print(f"[{self.process_type.value.upper()}] Report done {composite}", FLUSH)
                 continue
             char.gen_mainmenu(parameter=parameter, path=report_path)
             # break  # UNCOMMET IF ONE COMP
         mainfolder = path.split("CHAR")[0] + "CHAR"
         marker_name, marker_content = self.get_completion_marker_info()
-        # FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
+        FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
 
 
 # ==================================================
