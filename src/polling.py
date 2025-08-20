@@ -305,6 +305,11 @@ class ParameterExtractor:
             mytype = "CHAR"
             waf_badge = waf_badge_combined
             stdname = path
+        elif len(splitted) == 3:
+            product, productcut, flow = splitted
+            mytype = "CHAR"
+            waf_badge = ""
+            stdname = path
         else:
             raise ValueError(
                 f"Formato path non supportato: {len(splitted)} componenti in {path}"
@@ -535,7 +540,7 @@ class FileProcessor:
                     parameter["TITLE"] + ".html",
                 )
         elif process_type == ProcessType.CHAR:
-            base_report_path = os.path.join(os.path.dirname(base_path), "Report")
+            base_report_path = os.path.join(base_path, "Report")
             destinationfolder = (
                 base_report_path.split(parameter["FLOW"])[0]
                 + parameter["FLOW"]
@@ -597,7 +602,7 @@ class DirectoryPoller:
                         ).replace("\\", " ")
                         print(f"[Polling] New CONDITION found: {clean_path}")
                         clean_path
-                        condition_list.append(file_path)
+                        condition_list.add(file_path)
                         found = True
                     else:
                         clean_path = condition_folder_path.replace(
@@ -657,7 +662,7 @@ class DirectoryPoller:
 
             if new_path not in seen_paths:
                 print(f"[Polling] New STDF found: {new_name}")
-                stdf_list.append(new_path)
+                stdf_list.add(new_path)
                 seen_paths.add(new_path)
 
         else:
@@ -698,8 +703,8 @@ class DirectoryPoller:
                     new_path = old_path
 
                 if new_path not in seen_paths:
-                    print(f"[Polling] New STDF found: {new_name}")
-                    stdf_list.append(new_path)
+                    print(f"[Polling] New STDF found: {os.path.dirname(path)}")
+                    stdf_list.add(new_path)
                     seen_paths.add(new_path)
 
             if all_ready:
@@ -732,7 +737,7 @@ class DirectoryPoller:
 
             if not os.path.isdir(report_folder_path):
                 print(f"[Polling] New CSV found: {std_files[0]}")
-                csv_list.append(std_file_path)
+                csv_list.add(std_file_path)
             else:
                 # Check for missing composite reports
                 parameter = ParameterExtractor.get_parameter_from_stdf_path(
@@ -761,11 +766,11 @@ class DirectoryPoller:
 
                 if missing_composites:
                     print(f"[Polling] New CSV found: {std_files[0]}")
-                    csv_list.append(std_file_path)
+                    csv_list.add(std_file_path)
         else:
             if len(std_files) == 0:
                 return
-            char_list.append(path)
+            char_list.add(os.path.dirname(path))
             print(f"[Polling] New CHAR found: {path}")
 
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
@@ -792,7 +797,7 @@ class DirectoryPoller:
                     "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", ""
                 ).replace("\\", " ")
                 print(f"[Polling] New SHMOO found: {clean_path}")
-                shmoo_list.append(shmoo_folder_path)
+                shmoo_list.add(shmoo_folder_path)
                 found = True
             else:  # Nessun file .shm trovato, salta
                 clean_path = shmoo_folder_path.replace(
@@ -819,11 +824,11 @@ class DirectoryPoller:
 
         # Initialize lists and tracking sets
         seen_paths = set()
-        stdf_list = []
-        csv_list = []
-        condition_list = []
-        shmoo_list = []
-        char_list = []
+        stdf_list = set()
+        csv_list = set()
+        condition_list = set()
+        shmoo_list = set()
+        char_list = set()
 
         # Progress tracking
         start_time = time.time()
