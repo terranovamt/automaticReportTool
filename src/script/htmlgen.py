@@ -1439,6 +1439,6 @@ def main_ptr():
 
 if __name__ == "__main__":
     DEBUG = True
-    main_ptr()
     main_ftr()
+    main_ptr()
     # main_graph(DEBUG)

@@ -1928,7 +1928,7 @@ def scatter(
     )
 
     # Aggiorna gli assi Y con range 0-100% per lo Yield
-    fig.update_yaxes(title_text="Yield (%)")
+    fig.update_yaxes(title_text="Yield (%)",range=[-5, 105])
 
     # Aggiorna l'asse X solo per l'ultimo subplot
     fig.update_xaxes(title_text="Split", row=n_corners, col=1)

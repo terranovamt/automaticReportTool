@@ -827,15 +827,15 @@ def run(path, parameter, composite, DEBUG=False):
     ]
 
     order_list = [
-        "SSXX",
         "SSTT",
+        "SSXX",
         "S1TT",
         "SFTT",
         "TTTT",
         "FSTT",
         "F1TT",
-        "FFTT",
         "FFMM",
+        "FFTT",
     ]
     # Ordina le cartelle secondo l'ordine dei codici
     corner_folders = sorted(
