@@ -36,7 +36,7 @@ def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
         Calculated threshold value
     """
     if value == 0:
-        return adjustment_percent if threshold_type == "max" else -adjustment_percent
+        return -adjustment_percent if threshold_type == "max" else adjustment_percent
 
     if threshold_type == "min":
         # For minimum: if negative, make less negative; if positive, make more positive
@@ -305,6 +305,11 @@ def process_ptr(td):
         flush=True,
     )
 
+    if td["Value"].isin([0, 1]).all():
+        if not  td["Value"].eq(0).all() and not  td["Value"].eq(1).all():
+            # USE AS FTR
+            return {}, pd.DataFrame, True
+
     for corner in td["Corner"].unique():
         for temp in td["°C"].unique():
             subset = td.loc[(td["°C"] == temp) & (td["Corner"] == corner)].copy()
@@ -562,7 +567,7 @@ def process_ptr(td):
         flush=True,
     )
 
-    return stats, filtered_data
+    return stats, filtered_data, False
 
 
 def calculate_yield(x):
@@ -791,7 +796,16 @@ def gen_ptr(tname, parameter, df_stdf, path):
 
     td = pd.DataFrame(df_stdf["ptr"][(df_stdf["ptr"]["TestName"] == tname)])
 
-    stats, td = process_ptr(td)
+    stats, td, ftrflag = process_ptr(td)
+
+    if ftrflag:
+        df_stdf["ftr"] = df_stdf["ptr"][df_stdf["ptr"]["TestName"] == tname]
+        df_stdf["ftr"] = df_stdf["ftr"].assign(
+            RESULT=df_stdf["ftr"]["PARM_FLG"].map({192: 1, 200: 0})
+        )
+        gen_ftr(tname, parameter, df_stdf, path)
+        return
+
     print(
         HEAD,
         f"Generat graph",
@@ -1341,6 +1355,39 @@ def main_ptr():
         "TEST_NUM": "",
         "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
     }
+    td = pd.read_csv("./src/df_stdf_ptr_MBIST.csv")
+    path = "./"
+    tname = "ALLRAM_PLL:HSI_READY_PLL"
+    df_stdf = {}
+    df_stdf["ptr"] = td
+
+    gen_ptr(tname, parameter, df_stdf, path)
+
+    parameter = {
+        "TITLE": "PMU EWSCHAR char",
+        "COM": "STDF",
+        "FLOW": "EWSCHAR",
+        "TYPE": "CHAR",
+        "PRODUCT": "",
+        "CODE": "44E",
+        "LOT": "Q445172",
+        "WAFER": "05",
+        "CUT": "44EZ",
+        "REVISION": "0.1",
+        "FILE": {
+            "05": {
+                "corner": "TTTT",
+                "path": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_SSTT",
+            }
+        },
+        "AUTHOR": "Matteo Terranova",
+        "MAIL": "matteo.terranova@st.com",
+        "SITE": "Catania",
+        "GROUP": "MDRF - EP - GPAM",
+        "TEST_NUM": "",
+        "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
+    }
+
     td = pd.read_csv("./src/df_stdf_ptr_PMB.csv")
     path = "./"
     tname = "GET_DATA:SVT_P0_SpeedN"

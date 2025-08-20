@@ -298,6 +298,7 @@ def rework_stdf_multiple(parameter, corner_folders):
                 # Append to master collections
                 for key in all_data.keys():
                     if file_data is None:
+                        print(f"[CHAR] WARNIGN: No Data for {composite}",FLUSH)
                         return {}, {}
                     if key not in file_data:
                         continue
@@ -810,7 +811,7 @@ def run(path, parameter, composite, DEBUG=False):
         print(f"[ERROR] Error reading personalization.json: {e}")
         parameter["PRODUCT"] = parameter.get("CODE", "")
 
-    print(f"{HEAD} Start {parameter['CUT']} {composite}", FLUSH)
+    print(f"{HEAD} Start {parameter['CUT']} {composite}", FLUSH, end="\r", flush=True)
 
     mainfolder = path.split("CHAR")[0] + "CHAR"
 
@@ -824,6 +825,30 @@ def run(path, parameter, composite, DEBUG=False):
         for f in os.listdir(mainfolder)
         if os.path.isdir(os.path.join(mainfolder, f))
     ]
+
+    order_list = [
+        "SSXX",
+        "SSTT",
+        "S1TT",
+        "SFTT",
+        "TTTT",
+        "FSTT",
+        "F1TT",
+        "FFTT",
+        "FFMM",
+    ]
+    # Ordina le cartelle secondo l'ordine dei codici
+    corner_folders = sorted(
+        corner_folders,
+        key=lambda folder: next(
+            (
+                i
+                for i, code in enumerate(order_list)
+                if code in os.path.basename(folder)
+            ),
+            len(order_list),
+        ),
+    )
 
     print(HEAD, f"Found {len(corner_folders)} folders to process", end="\r", flush=True)
 

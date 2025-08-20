@@ -1315,7 +1315,8 @@ class ReportWorker(ProcessingWorker):
                     )
             else:
                 print(
-                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}",FLUSH
+                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}",
+                    FLUSH,
                 )
 
         # Create completion marker in the CONDITION directory (parent of the file)
@@ -1498,7 +1499,10 @@ class CharWorker(ProcessingWorker):
                         f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
                     )
             else:
-                print(f"[{self.process_type.value.upper()}] Report done {composite}", FLUSH)
+                print(
+                    f"[{self.process_type.value.upper()}] Report done {composite}",
+                    FLUSH,
+                )
                 continue
             char.gen_mainmenu(parameter=parameter, path=report_path)
             # break  # UNCOMMET IF ONE COMP

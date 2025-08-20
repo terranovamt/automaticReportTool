@@ -1569,8 +1569,8 @@ def boxploth(
 ):
 
     # Parametri iniziali
-    nbins_fd = freedman_diaconis_rule(td["Value"])
-    corners = sorted(td["Corner"].unique())
+    # nbins_fd = freedman_diaconis_rule(td["Value"])
+    # corners = sorted(td["Corner"].unique())
 
     # CORREZIONE: Ordina le temperature numericamente (non come stringhe)
     all_temps = sorted(td["°C"].unique(), key=lambda x: float(x))
@@ -1628,10 +1628,37 @@ def boxploth(
                         legendgroup=f"temp_{temp}",
                         showlegend=(split_idx == 0),
                         offsetgroup=f"split_{split}_temp_{temp}",
+                        notched=True,
+                        boxmean="sd",
                     ),
                     row=split_idx + 1,
                     col=1,
                 )
+                # fig.add_trace(
+                #     go.Violin(
+                #         x=temp_split_data["Value"],
+                #         y=temp_split_data["Corner"],
+                #         name=f"{temp}°C",
+                #         fillcolor=STPalette.get(
+                #             str(temp), STPalette.get(temp, "#1f77b4")
+                #         ),
+                #         line_color=STPalette.get(
+                #             str(temp), STPalette.get(temp, "#1f77b4")
+                #         ),
+                #         orientation="h",
+                #         points="outliers",  # equivalente a boxpoints="outliers"
+                #         spanmode="hard",
+                #         visible=True,
+                #         legendgroup=f"temp_{temp}",
+                #         showlegend=(split_idx == 0),
+                #         offsetgroup=f"split_{split}_temp_{temp}",
+                #         meanline_visible=True,  # equivalente a boxmean
+                #         box_visible=True,  # mostra il box interno
+                #         scalemode="width",  # scala la larghezza del violin
+                #     ),
+                #     row=split_idx + 1,
+                #     col=1,
+                # )
 
     # =========================
     # LINEE LIMITE
@@ -1644,6 +1671,11 @@ def boxploth(
             fig.add_vline(
                 ll, line_color=limit_color, line_dash="dash", row=split_idx + 1, col=1
             )
+            # Aggiungi un piccolo margine (3% del range)
+            value_range = global_max - global_min
+            margin = value_range * 0.03
+            x_min = min(ll, global_min) - margin
+            x_max = max(ul, global_max) + margin
 
     # =========================
     # LAYOUT FINALE
@@ -1662,6 +1694,7 @@ def boxploth(
         title_font=dict(size=24),
         title_pad=dict(t=10, r=0, b=15, l=0),
         boxmode="group",
+        violinmode="group",
     )
 
     # =========================
@@ -1804,14 +1837,26 @@ def scatter(
     from plotly.subplots import make_subplots
     import pandas as pd
 
-    # Aggregazione dei dati - metodo ottimizzato
-    df = (
+    # Calcola il totale dei test per ogni combinazione Split/°C/Corner
+    total_counts = (
+        td.groupby(["Split", "°C", "Corner"]).size().reset_index(name="Total")
+    )
+
+    # Calcola i test passati (RESULT = 1) per ogni combinazione
+    pass_counts = (
         pd.crosstab([td["Split"], td["°C"], td["Corner"]], td["RESULT"], margins=False)[
             1
         ]
         .reset_index()
-        .rename(columns={1: "Count"})
+        .rename(columns={1: "Pass"})
     )
+
+    # Merge dei dati per calcolare lo Yield
+    df = pd.merge(total_counts, pass_counts, on=["Split", "°C", "Corner"], how="left")
+    df["Pass"] = df["Pass"].fillna(0)  # Riempie NaN con 0 se non ci sono test passati
+
+    # Calcola lo Yield come percentuale
+    df["Yield"] = (df["Pass"] / df["Total"]) * 100
 
     # Template personalizzato
     STtemplate = go.layout.Template()
@@ -1851,7 +1896,7 @@ def scatter(
                 fig.add_trace(
                     go.Scatter(
                         x=temp_data["Split"],
-                        y=temp_data["Count"],
+                        y=temp_data["Yield"],
                         mode="markers+lines",
                         name=f"{temp}°C",
                         line=dict(color=color_map[temp]),
@@ -1860,8 +1905,8 @@ def scatter(
                             i == 0
                         ),  # Mostra la legenda solo per il primo subplot
                         legendgroup=f"{temp}°C",  # Raggruppa le leggende
-                        hovertemplate="Split: %{x}<br>Count: %{y}<br>Temp: "
-                        + f"{temp}°C<extra></extra>",
+                        hovertemplate="Split: %{x}<br>Yield: %{y:.1f}%<br>Temp: "
+                        + f"{temp}°C",
                     ),
                     row=i + 1,
                     col=1,
@@ -1882,8 +1927,8 @@ def scatter(
         title_pad=dict(t=10, r=0, b=15, l=0),
     )
 
-    # Aggiorna gli assi Y
-    fig.update_yaxes(title_text=f"Count")
+    # Aggiorna gli assi Y con range 0-100% per lo Yield
+    fig.update_yaxes(title_text="Yield (%)")
 
     # Aggiorna l'asse X solo per l'ultimo subplot
     fig.update_xaxes(title_text="Split", row=n_corners, col=1)
