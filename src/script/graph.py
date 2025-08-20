@@ -1884,6 +1884,22 @@ def scatter(
         temp: STPalette.get(temp, list(STPalette.values())[i % len(STPalette)])
         for i, temp in enumerate(temperatures)
     }
+    corner_list = [
+        "SSTT",
+        "SSXX",
+        "S1TT",
+        "SFTT",
+        "TTTT",
+        "FSTT",
+        "F1TT",
+        "FFMM",
+        "FFTT",
+    ]
+
+    # Ordina i corner secondo la lista desiderata, mantenendo quelli non nella lista
+    corners = [c for c in corner_list if c in corners] + [
+        c for c in corners if c not in corner_list
+    ]
 
     # Aggiungi le tracce per ogni combinazione Corner/Temperatura
     for i, corner in enumerate(corners):
@@ -1928,7 +1944,7 @@ def scatter(
     )
 
     # Aggiorna gli assi Y con range 0-100% per lo Yield
-    fig.update_yaxes(title_text="Yield (%)",range=[-5, 105])
+    fig.update_yaxes(title_text="Yield (%)", range=[-5, 105])
 
     # Aggiorna l'asse X solo per l'ultimo subplot
     fig.update_xaxes(title_text="Split", row=n_corners, col=1)

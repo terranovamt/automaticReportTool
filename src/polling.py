@@ -703,7 +703,7 @@ class DirectoryPoller:
                     new_path = old_path
 
                 if new_path not in seen_paths:
-                    print(f"[Polling] New STDF found: {os.path.dirname(path)}")
+                    print(f"[Polling] New STDF found: {path}")
                     stdf_list.add(new_path)
                     seen_paths.add(new_path)
 
