@@ -21,13 +21,11 @@ from typing import List, Dict, Set, Tuple
 import core
 import stdf2csv
 import shmoo
-import char
+import char as char
 
 # ==================================================
 # Constants and Configuration
 # ==================================================
-
-FLUSH = " " * 200
 
 
 class ProcessType(Enum):
@@ -1320,8 +1318,9 @@ class ReportWorker(ProcessingWorker):
                     )
             else:
                 print(
-                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}",
-                    FLUSH,
+                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}".rjust(
+                        150
+                    ),
                 )
 
         # Create completion marker in the CONDITION directory (parent of the file)
@@ -1481,6 +1480,10 @@ class CharWorker(ProcessingWorker):
         composite_list.remove("TTIME") if "TTIME" in composite_list else None
         if len(composite_list) == 0:
             print(f"[{self.process_type.value.upper()}] No composite found")
+
+        # df_stdf = char.get_df_stdf(parameter, path)
+        # print("[CHAR] Dataframe populated...".ljust(150))
+
         for composite in composite_list:
             parameter["COM"] = composite
             parameter["TITLE"] = self.create_title(parameter, composite)
@@ -1497,7 +1500,9 @@ class CharWorker(ProcessingWorker):
             if not os.path.isdir(os.path.join(report_path, composite)):
                 try:
                     char.run(
-                        path=report_path, parameter=local_parameter, composite=composite
+                        report_path=report_path,
+                        parameter=local_parameter,
+                        composite=composite,
                     )
                 except Exception as e:
                     print(
@@ -1505,15 +1510,16 @@ class CharWorker(ProcessingWorker):
                     )
             else:
                 print(
-                    f"[{self.process_type.value.upper()}] Report done {composite}",
-                    FLUSH,
+                    f"[{self.process_type.value.upper()}] Report done {composite}".ljust(
+                        150
+                    ),
                 )
                 continue
             char.gen_mainmenu(parameter=parameter, path=report_path)
             # break  # UNCOMMET IF ONE COMP
         mainfolder = path.split("CHAR")[0] + "CHAR"
         marker_name, marker_content = self.get_completion_marker_info()
-        FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
+        # FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
 
 
 # ==================================================

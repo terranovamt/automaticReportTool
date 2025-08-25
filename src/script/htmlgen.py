@@ -9,7 +9,6 @@ from scipy.stats import kurtosis
 # MAIN_PATH = "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF"
 MAIN_PATH = ".\\STDF"
 HEAD = "[CHAR]"
-FLUSH = " " * 200
 
 import pandas as pd
 from scipy.stats import kurtosis
@@ -133,8 +132,9 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
                 subset = subset.query("Value > @threshold_min")
                 print(
                     HEAD,
-                    f"Min clamp detected: {len(clamps_min)} values <= {threshold_min:.3f} (distance: {distance_min:.3f}, std: {std_dev:.3f})",
-                    FLUSH,
+                    f"Min clamp detected: {len(clamps_min)} values <= {threshold_min:.3f} (distance: {distance_min:.3f}, std: {std_dev:.3f})".ljust(
+                        150
+                    ),
                     end="\r",
                     flush=True,
                 )
@@ -172,8 +172,9 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
                 subset = subset.query("Value < @threshold_max")
                 print(
                     HEAD,
-                    f"Max clamp detected: {len(clamps_max)} values >= {threshold_max:.3f} (distance: {distance_max:.3f}, std: {std_dev:.3f})",
-                    FLUSH,
+                    f"Max clamp detected: {len(clamps_max)} values >= {threshold_max:.3f} (distance: {distance_max:.3f}, std: {std_dev:.3f})".ljust(
+                        150
+                    ),
                     end="\r",
                     flush=True,
                 )
@@ -251,10 +252,10 @@ def process_ptr(td):
     Returns:
         DataFrame with statistical summary and conditional clamp information
     """
-    print(HEAD, f"Starting test data processing...", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Starting test data processing...".ljust(150), end="\r", flush=True)
 
     if td.empty:
-        print(HEAD, f"Empty dataframe received", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
         return pd.DataFrame()
 
     # Data preparation
@@ -267,7 +268,7 @@ def process_ptr(td):
     if len(unique_splits) > 1:
         td = td[td["Split"] != "Standard"]
 
-    print(HEAD, f"Data prepared - {len(td)} rows", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
     # Extract limits and units (preferably from 30°C, otherwise use first available)
     if not td.loc[td["°C"] == "30"].empty:
@@ -280,8 +281,7 @@ def process_ptr(td):
 
     print(
         HEAD,
-        f"Limits extracted - Low: {limits['low']}, High: {limits['high']}",
-        FLUSH,
+        f"Limits extracted - Low: {limits['low']}, High: {limits['high']}".ljust(150),
         end="\r",
         flush=True,
     )
@@ -299,14 +299,13 @@ def process_ptr(td):
 
     print(
         HEAD,
-        f"Processing {total_combinations} corner/temperature combinations",
-        FLUSH,
+        f"Processing {total_combinations} corner/temperature combinations".ljust(150),
         end="\r",
         flush=True,
     )
 
     if td["Value"].isin([0, 1]).all():
-        if not  td["Value"].eq(0).all() and not  td["Value"].eq(1).all():
+        if not td["Value"].eq(0).all() and not td["Value"].eq(1).all():
             # USE AS FTR
             return {}, pd.DataFrame, True
 
@@ -342,8 +341,9 @@ def process_ptr(td):
 
     print(
         HEAD,
-        f"Clamp detection complete - Min: {total_min_clamps}, Max: {total_max_clamps}",
-        FLUSH,
+        f"Clamp detection complete - Min: {total_min_clamps}, Max: {total_max_clamps}".ljust(
+            150
+        ),
         end="\r",
         flush=True,
     )
@@ -351,8 +351,9 @@ def process_ptr(td):
     # Calculate pivot table with statistics ON FILTERED DATA (without clamps)
     print(
         HEAD,
-        f"Calculating statistics on {len(filtered_data)} filtered data points",
-        FLUSH,
+        f"Calculating statistics on {len(filtered_data)} filtered data points".ljust(
+            150
+        ),
         end="\r",
         flush=True,
     )
@@ -384,8 +385,7 @@ def process_ptr(td):
 
     print(
         HEAD,
-        f"Basic statistics calculated for {len(stats)} groups",
-        FLUSH,
+        f"Basic statistics calculated for {len(stats)} groups".ljust(150),
         end="\r",
         flush=True,
     )
@@ -453,8 +453,7 @@ def process_ptr(td):
     if total_min_clamps > 0:
         print(
             HEAD,
-            f"Processing {total_min_clamps} min clamps",
-            FLUSH,
+            f"Processing {total_min_clamps} min clamps".ljust(150),
             end="\r",
             flush=True,
         )
@@ -483,8 +482,7 @@ def process_ptr(td):
     if total_max_clamps > 0:
         print(
             HEAD,
-            f"Processing {total_max_clamps} max clamps",
-            FLUSH,
+            f"Processing {total_max_clamps} max clamps".ljust(150),
             end="\r",
             flush=True,
         )
@@ -561,8 +559,7 @@ def process_ptr(td):
 
     print(
         HEAD,
-        f"Test data processing completed successfully",
-        FLUSH,
+        f"Test data processing completed successfully".ljust(150),
         end="\r",
         flush=True,
     )
@@ -592,23 +589,22 @@ def process_ftr(td):
     Returns:
         DataFrame with statistical summary and conditional clamp information
     """
-    print(HEAD, f"Starting test data processing...", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Starting test data processing...".ljust(150), end="\r", flush=True)
 
     if td.empty:
-        print(HEAD, f"Empty dataframe received", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
         return pd.DataFrame()
 
     # Data preparation
     td = td.copy()
     td["°C"] = td["°C"].astype("str")
 
-    print(HEAD, f"Data prepared - {len(td)} rows", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
     # Calculate pivot table with statistics ON FILTERED DATA (without clamps)
     print(
         HEAD,
-        f"Calculating statistics on {len(td)} filtered data points",
-        FLUSH,
+        f"Calculating statistics on {len(td)} filtered data points".ljust(150),
         end="\r",
         flush=True,
     )
@@ -665,8 +661,7 @@ def process_ftr(td):
 
     print(
         HEAD,
-        f"Test data processing completed successfully",
-        FLUSH,
+        f"Test data processing completed successfully".ljust(150),
         end="\r",
         flush=True,
     )
@@ -700,7 +695,7 @@ def get_product_image(product):
 
 
 def gen_menu(parameter, destinationfolder):
-    print(HEAD, f"Generate main menu... ", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Generate main menu... ".ljust(150), end="\r", flush=True)
     # Full path for the index.html file
     destinationfolder = (
         destinationfolder.split(parameter["FLOW"])[0] + parameter["FLOW"] + "\\Report"
@@ -760,8 +755,7 @@ def gen_menu(parameter, destinationfolder):
             index_file_path = os.path.join(folder_path, "index.html")
             print(
                 HEAD,
-                f"File created: {folder_path}",
-                FLUSH,
+                f"File created: {folder_path}".ljust(150),
                 end="\r",
                 flush=True,
             )
@@ -784,15 +778,16 @@ def gen_menu(parameter, destinationfolder):
 
     print(
         HEAD,
-        f"File created: {file_path}",
-        FLUSH,
+        f"File created: {file_path}".ljust(150),
         end="\r",
         flush=True,
     )
 
 
-def gen_ptr(tname, parameter, df_stdf, path):
-    file_path = os.path.join(path, parameter["COM"], f"{tname.replace(":","_")}.html")
+def gen_ptr(tname, parameter, df_stdf, report_path):
+    file_path = os.path.join(
+        report_path, parameter["COM"], f"{tname.replace(":","_")}.html"
+    )
 
     td = pd.DataFrame(df_stdf["ptr"][(df_stdf["ptr"]["TestName"] == tname)])
 
@@ -803,13 +798,12 @@ def gen_ptr(tname, parameter, df_stdf, path):
         df_stdf["ftr"] = df_stdf["ftr"].assign(
             RESULT=df_stdf["ftr"]["PARM_FLG"].map({192: 1, 200: 0})
         )
-        gen_ftr(tname, parameter, df_stdf, path)
+        gen_ftr(tname, parameter, df_stdf, report_path)
         return
 
     print(
         HEAD,
-        f"Generat graph",
-        FLUSH,
+        f"Generat graph".ljust(150),
         end="\r",
         flush=True,
     )
@@ -830,8 +824,8 @@ def gen_ptr(tname, parameter, df_stdf, path):
         "30": "#49B170",
         "60": "#A4C238",
         "90": "#FFD200",
-        "110": "#F3693F",
-        "130": "#ED355F",
+        "110": "#FBAB18",
+        "130": "#F3693F",
         "140": "#E6007E",
     }
     xwafer = [19, 152]
@@ -880,8 +874,7 @@ def gen_ptr(tname, parameter, df_stdf, path):
 
     print(
         HEAD,
-        f"Generate html",
-        FLUSH,
+        f"Generate html".ljust(150),
         end="\r",
         flush=True,
     )
@@ -913,8 +906,7 @@ def gen_ptr(tname, parameter, df_stdf, path):
     # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
     print(
         HEAD,
-        f"Write html",
-        FLUSH,
+        f"Write html".ljust(150),
         end="\r",
         flush=True,
     )
@@ -923,22 +915,22 @@ def gen_ptr(tname, parameter, df_stdf, path):
 
     print(
         HEAD,
-        f"File created: {file_path}",
-        FLUSH,
+        f"File created: {file_path}".ljust(150),
         end="\r",
         flush=True,
     )
 
 
-def gen_ftr(tname, parameter, df_stdf, path):
-    file_path = os.path.join(path, parameter["COM"], f"{tname.replace(":","_")}.html")
+def gen_ftr(tname, parameter, df_stdf, report_path):
+    file_path = os.path.join(
+        report_path, parameter["COM"], f"{tname.replace(":","_")}.html"
+    )
     td = pd.DataFrame(df_stdf["ftr"][(df_stdf["ftr"]["TestName"] == tname)])
 
     stats, td = process_ftr(td)
     print(
         HEAD,
-        f"Generat graph",
-        FLUSH,
+        f"Generat graph".ljust(150),
         end="\r",
         flush=True,
     )
@@ -959,8 +951,8 @@ def gen_ftr(tname, parameter, df_stdf, path):
         "30": "#49B170",
         "60": "#A4C238",
         "90": "#FFD200",
-        "110": "#F3693F",
-        "130": "#ED355F",
+        "110": "#FBAB18",
+        "130": "#F3693F",
         "140": "#E6007E",
     }
     xwafer = [19, 152]
@@ -994,8 +986,7 @@ def gen_ftr(tname, parameter, df_stdf, path):
 
     print(
         HEAD,
-        f"Generate html",
-        FLUSH,
+        f"Generate html".ljust(150),
         end="\r",
         flush=True,
     )
@@ -1028,8 +1019,7 @@ def gen_ftr(tname, parameter, df_stdf, path):
     # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
     print(
         HEAD,
-        f"Write html",
-        FLUSH,
+        f"Write html".ljust(150),
         end="\r",
         flush=True,
     )
@@ -1038,15 +1028,14 @@ def gen_ftr(tname, parameter, df_stdf, path):
 
     print(
         HEAD,
-        f"File created: {file_path}",
-        FLUSH,
+        f"File created: {file_path}".ljust(150),
         end="\r",
         flush=True,
     )
 
 
 def gen_composite(parameter, df_stdf, destinationfolder):
-    print(HEAD, f"Generate Composite test list... ", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Generate Composite test list... ".ljust(150), end="\r", flush=True)
     file_path = os.path.join(destinationfolder, parameter["COM"])
     os.makedirs(file_path, exist_ok=True)
     file_path = os.path.join(destinationfolder, parameter["COM"], "index.html")
@@ -1117,27 +1106,6 @@ def gen_composite(parameter, df_stdf, destinationfolder):
             </tr>
         </table>
     """
-
-    test_numbers = parameter["TEST_NUM"]
-
-    with open("src/jupiter/personalization.json", "r") as file:
-        data = json.load(file)
-    product_data = data.get(parameter["CODE"], {})
-    STblue = product_data.get("STblue", "#000000")
-    STcyan = product_data.get("STcyan", "#000000")
-    STred = product_data.get("STred", "#000000")
-    STyellow = product_data.get("STyellow", "#000000")
-    STgreen = product_data.get("STgreen", "#000000")
-    STViolet = product_data.get("STViolet", "#000000")
-    STdarkgreen = product_data.get("STdarkgreen", "#000000")
-    STcolors = product_data.get("STcolors", ["#000000"])
-    STHBIN = product_data.get("STHBIN", ["#000000"])
-    gradientcolor = product_data.get("gradientcolor", ["#000000"])
-    tempSTcolort8 = product_data.get("tempSTcolort8", ["#000000"])
-    tempSTcolort = product_data.get("tempSTcolort", ["#000000"])
-    STPalette = product_data.get("STPalette", {})
-    xwafer = product_data.get("xwafer", [0, 200])
-    ywafer = product_data.get("ywafer", [0, 200])
 
     # PTR Parametric Test Record
     ptr = df_stdf["ptr"]
@@ -1243,8 +1211,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
 
     print(
         HEAD,
-        f"File created: {file_path}",
-        FLUSH,
+        f"File created: {file_path}".ljust(150),
         end="\r",
         flush=True,
     )
@@ -1255,15 +1222,15 @@ def main_graph(DEBUG):
     td = pd.read_csv("./src/td.csv")
 
     stats, td = process_ptr(td)
-    print(HEAD, f"Generate graph... ", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Generate graph... ".ljust(150), end="\r", flush=True)
     STPalette = {
         "-40": "#03234B",
         "-10": "#3CB4E6",
         "30": "#49B170",
         "60": "#A4C238",
         "90": "#FFD200",
-        "110": "#F3693F",
-        "130": "#ED355F",
+        "110": "#FBAB18",
+        "130": "#F3693F",
         "140": "#E6007E",
     }
     xwafer = [19, 152]
@@ -1321,10 +1288,14 @@ def main_ftr():
         "TEST_NUM": "",
         "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
     }
-    td = pd.read_csv("./src/df_stdf_ftr_SAFr.csv")
+    td = pd.read_csv("./src/df_stdf_ftr_SAF.csv")
     path = "./"
     tname = "SA_1"
     df_stdf = {}
+    valori_da_rimuovere = [-10, 60, 110]
+
+    # Filtrare il DataFrame mantenendo solo le righe che NON hanno quei valori nella colonna "C°"
+    td = td[~td["°C"].isin(valori_da_rimuovere)]
     df_stdf["ftr"] = td
 
     gen_ftr(tname, parameter, df_stdf, path)

@@ -6,7 +6,6 @@ import numpy as np
 from script.htmlgen import gen_menu, gen_composite, gen_ptr, gen_ftr
 
 HEAD = "[CHAR]"
-FLUSH = " " * 200
 
 
 def power_of_10(value):
@@ -44,8 +43,7 @@ def read_csv_to_dataframe(parameter, csv_path):
     # Legge tutti i file CSV necessari
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.ptr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.ptr.csv".ljust(150),
         end="\r",
         flush=True,
     )
@@ -62,56 +60,49 @@ def read_csv_to_dataframe(parameter, csv_path):
     )
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.ftr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.ftr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     ftr = read_csv_file(f"{csv_path}.ftr.csv", usecols=[0, 1, 4, 23])
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.mtr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.mtr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     mir = read_csv_file(f"{csv_path}.mir.csv")
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.prr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.prr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     prr = read_csv_file(f"{csv_path}.prr.csv")
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.pcr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.pcr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     pcr = read_csv_file(f"{csv_path}.pcr.csv")
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.hbr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.hbr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     hbr = read_csv_file(f"{csv_path}.hbr.csv")
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.sbr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.sbr.csv".ljust(150),
         end="\r",
         flush=True,
     )
     sbr = read_csv_file(f"{csv_path}.sbr.csv")
     print(
         HEAD,
-        f"Reading... {os.path.basename(csv_path)}.tsr.csv",
-        FLUSH,
+        f"Reading... {os.path.basename(csv_path)}.tsr.csv".ljust(150),
         end="\r",
         flush=True,
     )
@@ -141,7 +132,10 @@ def process_single_file(csv_file, corner_name, parameter, df_stdf):
         mir["TST_TEMP"] = "30"
     temperature = int(round(float(mir["TST_TEMP"].iloc[0]) / 5.0) * 5.0)
     print(
-        HEAD, f"Store... {corner_name} at {temperature}°C", FLUSH, end="\r", flush=True
+        HEAD,
+        f"Store... {corner_name} at {temperature}°C".ljust(150),
+        end="\r",
+        flush=True,
     )
 
     tsr = df_stdf["tsr"].copy()
@@ -298,7 +292,7 @@ def rework_stdf_multiple(parameter, corner_folders):
                 # Append to master collections
                 for key in all_data.keys():
                     if file_data is None:
-                        print(f"[CHAR] WARNIGN: No Data for {composite}",FLUSH)
+                        print(f"[CHAR] WARNING: No Data for {composite}".ljust(150))
                         return {}, {}
                     if key not in file_data:
                         continue
@@ -316,7 +310,7 @@ def rework_stdf_multiple(parameter, corner_folders):
     # Consolidate all data
     consolidated_data = {}
     for key, data_list in all_data.items():
-        print(HEAD, f"Merge... {key}", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Merge... {key}".ljust(150), end="\r", flush=True)
         if data_list:
             if key in ["ptr", "ftr", "mir", "prr", "pcr", "hbr", "sbr", "tsr"]:
                 consolidated_data[key] = pd.concat(data_list, ignore_index=True)
@@ -368,7 +362,7 @@ def process_consolidated_data(
     Process the consolidated data using the original logic
     This function now works on consolidated data with CORNER and TEMPERATURE columns
     """
-    print(HEAD, f"Data copy...", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Data copy...".ljust(150), end="\r", flush=True)
     composite = parameter["COM"]
 
     tmpptr = df_stdf["ptr"].copy()
@@ -478,7 +472,7 @@ def process_consolidated_data(
     regextest = f"(?P<TestName>.*)_(?P<COM>{composite})_(?P<TARGET>.*)"
 
     if not tmpptr.empty:
-        print(HEAD, f"Result Scaling... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
         # Result scaling logic (same as original)
         tmpptr["PARM_FLG"] = np.array([int(str(x), 2) for x in tmpptr["PARM_FLG"]])
 
@@ -487,8 +481,7 @@ def process_consolidated_data(
         def custom_res_scal(group):
             print(
                 HEAD,
-                f"Result Scaling... {group['TEST_TXT'].iloc[0]} ",
-                FLUSH,
+                f"Result Scaling... {group['TEST_TXT'].iloc[0]} ".ljust(150),
                 end="\r",
                 flush=True,
             )
@@ -515,7 +508,7 @@ def process_consolidated_data(
         )
 
         # Apply scaling and unit conversion
-        print(HEAD, f"Result Scaling... UNITS", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Result Scaling... UNITS".ljust(150), end="\r", flush=True)
         tmpptr["UNITS"] = tmpptr["UNITS"].astype(str)
         tmpptr.loc[tmpptr["RES_SCAL"] == 3, "UNITS"] = (
             "m" + tmpptr.loc[tmpptr["RES_SCAL"] == 3, "UNITS"]
@@ -542,7 +535,7 @@ def process_consolidated_data(
             "G" + tmpptr.loc[tmpptr["RES_SCAL"] == -9, "UNITS"]
         )
 
-        print(HEAD, f"Result Scaling... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
         scaling_factor = 10 ** tmpptr["RES_SCAL"].astype(float)
 
         columns_to_scale = ["RESULT", "HI_LIMIT", "LO_LIMIT"]
@@ -558,7 +551,7 @@ def process_consolidated_data(
 
             # ----------==================================================---------- #
             # SPLIT TESTS
-            print(HEAD, f"PTR Split... ", FLUSH, end="\r", flush=True)
+            print(HEAD, f"PTR Split... ".ljust(150), end="\r", flush=True)
             # work in a copy dataframe
             testsplit = tmpptr.loc[tmpptr["TEST_TXT"].str.match(regexsplit)].copy()
             # execute split test name
@@ -575,7 +568,7 @@ def process_consolidated_data(
 
             # ----------==================================================---------- #
             # SPLIT STANDARD TEST
-            print(HEAD, f"PTR Standard... ", FLUSH, end="\r", flush=True)
+            print(HEAD, f"PTR Standard... ".ljust(150), end="\r", flush=True)
             test = tmpptr.copy()
             test[["TestName", "COM", "TARGET"]] = test["TEST_TXT"].str.extract(
                 regextest, expand=True
@@ -586,7 +579,7 @@ def process_consolidated_data(
 
             # ----------==================================================---------- #
             # Rework Test name - Versione corretta con formattazione cifre
-            print(HEAD, f"Create Split column... ", FLUSH, end="\r", flush=True)
+            print(HEAD, f"Create Split column... ".ljust(150), end="\r", flush=True)
             test = test.sort_values(["TEST_TXT", "TEST_NUM"]).reset_index(drop=True)
             test["_temp_rank"] = (
                 test.groupby("TEST_TXT", sort=False)["TEST_NUM"]
@@ -623,7 +616,7 @@ def process_consolidated_data(
 
         # ----------==================================================---------- #
         # Choosing the Chart Type
-        print(HEAD, f"PTR Cleaning... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"PTR Cleaning... ".ljust(150), end="\r", flush=True)
         clearptr = pd.concat([test, testsplit])
 
         if not clearptr.empty:
@@ -682,7 +675,7 @@ def process_consolidated_data(
 
         # ----------==================================================---------- #
         # SPLIT TESTS
-        print(HEAD, f"FTR Split... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"FTR Split... ".ljust(150), end="\r", flush=True)
         testsplit = tmpftr.loc[tmpftr["TEST_TXT"].str.match(regexsplit)].copy()
         testsplit[["TestName", "tmp", "Split", "COM", "TARGET"]] = testsplit[
             "TEST_TXT"
@@ -694,7 +687,7 @@ def process_consolidated_data(
 
         # ----------==================================================---------- #
         # SPLIT STANDARD TEST
-        print(HEAD, f"FTR Standard... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"FTR Standard... ".ljust(150), end="\r", flush=True)
         test = tmpftr.copy()
         test[["TestName", "COM", "TARGET"]] = test["TEST_TXT"].str.extract(
             regextest, expand=True
@@ -704,7 +697,7 @@ def process_consolidated_data(
         # ----------==================================================---------- #
 
         # ----------==================================================---------- #
-        print(HEAD, f"FTR Cleaning... ", FLUSH, end="\r", flush=True)
+        print(HEAD, f"FTR Cleaning... ".ljust(150), end="\r", flush=True)
 
         # clearftr = pd.concat(
         #     [testsplit]  # ONLY SPECIAL ARE COMPUTED, STD TEST ARE IGNORED
@@ -741,7 +734,7 @@ def process_consolidated_data(
             # ftrtname = clearftr["TestName"].unique()
         # ----------==================================================---------- #
 
-    print(HEAD, f"Save dataframe... ", FLUSH, end="\r", flush=True)
+    print(HEAD, f"Save dataframe... ".ljust(150), end="\r", flush=True)
     ptr = pd.DataFrame()
     ftr = pd.DataFrame()
     if len(ptr_dict) != 0:
@@ -757,9 +750,9 @@ def process_consolidated_data(
     )
     ftr.drop(["TestNumber"], axis="columns", inplace=True, errors="ignore")
 
-    os.makedirs("./src/jupiter/tmp", exist_ok=True)
-    ptr.to_csv(os.path.abspath("./src/jupiter/tmp/ptr.csv"), index=False)
-    ftr.to_csv(os.path.abspath("./src/jupiter/tmp/ftr.csv"), index=False)
+    # os.makedirs("./src/jupiter/tmp", exist_ok=True)
+    # ptr.to_csv(os.path.abspath("./src/jupiter/tmp/ptr.csv"), index=False)
+    # ftr.to_csv(os.path.abspath("./src/jupiter/tmp/ftr.csv"), index=False)
 
     df_stdf = {
         "ptr": ptr,
@@ -792,7 +785,7 @@ def run_report(parameter, df_stdf, path):
             gen_ftr(tname, parameter, df_stdf, path)
 
 
-def run(path, parameter, composite, DEBUG=False):
+def run(report_path, parameter, composite, DEBUG=False):
     """Main processing function"""
 
     # Carica i dati di personalizzazione
@@ -811,9 +804,11 @@ def run(path, parameter, composite, DEBUG=False):
         print(f"[ERROR] Error reading personalization.json: {e}")
         parameter["PRODUCT"] = parameter.get("CODE", "")
 
-    print(f"{HEAD} Start {parameter['CUT']} {composite}", FLUSH, end="\r", flush=True)
+    print(
+        f"{HEAD} Start {parameter['CUT']} {composite}".ljust(150), end="\r", flush=True
+    )
 
-    mainfolder = path.split("CHAR")[0] + "CHAR"
+    mainfolder = report_path.split("CHAR")[0] + "CHAR"
 
     if not os.path.exists(mainfolder):
         print(f"Main folder {mainfolder} does not exist")
@@ -855,11 +850,11 @@ def run(path, parameter, composite, DEBUG=False):
     parameter, df_stdf = rework_stdf_multiple(parameter, corner_folders)
 
     if not parameter and not df_stdf:
-        print(HEAD, "No test found... ", FLUSH, end="\r", flush=True)
+        print(HEAD, "No test found... ".ljust(150), end="\r", flush=True)
         return
 
-    print(HEAD, f"Start Report generation... ", FLUSH, end="\r", flush=True)
-    run_report(parameter, df_stdf, path)
+    print(HEAD, "Start Report generation... ".ljust(150), end="\r", flush=True)
+    run_report(parameter, df_stdf, report_path)
 
 
 def gen_mainmenu(parameter, path):

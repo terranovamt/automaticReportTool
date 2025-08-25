@@ -1867,24 +1867,7 @@ def scatter(
     )
 
     # Ottieni valori unici
-    corners = df["Corner"].unique()
-    temperatures = df["°C"].unique()
-    n_corners = len(corners)
-
-    # Crea subplot con facet per Corner
-    fig = make_subplots(
-        rows=n_corners,
-        cols=1,
-        subplot_titles=[f"Corner: {corner}" for corner in corners],
-        vertical_spacing=0.18,
-    )
-
-    # Usa STPalette per i colori delle temperature
-    color_map = {
-        temp: STPalette.get(temp, list(STPalette.values())[i % len(STPalette)])
-        for i, temp in enumerate(temperatures)
-    }
-    corner_list = [
+    corner_orner = [
         "SSTT",
         "SSXX",
         "S1TT",
@@ -1895,11 +1878,28 @@ def scatter(
         "FFMM",
         "FFTT",
     ]
-
-    # Ordina i corner secondo la lista desiderata, mantenendo quelli non nella lista
-    corners = [c for c in corner_list if c in corners] + [
-        c for c in corners if c not in corner_list
+    corners = sorted(
+        df["Corner"].unique(),
+        key=lambda c: corner_orner.index(c) if c in corner_orner else len(corner_orner),
+    )
+    temperatures = [
+        str(temp) for temp in sorted(int(temp) for temp in df["°C"].unique())
     ]
+    n_corners = len(corners)
+
+    # Crea subplot con facet per Corner
+    fig = make_subplots(
+        rows=n_corners,
+        cols=1,
+        subplot_titles=[f"Corner: {corner}" for corner in corners],
+        # vertical_spacing=0.18,
+    )
+
+    # Usa STPalette per i colori delle temperature
+    color_map = {
+        temp: STPalette.get(temp, list(STPalette.values())[i % len(STPalette)])
+        for i, temp in enumerate(temperatures)
+    }
 
     # Aggiungi le tracce per ogni combinazione Corner/Temperatura
     for i, corner in enumerate(corners):
@@ -1933,7 +1933,7 @@ def scatter(
         height=300 * n_corners,
         template=STtemplate,
         hovermode="x unified",
-        autosize=True,
+        # autosize=True,
         showlegend=True,
         barmode="overlay",
         margin=dict(l=50, r=120, t=120, b=50),
