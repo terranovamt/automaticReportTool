@@ -556,7 +556,7 @@ def process_ptr(td):
     # Select only existing columns
     existing_columns = [col for col in final_columns if col in stats.columns]
     stats = stats[existing_columns]
-
+    stats.reset_index(drop=True)
     print(
         HEAD,
         f"Test data processing completed successfully".ljust(150),
@@ -611,7 +611,7 @@ def process_ftr(td):
 
     # Aggregazione ottimizzata con funzioni più efficienti
     pv = (
-        td.groupby(["°C", "Corner", "Split"], as_index=False)
+        td.groupby(["Corner", "°C", "Split"], as_index=False)
         .agg(
             {
                 "RESULT": [
@@ -625,11 +625,11 @@ def process_ftr(td):
     )
 
     # Flatten delle colonne multi-level
-    pv.columns = ["°C", "Corner", "Split", "PASS", "Gross", "Yield"]
+    pv.columns = ["Corner", "°C", "Split", "PASS", "Gross", "Yield"]
 
-    # Melt più efficiente con liste predefinte
+    # Melt più efficiente con liste predefinite
     metrics = ["PASS", "Gross", "Yield"]
-    id_columns = ["°C", "Corner", "Split"]
+    id_columns = ["Corner", "°C", "Split"]
 
     pv_melted = pd.melt(
         pv,
@@ -639,24 +639,30 @@ def process_ftr(td):
         value_name="Value",
     )
 
-    # Sort prima del pivot
+    # Conversione e sort
     pv_melted["°C"] = pd.to_numeric(pv_melted["°C"], errors="coerce")
     pv_melted_sorted = pv_melted.sort_values(by=["°C", "Corner", "Metric"])
 
-    # Pivot ottimizzato
-    pv_pivot = pv_melted_sorted.pivot(
-        index=["°C", "Corner", "Metric"], columns="Split", values="Value"
+    # Pivot con Split come colonne
+    pv_pivot = pv_melted_sorted.pivot_table(
+        index=["°C", "Corner", "Metric"],
+        columns="Split",
+        values="Value",
+        aggfunc="first",  # In caso di duplicati
     ).reset_index()
 
-    # Sorting ottimizzato usando map invece di apply
+    # Appiattire le colonne se necessario
+    pv_pivot.columns.name = None  # Rimuove il nome delle colonne
+
+    # Sorting ottimizzato
     metric_order = get_metric_order()
     pv_pivot["Sort_Code"] = pv_pivot["Metric"].map(metric_order)
 
-    # Sorting e cleanup finale
+    # Final result - tabella con Corner, °C, Metric e colonne per ogni Split
     stats = (
         pv_pivot.sort_values(["°C", "Corner", "Sort_Code"])
         .drop("Sort_Code", axis=1)
-        .set_index(["°C", "Corner", "Metric"])
+        .reset_index(drop=True)  # Mantieni come DataFrame normale invece di multi-index
     )
 
     print(
@@ -883,7 +889,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
     )
     html_js = graph.js()
-    html_table = graph.generate_colored_ptrtable(stats)
+    html_table = graph.generate_colored_ptrtable_html(stats)
 
     # Sample HTML content for the file
     html_content = f"""
@@ -995,7 +1001,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
     )
     html_js = graph.js()
-    html_table = graph.generate_colored_ftrtable(stats)
+    html_table = graph.generate_colored_ftrtable_html(stats)
     # html_table = ""
 
     # Sample HTML content for the file
