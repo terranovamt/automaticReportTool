@@ -59,7 +59,7 @@ def process_condition(parameter, stdf_folder, df_stdf):
     parameter["PRODUCT"] = product_name
     csv_file = condition_rework(parameter, stdf_folder)
     if len(csv_file) == 0:
-        uty.write_log(f"No Extaction good : {parameter["COM"]}", FILENAME)
+        uty.write_log(f"No Extaction good : {parameter['COM']}", FILENAME)
         return
     parameter["TEST_NUM"] = ""
     parameter["CSV"] = csv_file

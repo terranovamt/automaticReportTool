@@ -1,7 +1,7 @@
 import os
 import json
 import datetime
-import pandas as pd
+import polars as pl
 import plotly.offline as pyo
 from scipy.stats import kurtosis
 
@@ -10,16 +10,10 @@ from scipy.stats import kurtosis
 MAIN_PATH = ".\\STDF"
 HEAD = "[CHAR]"
 
-import pandas as pd
-from scipy.stats import kurtosis
-
-import pandas as pd
-from scipy.stats import kurtosis
-
 try:
-    import script.graph as graph
+    import script.graphv2 as graph
 except ModuleNotFoundError:
-    import graph as graph
+    import graphv2 as graph
 
 
 def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
@@ -66,7 +60,7 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
     8. Filter values beyond threshold
 
     Args:
-        subset: DataFrame subset for specific corner/temperature
+        subset: Polars DataFrame subset for specific corner/temperature
         limits: Dict with 'low' and 'high' limit values
         std_multiplier: Multiplier for std deviation to determine clamp distance (default 1.9)
         adjustment_percent: Percentage to adjust threshold from extreme value (default 0.01 = 1%)
@@ -74,14 +68,14 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
     Returns:
         Tuple of (clamps_min_df, clamps_max_df, filtered_subset)
     """
-    if subset.empty:
-        return pd.DataFrame(), pd.DataFrame(), subset
+    if subset.is_empty():
+        return pl.DataFrame(), pl.DataFrame(), subset
 
-    clamps_min = pd.DataFrame()
-    clamps_max = pd.DataFrame()
+    clamps_min = pl.DataFrame()
+    clamps_max = pl.DataFrame()
 
     # Get basic statistics
-    values = subset["Value"].copy()
+    values = subset["Value"]
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
@@ -89,21 +83,21 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
         return clamps_min, clamps_max, subset
 
     # Get sorted unique values for distance calculation
-    sorted_values = values.drop_duplicates().sort_values().reset_index(drop=True)
+    sorted_values = values.unique().sort()
 
     if len(sorted_values) < 2:
         # Not enough unique values to detect clamps
         return clamps_min, clamps_max, subset
 
-    min_val = sorted_values.iloc[0]
-    max_val = sorted_values.iloc[-1]
+    min_val = sorted_values[0]
+    max_val = sorted_values[-1]
 
     # Check if limits exist (both non-zero means limits are set)
     has_limits = limits["low"] != 0 or limits["high"] != 0
 
     # Detect minimum clamps
     if len(sorted_values) >= 2:
-        second_min = sorted_values.iloc[1]
+        second_min = sorted_values[1]
         distance_min = abs(second_min - min_val)
 
         # Check if distance is significant compared to standard deviation
@@ -125,11 +119,13 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
             threshold_min = calculate_clamp_threshold(
                 min_val, "min", adjustment_percent
             )
-            potential_clamps_min = subset.query("Value <= @threshold_min")
+            potential_clamps_min = subset.filter(pl.col("Value") <= threshold_min)
 
-            if not potential_clamps_min.empty:
-                clamps_min = potential_clamps_min.assign(clamp_threshold=threshold_min)
-                subset = subset.query("Value > @threshold_min")
+            if not potential_clamps_min.is_empty():
+                clamps_min = potential_clamps_min.with_columns(
+                    pl.lit(threshold_min).alias("clamp_threshold")
+                )
+                subset = subset.filter(pl.col("Value") > threshold_min)
                 print(
                     HEAD,
                     f"Min clamp detected: {len(clamps_min)} values <= {threshold_min:.3f} (distance: {distance_min:.3f}, std: {std_dev:.3f})".ljust(
@@ -141,7 +137,7 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
 
     # Detect maximum clamps
     if len(sorted_values) >= 2:
-        second_max = sorted_values.iloc[-2]
+        second_max = sorted_values[-2]
         distance_max = abs(max_val - second_max)
 
         # Check if distance is significant compared to standard deviation
@@ -165,11 +161,13 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
             threshold_max = calculate_clamp_threshold(
                 max_val, "max", adjustment_percent
             )
-            potential_clamps_max = subset.query("Value >= @threshold_max")
+            potential_clamps_max = subset.filter(pl.col("Value") >= threshold_max)
 
-            if not potential_clamps_max.empty:
-                clamps_max = potential_clamps_max.assign(clamp_threshold=threshold_max)
-                subset = subset.query("Value < @threshold_max")
+            if not potential_clamps_max.is_empty():
+                clamps_max = potential_clamps_max.with_columns(
+                    pl.lit(threshold_max).alias("clamp_threshold")
+                )
+                subset = subset.filter(pl.col("Value") < threshold_max)
                 print(
                     HEAD,
                     f"Max clamp detected: {len(clamps_max)} values >= {threshold_max:.3f} (distance: {distance_max:.3f}, std: {std_dev:.3f})".ljust(
@@ -187,7 +185,7 @@ def calculate_process_capability(data, limits, std_val, mean_val):
     Calculate Cp and Cpk process capability indices.
 
     Args:
-        data: DataFrame with values
+        data: Polars DataFrame with values
         limits: Dict with 'low' and 'high' limits
         std_val: Standard deviation
         mean_val: Mean value
@@ -217,29 +215,42 @@ def calculate_yield_metrics(data, limits):
     Calculate yield and failure metrics.
 
     Args:
-        data: DataFrame with values grouped by temperature and corner
+        data: Polars DataFrame with values grouped by temperature and corner
         limits: Dict with 'low' and 'high' limits
 
     Returns:
         Dict with yield metrics or "-" if no limits
     """
     if limits["low"] == 0 and limits["high"] == 0:
-        return {"yield": "-", "fail_count": "-"}
+        return "-"
 
-    data["is_within_limits"] = (data["Value"] >= limits["low"]) & (
-        data["Value"] <= limits["high"]
+    data_with_limits = data.with_columns(
+        [
+            (
+                (pl.col("Value") >= limits["low"]) & (pl.col("Value") <= limits["high"])
+            ).alias("is_within_limits")
+        ]
     )
 
-    yield_data = data.groupby(["°C", "Corner"]).agg(
-        within_limits=("is_within_limits", "sum"), total=("is_within_limits", "count")
+    yield_data = (
+        data_with_limits.group_by(["°C", "Corner"])
+        .agg(
+            [
+                pl.col("is_within_limits").sum().alias("within_limits"),
+                pl.col("is_within_limits").count().alias("total"),
+            ]
+        )
+        .with_columns(
+            [
+                (pl.col("within_limits") / pl.col("total") * 100)
+                .round(3)
+                .alias("yield_pct"),
+                (pl.col("total") - pl.col("within_limits")).alias("fail_count"),
+            ]
+        )
     )
 
-    yield_data["yield_pct"] = round(
-        (yield_data["within_limits"] / yield_data["total"] * 100), 3
-    )
-    yield_data["fail_count"] = yield_data["total"] - yield_data["within_limits"]
-
-    return {"yield": yield_data["yield_pct"], "fail_count": yield_data["fail_count"]}
+    return yield_data["yield_pct"][0]
 
 
 def process_ptr(td):
@@ -247,34 +258,34 @@ def process_ptr(td):
     Main function to process test data and calculate statistics with improved clamp detection.
 
     Args:
-        td: Input DataFrame with test data
+        td: Input Polars DataFrame with test data
 
     Returns:
-        DataFrame with statistical summary and conditional clamp information
+        Polars DataFrame with statistical summary and conditional clamp information
     """
     print(HEAD, f"Starting test data processing...".ljust(150), end="\r", flush=True)
 
-    if td.empty:
+    if td.is_empty():
         print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
-        return pd.DataFrame()
+        return pl.DataFrame()
 
     # Data preparation
-    td = td.copy()
-    td["°C"] = td["°C"].astype("str")
-    td["Unit"] = td["Unit"].fillna("")
+    td = td.clone()
+    td = td.with_columns([pl.col("°C").cast(pl.String), pl.col("Unit").fill_null("")])
 
     # Verifica e filtra condizionalmente
-    unique_splits = set(td["Split"].unique())
+    unique_splits = set(td["Split"].unique().to_list())
     if len(unique_splits) > 1:
-        td = td[td["Split"] != "Standard"]
+        td = td.filter(pl.col("Split") != "Standard")
 
     print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
     # Extract limits and units (preferably from 30°C, otherwise use first available)
-    if not td.loc[td["°C"] == "30"].empty:
-        reference_row = td.loc[td["°C"] == "30"].iloc[0]
+    temp_30_data = td.filter(pl.col("°C") == "30")
+    if not temp_30_data.is_empty():
+        reference_row = temp_30_data.row(0, named=True)
     else:
-        reference_row = td.iloc[0]
+        reference_row = td.row(0, named=True)
 
     limits = {"low": reference_row["Low Limit"], "high": reference_row["High Limit"]}
     units = reference_row["Unit"]
@@ -287,9 +298,9 @@ def process_ptr(td):
     )
 
     # Initialize clamp containers
-    all_clamps_min = pd.DataFrame()
-    all_clamps_max = pd.DataFrame()
-    filtered_data = pd.DataFrame()
+    all_clamps_min = pl.DataFrame()
+    all_clamps_max = pl.DataFrame()
+    filtered_data = pl.DataFrame()
 
     # Process each corner/temperature combination
     total_combinations = len(td["Corner"].unique()) * len(td["°C"].unique())
@@ -304,40 +315,56 @@ def process_ptr(td):
         flush=True,
     )
 
-    if td["Value"].isin([0, 1]).all():
-        if not td["Value"].eq(0).all() and not td["Value"].eq(1).all():
+    # Check if data is binary (FTR case)
+    unique_values = td["Value"].unique().to_list()
+    if all(val in [0, 1] for val in unique_values):
+        if not all(val == 0 for val in unique_values) and not all(
+            val == 1 for val in unique_values
+        ):
             # USE AS FTR
-            return {}, pd.DataFrame, True
+            return {}, pl.DataFrame(), True
 
     for corner in td["Corner"].unique():
         for temp in td["°C"].unique():
-            subset = td.loc[(td["°C"] == temp) & (td["Corner"] == corner)].copy()
+            subset = td.filter((pl.col("°C") == temp) & (pl.col("Corner") == corner))
             processed_combinations += 1
-
-            if subset.empty:
+            print(
+                HEAD,
+                f"Processing {processed_combinations}/{total_combinations} corner/temperature combinations".ljust(
+                    150
+                ),
+                end="\r",
+                flush=True,
+            )
+            if subset.is_empty():
                 continue
 
             # Detect and remove clamps using improved algorithm
             clamps_min, clamps_max, clean_subset = detect_clamps(subset, limits)
 
             # Debug clamp detection
-            if not clamps_min.empty:
+            if not clamps_min.is_empty():
                 total_min_clamps += len(clamps_min)
-            if not clamps_max.empty:
+            if not clamps_max.is_empty():
                 total_max_clamps += len(clamps_max)
 
             # Collect clamps
-            if not clamps_min.empty:
-                all_clamps_min = pd.concat(
-                    [all_clamps_min, clamps_min], ignore_index=True
-                )
-            if not clamps_max.empty:
-                all_clamps_max = pd.concat(
-                    [all_clamps_max, clamps_max], ignore_index=True
-                )
+            if not clamps_min.is_empty():
+                if all_clamps_min.is_empty():
+                    all_clamps_min = clamps_min
+                else:
+                    all_clamps_min = pl.concat([all_clamps_min, clamps_min])
+            if not clamps_max.is_empty():
+                if all_clamps_max.is_empty():
+                    all_clamps_max = clamps_max
+                else:
+                    all_clamps_max = pl.concat([all_clamps_max, clamps_max])
 
             # Collect clean data (after clamp removal)
-            filtered_data = pd.concat([filtered_data, clean_subset], ignore_index=True)
+            if filtered_data.is_empty():
+                filtered_data = clean_subset
+            else:
+                filtered_data = pl.concat([filtered_data, clean_subset])
 
     print(
         HEAD,
@@ -358,30 +385,31 @@ def process_ptr(td):
         flush=True,
     )
 
-    # Sort prima del pivot_table
-    filtered_data["°C"] = pd.to_numeric(filtered_data["°C"], errors="coerce")
-    filtered_data_sorted = filtered_data.sort_values(by=["°C", "Corner", "Split"])
+    # Sort before pivot
+    filtered_data = filtered_data.with_columns(
+        pl.col("°C").cast(pl.Int32, strict=False)
+    ).sort(["°C", "Corner", "Split"])
 
-    stats = pd.pivot_table(
-        filtered_data_sorted,
-        values="Value",
-        index=["°C", "Corner", "Split"],
-        aggfunc={"Value": ["size", "min", "max", "mean", "std"]},
-    ).round(3)
-
-    # Flatten column names
-    stats = stats.rename(columns={"size": "count"})
-
-    # Add limit columns
-    stats["Low Limit"] = limits["low"]
-    stats["High Limit"] = limits["high"]
-    stats["unit"] = units
-
-    # Fill missing std with 0
-    if "std" in stats:
-        stats["std"] = stats["std"].fillna(0)
-    else:
-        stats["std"] = 0
+    stats = (
+        filtered_data.group_by(["°C", "Corner", "Split"])
+        .agg(
+            [
+                pl.col("Value").count().alias("count"),
+                pl.col("Value").min().alias("min"),
+                pl.col("Value").max().alias("max"),
+                pl.col("Value").mean().alias("mean"),
+                pl.col("Value").std().alias("std"),
+            ]
+        )
+        .with_columns(
+            [
+                pl.lit(limits["low"]).alias("Low Limit"),
+                pl.lit(limits["high"]).alias("High Limit"),
+                pl.lit(units).alias("unit"),
+                pl.col("std").fill_null(0),
+            ]
+        )
+    )
 
     print(
         HEAD,
@@ -391,63 +419,84 @@ def process_ptr(td):
     )
 
     # Calculate process capability metrics ON FILTERED DATA
-    capability_metrics = []
-    for idx, row in stats.iterrows():
-        subset_data = filtered_data.loc[
-            (filtered_data["°C"] == idx[0]) & (filtered_data["Corner"] == idx[1])
-        ]
+    capability_data = []
+    for row in stats.iter_rows(named=True):
+        subset_data = filtered_data.filter(
+            (pl.col("°C") == row["°C"]) & (pl.col("Corner") == row["Corner"])
+        )
         metrics = calculate_process_capability(
             subset_data,
             limits,
             row["std"],
             row["mean"],
         )
-        capability_metrics.append(metrics)
+        metrics["Yield"] = calculate_yield_metrics(subset_data, limits)
+        capability_data.append(metrics)
 
-    capability_df = pd.DataFrame(capability_metrics, index=stats.index)
-    stats = pd.concat([stats, capability_df], axis=1)
+    capability_df = pl.DataFrame(capability_data)
+    stats = stats.with_columns(
+        [capability_df["Cp"], capability_df["Cpk"], capability_df["Yield"]]
+    )
 
     # Calculate yield metrics ON FILTERED DATA
-    yield_metrics = calculate_yield_metrics(filtered_data, limits)
-    if isinstance(yield_metrics["yield"], pd.Series):
-        stats["Yield"] = yield_metrics["yield"]
-        stats["Fail Duts"] = yield_metrics["fail_count"]
-    else:
-        stats["Yield"] = yield_metrics["yield"]
-        stats["Fail Duts"] = yield_metrics["fail_count"]
+    # yield_metrics = calculate_yield_metrics(filtered_data, limits)
+    # if hasattr(yield_metrics["yield"], "to_list"):
+    #     stats = stats.with_columns(
+    #         [
+    #             pl.Series("Yield", yield_metrics["yield"].to_list()),
+    #             pl.Series("Fail Duts", yield_metrics["fail_count"].to_list()),
+    #         ]
+    #     )
+    # else:
+    #     stats = stats.with_columns(
+    #         [
+    #             pl.lit(yield_metrics["yield"]).alias("Yield"),
+    #             pl.lit(yield_metrics["fail_count"]).alias("Fail Duts"),
+    #         ]
+    #     )
 
     # Add 3-sigma bounds ON FILTERED DATA
-    std_not_zero = stats["std"] != 0
-
-    # Initialize columns as object type to handle mixed data types
-    stats["max3sigma"] = pd.NA
-    stats["min3sigma"] = pd.NA
-
-    # Calculate 3-sigma bounds for non-zero std
-    stats.loc[std_not_zero, "max3sigma"] = (
-        stats.loc[std_not_zero, "mean"] + 3 * stats.loc[std_not_zero, "std"]
-    ).round(3)
-    stats.loc[std_not_zero, "min3sigma"] = (
-        stats.loc[std_not_zero, "mean"] - 3 * stats.loc[std_not_zero, "std"]
-    ).round(3)
-
-    # Set "-" for zero std cases
-    stats.loc[~std_not_zero, "max3sigma"] = "-"
-    stats.loc[~std_not_zero, "min3sigma"] = "-"
+    stats = stats.with_columns(
+        [
+            pl.when(pl.col("std") != 0)
+            .then((pl.col("mean") + 3 * pl.col("std")).round(3))
+            .otherwise(pl.lit("-"))
+            .alias("max3sigma"),
+            pl.when(pl.col("std") != 0)
+            .then((pl.col("mean") - 3 * pl.col("std")).round(3))
+            .otherwise(pl.lit("-"))
+            .alias("min3sigma"),
+        ]
+    )
 
     # Calculate kurtosis ON FILTERED DATA
     if limits["low"] != 0 or limits["high"] != 0:
-        stats["Kurtosis"] = (
-            filtered_data.groupby(["°C", "Corner"])["Value"].apply(kurtosis).round(3)
-        )
+        kurtosis_data = []
+        for temp in filtered_data["°C"].unique():
+            for corner in filtered_data["Corner"].unique():
+                subset = filtered_data.filter(
+                    (pl.col("°C") == temp) & (pl.col("Corner") == corner)
+                )
+                if not subset.is_empty():
+                    kurt_val = kurtosis(subset["Value"].to_numpy())
+                    kurtosis_data.append(
+                        {"°C": temp, "Corner": corner, "Kurtosis": round(kurt_val, 3)}
+                    )
+
+        kurtosis_df = pl.DataFrame(kurtosis_data)
+        stats = stats.join(kurtosis_df, on=["°C", "Corner"], how="left")
     else:
-        stats["Kurtosis"] = "-"
+        stats = stats.with_columns(pl.lit("-").alias("Kurtosis"))
 
     # Initialize clamp columns
-    stats["Clamps Min Count"] = 0
-    stats["Clamps Min Threshold"] = 0.0
-    stats["Clamps Max Count"] = 0
-    stats["Clamps Max Threshold"] = 0.0
+    stats = stats.with_columns(
+        [
+            pl.lit(0).alias("Clamps Min Count"),
+            pl.lit(0.0).alias("Clamps Min Threshold"),
+            pl.lit(0).alias("Clamps Max Count"),
+            pl.lit(0.0).alias("Clamps Max Threshold"),
+        ]
+    )
 
     # Add clamp information ONLY if clamps exist
     if total_min_clamps > 0:
@@ -459,24 +508,29 @@ def process_ptr(td):
         )
 
         # Convert clamp data °C to numeric to match stats
-        all_clamps_min["°C"] = pd.to_numeric(all_clamps_min["°C"], errors="coerce")
-
-        # Group clamps by temperature and corner
-        clamp_min_grouped = all_clamps_min.groupby(["°C", "Corner"]).agg(
-            {"Value": "count", "clamp_threshold": "min"}
+        all_clamps_min = all_clamps_min.with_columns(
+            pl.col("°C").cast(pl.Int32, strict=False)
         )
 
-        # Update stats for each combination with clamps
-        for (temp, corner), group_data in clamp_min_grouped.iterrows():
-            mask = (stats.index.get_level_values(0) == temp) & (
-                stats.index.get_level_values(1) == corner
-            )
+        # Group clamps by temperature and corner
+        clamp_min_grouped = all_clamps_min.group_by(["°C", "Corner"]).agg(
+            [
+                pl.col("Value").count().alias("clamp_count"),
+                pl.col("clamp_threshold").min().alias("min_threshold"),
+            ]
+        )
 
-            if mask.any():
-                stats.loc[mask, "Clamps Min Count"] = int(group_data["Value"])
-                stats.loc[mask, "Clamps Min Threshold"] = round(
-                    group_data["clamp_threshold"], 3
-                )
+        # Update stats with clamp information
+        stats = stats.join(clamp_min_grouped, on=["°C", "Corner"], how="left")
+        stats = stats.with_columns(
+            [
+                pl.col("clamp_count").fill_null(0).alias("Clamps Min Count"),
+                pl.col("min_threshold")
+                .fill_null(0.0)
+                .round(3)
+                .alias("Clamps Min Threshold"),
+            ]
+        ).drop(["clamp_count", "min_threshold"])
 
     # Process MAX clamps
     if total_max_clamps > 0:
@@ -488,44 +542,46 @@ def process_ptr(td):
         )
 
         # Convert clamp data °C to numeric to match stats
-        all_clamps_max["°C"] = pd.to_numeric(all_clamps_max["°C"], errors="coerce")
-
-        # Group clamps by temperature and corner
-        clamp_max_grouped = all_clamps_max.groupby(["°C", "Corner"]).agg(
-            {"Value": "count", "clamp_threshold": "max"}
+        all_clamps_max = all_clamps_max.with_columns(
+            pl.col("°C").cast(pl.Int32, strict=False)
         )
 
-        # Update stats for each combination with clamps
-        for (temp, corner), group_data in clamp_max_grouped.iterrows():
-            mask = (stats.index.get_level_values(0) == temp) & (
-                stats.index.get_level_values(1) == corner
-            )
+        # Group clamps by temperature and corner
+        clamp_max_grouped = all_clamps_max.group_by(["°C", "Corner"]).agg(
+            [
+                pl.col("Value").count().alias("clamp_count"),
+                pl.col("clamp_threshold").max().alias("max_threshold"),
+            ]
+        )
 
-            if mask.any():
-                stats.loc[mask, "Clamps Max Count"] = int(group_data["Value"])
-                stats.loc[mask, "Clamps Max Threshold"] = round(
-                    group_data["clamp_threshold"], 3
-                )
-
-    # Handle NaN values in clamp columns - replace with 0
-    stats["Clamps Min Count"] = stats["Clamps Min Count"].fillna(0).astype(int)
-    stats["Clamps Max Count"] = stats["Clamps Max Count"].fillna(0).astype(int)
-    stats["Clamps Min Threshold"] = stats["Clamps Min Threshold"].fillna(0.0)
-    stats["Clamps Max Threshold"] = stats["Clamps Max Threshold"].fillna(0.0)
+        # Update stats with clamp information
+        stats = stats.join(clamp_max_grouped, on=["°C", "Corner"], how="left")
+        stats = stats.with_columns(
+            [
+                pl.col("clamp_count").fill_null(0).alias("Clamps Max Count"),
+                pl.col("max_threshold")
+                .fill_null(0.0)
+                .round(3)
+                .alias("Clamps Max Threshold"),
+            ]
+        ).drop(["clamp_count", "max_threshold"])
 
     # Rename columns
     stats = stats.rename(
-        columns={
+        {
             "max": "Max",
             "min": "Min",
             "mean": "Mean",
             "std": "Std",
             "count": "Tested Part",
-        },
+        }
     )
 
     # Define base columns
     base_columns = [
+        "°C",
+        "Corner",
+        "Split",
         "Tested Part",
         "Low Limit",
         "Min",
@@ -555,8 +611,8 @@ def process_ptr(td):
 
     # Select only existing columns
     existing_columns = [col for col in final_columns if col in stats.columns]
-    stats = stats[existing_columns]
-    stats.reset_index(drop=True)
+    stats = stats.select(existing_columns)
+    filtered_data = filtered_data.with_columns(pl.col("°C").cast(pl.Utf8))
     print(
         HEAD,
         f"Test data processing completed successfully".ljust(150),
@@ -584,20 +640,20 @@ def process_ftr(td):
     Main function to process test data and calculate statistics with improved clamp detection.
 
     Args:
-        td: Input DataFrame with test data
+        td: Input Polars DataFrame with test data
 
     Returns:
-        DataFrame with statistical summary and conditional clamp information
+        Polars DataFrame with statistical summary and conditional clamp information
     """
     print(HEAD, f"Starting test data processing...".ljust(150), end="\r", flush=True)
 
-    if td.empty:
+    if td.is_empty():
         print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
-        return pd.DataFrame()
+        return pl.DataFrame()
 
     # Data preparation
-    td = td.copy()
-    td["°C"] = td["°C"].astype("str")
+    td = td.clone()
+    td = td.with_columns(pl.col("°C").cast(pl.String))
 
     print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
@@ -609,61 +665,47 @@ def process_ftr(td):
         flush=True,
     )
 
-    # Aggregazione ottimizzata con funzioni più efficienti
-    pv = (
-        td.groupby(["Corner", "°C", "Split"], as_index=False)
-        .agg(
-            {
-                "RESULT": [
-                    ("PASS", lambda x: (x == 1).sum()),
-                    ("Gross", "size"),
-                    ("Yield", calculate_yield),
-                ]
-            }
-        )
-        .round(2)
+    # Aggregazione ottimizzata
+    pv = td.group_by(["Corner", "°C", "Split"]).agg(
+        [
+            (pl.col("RESULT") == 1).sum().alias("PASS"),
+            pl.col("RESULT").count().alias("Gross"),
+            ((pl.col("RESULT") == 1).sum() / pl.col("RESULT").count() * 100)
+            .round(2)
+            .alias("Yield")
+            .cast(pl.String)
+            + (pl.lit(" %")),
+        ]
     )
 
-    # Flatten delle colonne multi-level
-    pv.columns = ["Corner", "°C", "Split", "PASS", "Gross", "Yield"]
-
-    # Melt più efficiente con liste predefinite
+    # Melt per ottenere il formato desiderato
     metrics = ["PASS", "Gross", "Yield"]
     id_columns = ["Corner", "°C", "Split"]
 
-    pv_melted = pd.melt(
-        pv,
-        id_vars=id_columns,
-        value_vars=metrics,
-        var_name="Metric",
-        value_name="Value",
+    pv_melted = pv.unpivot(
+        index=id_columns, on=metrics, variable_name="Metric", value_name="Value"
     )
 
     # Conversione e sort
-    pv_melted["°C"] = pd.to_numeric(pv_melted["°C"], errors="coerce")
-    pv_melted_sorted = pv_melted.sort_values(by=["°C", "Corner", "Metric"])
+    pv_melted = pv_melted.with_columns(
+        pl.col("°C").cast(pl.Int32, strict=False)
+    ).sort(["°C", "Corner", "Metric"])
 
     # Pivot con Split come colonne
-    pv_pivot = pv_melted_sorted.pivot_table(
-        index=["°C", "Corner", "Metric"],
-        columns="Split",
-        values="Value",
-        aggfunc="first",  # In caso di duplicati
-    ).reset_index()
-
-    # Appiattire le colonne se necessario
-    pv_pivot.columns.name = None  # Rimuove il nome delle colonne
+    pv_pivot = pv_melted.pivot(
+        values="Value", index=["°C", "Corner", "Metric"], on="Split"
+    )
 
     # Sorting ottimizzato
     metric_order = get_metric_order()
-    pv_pivot["Sort_Code"] = pv_pivot["Metric"].map(metric_order)
-
-    # Final result - tabella con Corner, °C, Metric e colonne per ogni Split
-    stats = (
-        pv_pivot.sort_values(["°C", "Corner", "Sort_Code"])
-        .drop("Sort_Code", axis=1)
-        .reset_index(drop=True)  # Mantieni come DataFrame normale invece di multi-index
+    pv_pivot = pv_pivot.with_columns(
+        pl.col("Metric")
+        .map_elements(lambda x: metric_order.get(x, 5), return_dtype=pl.Int32)
+        .alias("Sort_Code")
     )
+
+    # Final result
+    stats = pv_pivot.sort(["°C", "Corner", "Sort_Code"]).drop("Sort_Code")
 
     print(
         HEAD,
@@ -795,33 +837,25 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         report_path, parameter["COM"], f"{tname.replace(":","_")}.html"
     )
 
-    td = pd.DataFrame(df_stdf["ptr"][(df_stdf["ptr"]["TestName"] == tname)])
+    td = df_stdf["ptr"].filter(pl.col("TestName") == tname)
 
     stats, td, ftrflag = process_ptr(td)
 
     if ftrflag:
-        df_stdf["ftr"] = df_stdf["ptr"][df_stdf["ptr"]["TestName"] == tname]
-        df_stdf["ftr"] = df_stdf["ftr"].assign(
-            RESULT=df_stdf["ftr"]["PARM_FLG"].map({192: 1, 200: 0})
+        df_stdf["ftr"] = df_stdf["ptr"].filter(pl.col("TestName") == tname)
+        df_stdf["ftr"] = df_stdf["ftr"].with_columns(
+            pl.col("PARM_FLG")
+            .map_elements(lambda x: 1 if x == 192 else 0, return_dtype=pl.Int32)
+            .alias("RESULT")
         )
         gen_ftr(tname, parameter, df_stdf, report_path)
         return
 
     print(
         HEAD,
-        f"Generat graph".ljust(150),
+        f"Generate graph".ljust(150),
         end="\r",
         flush=True,
-    )
-    stats.rename(
-        columns={
-            "max": "Max",
-            "min": "Min",
-            "mean": "Mean",
-            "std": "Std",
-            "count": "Tested Part",
-        },
-        inplace=True,
     )
 
     STPalette = {
@@ -837,22 +871,23 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
     xwafer = [19, 152]
     ywafer = [21, 173]
 
-    if not td.loc[td["°C"] == "30"].empty:
-        ul = td.loc[td["°C"] == "30", "High Limit"].unique()[0]
-        ll = td.loc[td["°C"] == "30", "Low Limit"].unique()[0]
-        units = td.loc[td["°C"] == "30", "Unit"].unique()[0]
+    temp_30_data = td.filter(pl.col("°C") == "30")
+    if temp_30_data.height > 0:
+        ul = temp_30_data.select(pl.col("High Limit")).unique().item(0, 0)
+        ll = temp_30_data.select(pl.col("Low Limit")).unique().item(0, 0)
+        units = temp_30_data.select(pl.col("Unit")).unique().item(0, 0)
     else:
-        ul = td["High Limit"].unique()[0]
-        ll = td["Low Limit"].unique()[0]
-        units = td["Unit"].unique()[0]
+        ul = td.select(pl.col("High Limit")).unique().item(0, 0)
+        ll = td.select(pl.col("Low Limit")).unique().item(0, 0)
+        units = td.select(pl.col("Unit")).unique().item(0, 0)
 
     # Get the unique values from the 'pltype' column
-    pl_types = pd.unique(td["pltype"])
+    pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
 
     # Check if there is more than one unique value and if "SPLIT" is one of them
     if len(pl_types) > 1 and "SPLIT" in pl_types:
         # Filter the DataFrame to only include rows where 'pltype' is 'SPLIT'
-        td_split = td[td["pltype"] == "SPLIT"]
+        td_split = td.filter(pl.col("pltype") == "SPLIT")
         fig = graph.boxploth(
             td_split,
             ll,
@@ -864,10 +899,6 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         )
 
     else:
-        # fig = graph.std_hist(td, ll, ul, units, STPalette)
-        # fig.show()
-        # fig.write_html("grafico.html")
-
         fig = graph.boxploth(
             td,
             ll,
@@ -888,7 +919,6 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
     html_plot = pyo.plot(
         fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
     )
-    html_js = graph.js()
     html_table = graph.generate_colored_ptrtable_html(stats)
 
     # Sample HTML content for the file
@@ -906,10 +936,8 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         {html_plot} 
         {html_table} 
     <script>
-        {html_js} 
     </script>
     """
-    # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
     print(
         HEAD,
         f"Write html".ljust(150),
@@ -931,7 +959,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
     file_path = os.path.join(
         report_path, parameter["COM"], f"{tname.replace(':','_')}.html"
     )
-    td = pd.DataFrame(df_stdf["ftr"][(df_stdf["ftr"]["TestName"] == tname)])
+    td = df_stdf["ftr"].filter(pl.col("TestName") == tname)
 
     stats, td = process_ftr(td)
     print(
@@ -939,16 +967,6 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         f"Generat graph".ljust(150),
         end="\r",
         flush=True,
-    )
-    stats.rename(
-        columns={
-            "max": "Max",
-            "min": "Min",
-            "mean": "Mean",
-            "std": "Std",
-            "count": "Tested Part",
-        },
-        inplace=True,
     )
 
     STPalette = {
@@ -965,12 +983,12 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
     ywafer = [21, 173]
 
     # Get the unique values from the 'pltype' column
-    pl_types = pd.unique(td["pltype"])
+    pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
 
     # Check if there is more than one unique value and if "SPLIT" is one of them
     if len(pl_types) > 1 and "SPLIT" in pl_types:
         # Filter the DataFrame to only include rows where 'pltype' is 'SPLIT'
-        td_split = td[td["pltype"] == "SPLIT"]
+        td_split = td.filter(pl.col("pltype") == "SPLIT")
         fig = graph.scatter(
             td_split,
             STPalette,
@@ -979,10 +997,6 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         )
 
     else:
-        # fig = graph.std_hist(td, ll, ul, units, STPalette)
-        # fig.show()
-        # fig.write_html("grafico.html")
-
         fig = graph.scatter(
             td,
             STPalette,
@@ -1000,9 +1014,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
     html_plot = pyo.plot(
         fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
     )
-    html_js = graph.js()
     html_table = graph.generate_colored_ftrtable_html(stats)
-    # html_table = ""
 
     # Sample HTML content for the file
     html_content = f"""
@@ -1019,10 +1031,8 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         {html_plot} 
         {html_table} 
     <script>
-        {html_js} 
     </script>
     """
-    # <h2 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">{tname}</h2>
     print(
         HEAD,
         f"Write html".ljust(150),
@@ -1081,7 +1091,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
             </tr>
             <tr>
                 <td>Part ID-CUT</td>
-                <td>{str(mir["FAMLY_ID"][0])}</td>
+                <td>{str(mir.select(pl.col("FAMLY_ID")).item(0, 0))}</td>
             </tr>
             <tr>
                 <td>Division</td>
@@ -1119,10 +1129,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
                 return (prefix, 1)
             elif "Trimmed" in suffix:
                 return (prefix, 2)
-            return (
-                prefix,
-                3,
-            )  # Per tutti gli altri nomi che non contengono le parole chiave
+            return (prefix, 3)
 
         # Mantieni l'ordine generale dei test ma ordina all'interno dei gruppi
         grouped_tests = {}
@@ -1137,19 +1144,25 @@ def gen_composite(parameter, df_stdf, destinationfolder):
             prefix_key = prefix.split(":", 1)[0]
             if prefix_key in grouped_tests:
                 sorted_tests.extend(sorted(grouped_tests[prefix_key], key=sort_key))
-                del grouped_tests[prefix_key]  # Rimuovi il gruppo una volta aggiunto
+                del grouped_tests[prefix_key]
 
         return sorted_tests
 
     # Ottieni i nomi dei test unici
     print(HEAD, f"PTR test list... ".ljust(150), end="\r", flush=True)
-    ptrtname = ptr["TestName"].unique() if not ptr.is_empty() else []
+    ptrtname = (
+        ptr.select(pl.col("TestName")).unique().to_series().to_list()
+        if ptr.height > 0
+        else []
+    )
     ptrtname = ordina_test_name(ptrtname)
     print(HEAD, f"FTR test list... ".ljust(150), end="\r", flush=True)
-    ftrtname = ftr["TestName"].unique() if not ftr.is_empty() else []
+    ftrtname = (
+        ftr.select(pl.col("TestName")).unique().to_series().to_list()
+        if ftr.height > 0
+        else []
+    )
     ftrtname = ordina_test_name(ftrtname)
-
-    # Ordina i nomi dei test
 
     print(HEAD, f"Write HTML... ".ljust(150), end="\r", flush=True)
     html_content += '<h2 id="TableOfContent">Table of Contents<a class="anchor-link" href="#TableOfContent"></a></h2><hr>'
@@ -1204,7 +1217,6 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     </html>
     """
 
-    # Writ
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(html_content)
 
@@ -1218,7 +1230,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
 
 
 def main_graph(DEBUG):
-    td = pd.read_csv("./src/td.csv")
+    td = pl.read_csv("./src/td.csv")
 
     stats, td = process_ptr(td)
     print(HEAD, f"Generate graph... ".ljust(150), end="\r", flush=True)
@@ -1234,20 +1246,19 @@ def main_graph(DEBUG):
     }
     xwafer = [19, 152]
     ywafer = [21, 173]
-    if not td.loc[td["°C"] == "30"].empty:
-        ul = td.loc[td["°C"] == "30", "High Limit"].unique()[0]
-        ll = td.loc[td["°C"] == "30", "Low Limit"].unique()[0]
-        units = td.loc[td["°C"] == "30", "Unit"].unique()[0]
+
+    temp_30_data = td.filter(pl.col("°C") == "30")
+    if temp_30_data.height > 0:
+        ul = temp_30_data.select(pl.col("High Limit")).unique().item(0, 0)
+        ll = temp_30_data.select(pl.col("Low Limit")).unique().item(0, 0)
+        units = temp_30_data.select(pl.col("Unit")).unique().item(0, 0)
     else:
-        ul = td["High Limit"].unique()[0]
-        ll = td["Low Limit"].unique()[0]
-        units = td["Unit"].unique()[0]
+        ul = td.select(pl.col("High Limit")).unique().item(0, 0)
+        ll = td.select(pl.col("Low Limit")).unique().item(0, 0)
+        units = td.select(pl.col("Unit")).unique().item(0, 0)
 
-    if pd.unique(td.pltype)[0] == "STD":
-        # fig = graph.std_hist(td, ll, ul, units, STPalette)
-        # fig.show()
-        # fig.write_html("grafico.html")
-
+    pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
+    if pl_types[0] == "STD":
         fig = graph.combined_hist_heatmap_box(
             td,
             ll,
@@ -1287,14 +1298,14 @@ def main_ftr():
         "TEST_NUM": "",
         "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
     }
-    td = pd.read_csv("./src/df_stdf_ftr_SAF.csv")
+    td = pl.read_csv("./src/df_stdf_ftr_SAF.csv")
     path = "./"
     tname = "SA_1"
     df_stdf = {}
     valori_da_rimuovere = [-10, 60, 110]
 
-    # Filtrare il DataFrame mantenendo solo le righe che NON hanno quei valori nella colonna "C°"
-    td = td[~td["°C"].isin(valori_da_rimuovere)]
+    # Filtrare il DataFrame mantenendo solo le righe che NON hanno quei valori nella colonna "°C"
+    td = td.filter(~pl.col("°C").is_in(valori_da_rimuovere))
     df_stdf["ftr"] = td
 
     gen_ftr(tname, parameter, df_stdf, path)
@@ -1325,85 +1336,37 @@ def main_ptr():
         "TEST_NUM": "",
         "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
     }
-    td = pd.read_csv("./src/df_stdf_ptr_MBIST.csv")
+
+    # Test case 1
+    td = pl.read_csv("./src/df_stdf_ptr_MBIST.csv")
     path = "./"
     tname = "ALLRAM_PLL:HSI_READY_PLL"
+    td = td.with_columns(pl.col("°C").cast(pl.Utf8))
     df_stdf = {}
     df_stdf["ptr"] = td
-
     gen_ptr(tname, parameter, df_stdf, path)
 
-    parameter = {
-        "TITLE": "PMU EWSCHAR char",
-        "COM": "STDF",
-        "FLOW": "EWSCHAR",
-        "TYPE": "CHAR",
-        "PRODUCT": "",
-        "CODE": "44E",
-        "LOT": "Q445172",
-        "WAFER": "05",
-        "CUT": "44EZ",
-        "REVISION": "0.1",
-        "FILE": {
-            "05": {
-                "corner": "TTTT",
-                "path": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_SSTT",
-            }
-        },
-        "AUTHOR": "Matteo Terranova",
-        "MAIL": "matteo.terranova@st.com",
-        "SITE": "Catania",
-        "GROUP": "MDRF - EP - GPAM",
-        "TEST_NUM": "",
-        "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
-    }
-
-    td = pd.read_csv("./src/df_stdf_ptr_PMB.csv")
-    path = "./"
+    # Test case 2
+    td = pl.read_csv("./src/df_stdf_ptr_PMB.csv")
+    td = td.with_columns(pl.col("°C").cast(pl.Utf8))
     tname = "GET_DATA:SVT_P0_SpeedN"
     df_stdf = {}
     df_stdf["ptr"] = td
-
     gen_ptr(tname, parameter, df_stdf, path)
 
-    parameter = {
-        "TITLE": "PMU EWSCHAR char",
-        "COM": "STDF",
-        "FLOW": "EWSCHAR",
-        "TYPE": "CHAR",
-        "PRODUCT": "",
-        "CODE": "44E",
-        "LOT": "Q445172",
-        "WAFER": "05",
-        "CUT": "44EZ",
-        "REVISION": "0.1",
-        "FILE": {
-            "05": {
-                "corner": "TTTT",
-                "path": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_SSTT",
-            }
-        },
-        "AUTHOR": "Matteo Terranova",
-        "MAIL": "matteo.terranova@st.com",
-        "SITE": "Catania",
-        "GROUP": "MDRF - EP - GPAM",
-        "TEST_NUM": "",
-        "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
-    }
-    td = pd.read_csv("./src/ptrPMU.csv")
-    path = "./"
+    # Test case 3
+    td = pl.read_csv("./src/ptrPMU.csv")
     tname = "MEAS_OBL_LDO:pa7"
+    td = td.with_columns(pl.col("°C").cast(pl.Utf8))
     df_stdf = {}
     df_stdf["ptr"] = td
-
     gen_ptr(tname, parameter, df_stdf, path)
 
-    td = pd.read_csv("./src/td.csv")
-    path = "./"
+    # Test case 4
+    td = pl.read_csv("./src/td.csv")
     tname = "OPEN_PE:pa0"
     df_stdf = {}
     df_stdf["ptr"] = td
-
     gen_ptr(tname, parameter, df_stdf, path)
 
 

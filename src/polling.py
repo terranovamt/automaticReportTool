@@ -21,7 +21,7 @@ from typing import List, Dict, Set, Tuple
 import core
 import stdf2csv
 import shmoo
-import char as char
+import charv3 as char
 
 # ==================================================
 # Constants and Configuration
@@ -542,7 +542,7 @@ class FileProcessor:
             destinationfolder = (
                 base_report_path.split(parameter["FLOW"])[0]
                 + parameter["FLOW"]
-                + "\\Report"
+                + "/Report"
             )
             return destinationfolder
         elif process_type == ProcessType.CONDITION2REPORT:
