@@ -822,6 +822,7 @@ def process_single_corner_file(
             .otherwise(None)
             .alias("PARM_FLG")
         )
+        df_stdf["ptr"] = df_stdf["ptr"].filter(pl.col("RESULT").is_not_null())
 
         # Filter PTR and FTR by test numbers
         if not df_stdf["ptr"].is_empty():
