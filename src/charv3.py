@@ -248,7 +248,7 @@ def get_remove_testnumber(path):
     file_path = os.path.join(path, "ART.json")
 
     if not os.path.isfile(file_path):
-        return None
+        return []
 
     with open(file_path, "r", encoding="utf-8") as file:
         dati = json.load(file)
@@ -257,7 +257,7 @@ def get_remove_testnumber(path):
         toremove = dati["remove_TestNumber"]
         return toremove
     else:
-        return None
+        return []
 
 
 def filter_test_numbers(

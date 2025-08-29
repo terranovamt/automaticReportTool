@@ -1256,7 +1256,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):\n    \"\"\"\n    Detect clamp values using improved distance-based algorithm.\n    Algorithm:\n    1. Find min and max values\n    2. Find second min and second max\n    3. Calculate distance between extreme and second extreme\n    4. If distance > (std_deviation * std_multiplier), it's likely a clamp\n    5. If no limits are set: remove all detected clamps\n    6. If limits are set: remove clamps only if they violate the limits",
+        "peekOfCode": "def detect_clamps(\n    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=6\n):\n    \"\"\"\n    Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.\n    Algorithm:\n    1. Calculate 6-sigma bounds\n    2. Find min and max values and calculate extreme thresholds\n    3. Compare sigma bounds vs extreme thresholds and choose most stringent\n    4. Filter once with most stringent thresholds",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1328,7 +1328,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def get_product_image(product):\n    folder_path = os.path.join(MAIN_PATH, product, \"ARTstdf\")\n    for filename in os.listdir(folder_path):\n        if filename.lower().endswith(\".svg\"):\n            svg_path = os.path.join(folder_path, filename)\n            with open(svg_path, \"r\", encoding=\"utf-8\") as f:\n                content = f.read()\n            return content\n    return None\ndef gen_menu(parameter, destinationfolder):",
+        "peekOfCode": "def get_product_image(product):\n    folder_path = os.path.join(MAIN_PATH, product)\n    for filename in os.listdir(folder_path):\n        if filename.lower().endswith(\".svg\"):\n            svg_path = os.path.join(folder_path, filename)\n            with open(svg_path, \"r\", encoding=\"utf-8\") as f:\n                content = f.read()\n            return content\n    return None\ndef gen_menu(parameter, destinationfolder):",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1346,7 +1346,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def gen_ptr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(\":\",\"_\")}.html\"\n    )\n    td = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n    stats, td, ftrflag = process_ptr(td)\n    if ftrflag:\n        df_stdf[\"ftr\"] = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n        df_stdf[\"ftr\"] = df_stdf[\"ftr\"].with_columns(\n            pl.col(\"PARM_FLG\")",
+        "peekOfCode": "def gen_ptr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(\":\",\"_\")}.html\"\n    )\n    td = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return\n    stats, td, ftrflag = process_ptr(td)\n    if ftrflag:\n        df_stdf[\"ftr\"] = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1355,7 +1355,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def gen_ftr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(':','_')}.html\"\n    )\n    td = df_stdf[\"ftr\"].filter(pl.col(\"TestName\") == tname)\n    stats, td = process_ftr(td)\n    print(\n        HEAD,\n        f\"Generat graph\".ljust(150),\n        end=\"\\r\",",
+        "peekOfCode": "def gen_ftr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(':','_')}.html\"\n    )\n    td = df_stdf[\"ftr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return\n    stats, td = process_ftr(td)\n    print(\n        HEAD,",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1661,7 +1661,16 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def extract_temperature(mir_df: pl.DataFrame) -> int:\n    \"\"\"Extract and round temperature from MIR dataframe.\"\"\"\n    if mir_df.is_empty():\n        return 30\n    temp_value = float(mir_df.select(\"TST_TEMP\").to_numpy().flatten()[0])\n    if np.isnan(temp_value):\n        return 30\n    return int(round(float(temp_value) / 5.0) * 5.0)\ndef filter_test_numbers(\n    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str",
+        "peekOfCode": "def extract_temperature(mir_df: pl.DataFrame) -> int:\n    \"\"\"Extract and round temperature from MIR dataframe.\"\"\"\n    if mir_df.is_empty():\n        return 30\n    temp_value = float(mir_df.select(\"TST_TEMP\").to_numpy().flatten()[0])\n    if np.isnan(temp_value):\n        return 30\n    return int(round(float(temp_value) / 5.0) * 5.0)\ndef get_remove_testnumber(path):\n    file_path = os.path.join(path, \"ART.json\")",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "get_remove_testnumber",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def get_remove_testnumber(path):\n    file_path = os.path.join(path, \"ART.json\")\n    if not os.path.isfile(file_path):\n        return []\n    with open(file_path, \"r\", encoding=\"utf-8\") as file:\n        dati = json.load(file)\n    if \"remove_TestNumber\" in dati:\n        toremove = dati[\"remove_TestNumber\"]\n        return toremove\n    else:",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1670,7 +1679,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def filter_test_numbers(\n    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str\n) -> list:\n    \"\"\"Filter and extract test numbers based on composite and flow.\"\"\"\n    if tsr_df.is_empty():\n        return []\n    # Use polars string operations for better performance\n    pattern = f\".*_{composite}_.*:.*|.*_{composite}_..$|.*_{composite}_.*_DELTA_.*\"\n    filtered_df = tsr_df.filter(pl.col(\"TEST_NAM\").str.contains(pattern))\n    test_numbers = filtered_df.select(\"TEST_NUM\").unique().to_series().to_list()",
+        "peekOfCode": "def filter_test_numbers(\n    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str, path: str\n) -> list:\n    \"\"\"Filter and extract test numbers based on composite and flow.\"\"\"\n    if tsr_df.is_empty():\n        return []\n    # Use polars string operations for better performance\n    pattern = f\".*_{composite}_.*:.*|.*_{composite}_..$|.*_{composite}_.*_DELTA_.*\"\n    filtered_df = tsr_df.filter(pl.col(\"TEST_NAM\").str.contains(pattern))\n    test_numbers = filtered_df.select(\"TEST_NUM\").unique().to_series().to_list()",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1733,7 +1742,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def process_ftr_data(ftr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process FTR data with all transformations.\"\"\"\n    if ftr_df.is_empty():\n        return ftr_df\n    print(HEAD, f\"FTR Processing... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    ftr_df = parse_test_names_regex(ftr_df, composite, False)\n    # Clean and rename\n    ftr_df = ftr_df.with_columns(\n        pl.col(\"TEST_TXT\").str.to_uppercase().alias(\"TEST_TXT\")",
+        "peekOfCode": "def process_ftr_data(ftr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process FTR data with all transformations.\"\"\"\n    if ftr_df.is_empty():\n        return ftr_df\n    print(HEAD, f\"FTR Processing... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    ftr_df = parse_test_names_regex(ftr_df, composite, False)\n    column_renames = {\n        \"TEMPERATURE\": \"°C\",\n        \"TEST_NUM\": \"TestNumber\",",
         "detail": "src.charv3",
         "documentation": {}
     },
