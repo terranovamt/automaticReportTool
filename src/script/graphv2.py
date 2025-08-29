@@ -790,6 +790,7 @@ def generate_colored_ptrtable_html(
         vertical-align: middle;
         padding: 8px;
         border: 1px solid #ddd;
+        white-space: nowrap;
     }}
     
     .hidden-row {{

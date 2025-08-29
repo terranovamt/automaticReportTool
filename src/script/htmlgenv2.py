@@ -674,7 +674,7 @@ def process_ftr(td):
             .round(2)
             .alias("Yield")
             .cast(pl.String)
-            + (pl.lit(" %")),
+            + (pl.lit("%")),
         ]
     )
 
