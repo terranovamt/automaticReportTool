@@ -1,5 +1,5 @@
 import os
-import json
+import json5
 import datetime
 import polars as pl
 import plotly.offline as pyo
@@ -14,6 +14,24 @@ try:
     import script.graphv2 as graph
 except ModuleNotFoundError:
     import graphv2 as graph
+
+
+def get_personalizzation(parameter, name):
+    file_path = os.path.join(
+        parameter["MAIN"].split(parameter["CODE"])[0], parameter["CODE"], "ART.jsonc"
+    )
+
+    if not os.path.isfile(file_path):
+        return {}
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        dati = json5.load(file)
+
+    if name in dati:
+        dato = dati[name]
+        return dato
+    else:
+        return {}
 
 
 def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
@@ -815,21 +833,21 @@ def gen_menu(parameter, destinationfolder):
     ]
     composite_list = sorted(composite_list)
 
-    # Carica i dati di personalizzazione
-    try:
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
+    # # Carica i dati di personalizzazione
+    # try:
+    #     with open("src/jupiter/personalization.json", "r") as file:
+    #         data = json5.load(file)
 
-        # Recupera il nome del prodotto
-        product_data = data.get(parameter["CODE"], {})
-        product_name = product_data.get("product_name", "")
-        parameter["PRODUCT"] = product_name
-    except FileNotFoundError:
-        print("[WARNING] personalization.json not found, using default product name")
-        parameter["PRODUCT"] = parameter.get("CODE", "")
-    except Exception as e:
-        print(f"[ERROR] Error reading personalization.json: {e}")
-        parameter["PRODUCT"] = parameter.get("CODE", "")
+    #     # Recupera il nome del prodotto
+    #     product_data = data.get(parameter["CODE"], {})
+    #     product_name = product_data.get("product_name", "")
+    #     parameter["PRODUCT"] = product_name
+    # except FileNotFoundError:
+    #     print("[WARNING] personalization.json not found, using default product name")
+    #     parameter["PRODUCT"] = parameter.get("CODE", "")
+    # except Exception as e:
+    #     print(f"[ERROR] Error reading personalization.json: {e}")
+    #     parameter["PRODUCT"] = parameter.get("CODE", "")
 
     # Sample HTML content for the file
     html_content = f"""
@@ -917,7 +935,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         flush=True,
     )
 
-    STPalette = {
+    STPaletteChar = {
         "-40": "#03234B",
         "-10": "#3CB4E6",
         "30": "#49B170",
@@ -929,6 +947,10 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
     }
     xwafer = [19, 152]
     ywafer = [21, 173]
+
+    STPaletteChar = get_personalizzation(parameter, "STPaletteChar")
+    xwafer = get_personalizzation(parameter, "xwafer")
+    ywafer = get_personalizzation(parameter, "ywafer")
 
     temp_30_data = td.filter(pl.col("°C") == "30")
     if temp_30_data.height > 0:
@@ -952,7 +974,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
             ll,
             ul,
             units,
-            STPalette,
+            STPaletteChar,
             xwafer,
             ywafer,
         )
@@ -963,7 +985,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
             ll,
             ul,
             units,
-            STPalette,
+            STPaletteChar,
             xwafer,
             ywafer,
         )
@@ -1031,7 +1053,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         flush=True,
     )
 
-    STPalette = {
+    STPaletteChar = {
         "-40": "#03234B",
         "-10": "#3CB4E6",
         "30": "#49B170",
@@ -1044,6 +1066,10 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
     xwafer = [19, 152]
     ywafer = [21, 173]
 
+    STPaletteChar = get_personalizzation(parameter, "STPaletteChar")
+    xwafer = get_personalizzation(parameter, "xwafer")
+    ywafer = get_personalizzation(parameter, "ywafer")
+
     # Get the unique values from the 'pltype' column
     pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
 
@@ -1053,7 +1079,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         td_split = td.filter(pl.col("pltype") == "SPLIT")
         fig = graph.scatter(
             td_split,
-            STPalette,
+            STPaletteChar,
             xwafer,
             ywafer,
         )
@@ -1061,7 +1087,7 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
     else:
         fig = graph.scatter(
             td,
-            STPalette,
+            STPaletteChar,
             xwafer,
             ywafer,
         )
@@ -1307,7 +1333,7 @@ def main_graph(DEBUG):
 
     stats, td = process_ptr(td)
     print(HEAD, f"Generate graph... ".ljust(150), end="\r", flush=True)
-    STPalette = {
+    STPaletteChar = {
         "-40": "#03234B",
         "-10": "#3CB4E6",
         "30": "#49B170",
@@ -1337,7 +1363,7 @@ def main_graph(DEBUG):
             ll,
             ul,
             units,
-            STPalette,
+            STPaletteChar,
             xwafer,
             ywafer,
         )
