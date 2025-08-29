@@ -244,8 +244,24 @@ def extract_temperature(mir_df: pl.DataFrame) -> int:
     return int(round(float(temp_value) / 5.0) * 5.0)
 
 
+def get_remove_testnumber(path):
+    file_path = os.path.join(path, "ART.json")
+
+    if not os.path.isfile(file_path):
+        return None
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        dati = json.load(file)
+
+    if "remove_TestNumber" in dati:
+        toremove = dati["remove_TestNumber"]
+        return toremove
+    else:
+        return None
+
+
 def filter_test_numbers(
-    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str
+    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str, path: str
 ) -> list:
     """Filter and extract test numbers based on composite and flow."""
     if tsr_df.is_empty():
@@ -275,6 +291,10 @@ def filter_test_numbers(
         for key in xy_keys:
             if key in product_data:
                 test_numbers.append(product_data[key])
+
+    toremove = get_remove_testnumber(path)
+
+    test_numbers = [num for num in test_numbers if num not in toremove]
 
     return test_numbers
 
@@ -481,7 +501,9 @@ def parse_test_names_regex(
                             # Caso con gruppo 7 presente: include il gruppo 7
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT").str.extract(split_pattern, 1),
+                                    pl.col("TEST_TXT")
+                                    .str.extract(split_pattern, 1)
+                                    .str.to_uppercase(),
                                     pl.lit(":"),
                                     pl.col("TEST_TXT").str.extract(split_pattern, 7),
                                 ]
@@ -489,7 +511,9 @@ def parse_test_names_regex(
                         )
                         .otherwise(
                             # Caso senza gruppo 7: solo prefix
-                            pl.col("TEST_TXT").str.extract(split_pattern, 1)
+                            pl.col("TEST_TXT")
+                            .str.extract(split_pattern, 1)
+                            .str.to_uppercase()
                         )
                     )
                     .otherwise(
@@ -499,7 +523,9 @@ def parse_test_names_regex(
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT").str.extract(std_pattern, 1),
+                                    pl.col("TEST_TXT")
+                                    .str.extract(std_pattern, 1)
+                                    .str.to_uppercase(),
                                     pl.lit(":"),
                                     pl.col("TEST_TXT").str.extract(std_pattern, 4),
                                 ]
@@ -507,7 +533,9 @@ def parse_test_names_regex(
                         )
                         .otherwise(
                             # Caso senza gruppo 4: solo prefix
-                            pl.col("TEST_TXT").str.extract(std_pattern, 1)
+                            pl.col("TEST_TXT")
+                            .str.extract(std_pattern, 1)
+                            .str.to_uppercase()
                         )
                     )
                     .alias("new_TEST_TXT"),
@@ -587,13 +615,19 @@ def parse_test_names_regex(
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT").str.extract(split_pattern, 1),
+                                    pl.col("TEST_TXT")
+                                    .str.extract(split_pattern, 1)
+                                    .str.to_uppercase(),
                                     pl.lit(":"),
                                     pl.col("TEST_TXT").str.extract(split_pattern, 7),
                                 ]
                             )
                         )
-                        .otherwise(pl.col("TEST_TXT").str.extract(split_pattern, 1))
+                        .otherwise(
+                            pl.col("TEST_TXT")
+                            .str.extract(split_pattern, 1)
+                            .str.to_uppercase()
+                        )
                     )
                     .otherwise(
                         pl.when(
@@ -602,13 +636,19 @@ def parse_test_names_regex(
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT").str.extract(std_pattern, 1),
+                                    pl.col("TEST_TXT")
+                                    .str.extract(std_pattern, 1)
+                                    .str.to_uppercase(),
                                     pl.lit(":"),
                                     pl.col("TEST_TXT").str.extract(std_pattern, 4),
                                 ]
                             )
                         )
-                        .otherwise(pl.col("TEST_TXT").str.extract(std_pattern, 1))
+                        .otherwise(
+                            pl.col("TEST_TXT")
+                            .str.extract(std_pattern, 1)
+                            .str.to_uppercase()
+                        )
                     )
                     .alias("new_TEST_TXT"),
                     # SPLIT: Estrarre il valore split o "Standard"
@@ -645,9 +685,9 @@ def parse_test_names_regex(
         )
 
         # Riassegnare TEST_TXT con il nuovo valore
-        df = df.with_columns(
-            pl.col("new_TEST_TXT").str.to_uppercase().alias("TEST_TXT")
-        ).drop("new_TEST_TXT")
+        df = df.with_columns(pl.col("new_TEST_TXT").alias("TEST_TXT")).drop(
+            "new_TEST_TXT"
+        )
 
     return df
 
@@ -746,11 +786,6 @@ def process_ftr_data(ftr_df: pl.DataFrame, composite: str) -> pl.DataFrame:
     # Parse test names
     ftr_df = parse_test_names_regex(ftr_df, composite, False)
 
-    # Clean and rename
-    ftr_df = ftr_df.with_columns(
-        pl.col("TEST_TXT").str.to_uppercase().alias("TEST_TXT")
-    )
-
     column_renames = {
         "TEMPERATURE": "°C",
         "TEST_NUM": "TestNumber",
@@ -798,7 +833,11 @@ def process_single_corner_file(
 
         # Filter test numbers
         test_numbers = filter_test_numbers(
-            df_stdf["tsr"], parameter["COM"], product_data, parameter["FLOW"]
+            df_stdf["tsr"],
+            parameter["COM"],
+            product_data,
+            parameter["FLOW"],
+            parameter["MAIN"],
         )
         if not test_numbers:
             return None

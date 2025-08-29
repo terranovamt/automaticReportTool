@@ -202,6 +202,7 @@ class ParameterExtractor:
             Dictionary containing extracted parameters
         """
         # Split path and extract components
+        mainpath = os.path.abspath(path)
         path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
         path = path.replace(".\\STDF\\", "")
         splitted = path.split("\\")[:]
@@ -232,6 +233,7 @@ class ParameterExtractor:
             corner=corner,
             stdname=stdname,
             path=path,
+            main= mainpath,
         )
 
     @staticmethod
@@ -246,6 +248,7 @@ class ParameterExtractor:
         Returns:
             Dictionary containing extracted parameters
         """
+        mainpath = os.path.abspath(path)
         path_parts = path.split("\\")
 
         # Find the relevant parts - look for PRODUCTCUT pattern and get flow from parent of CONDITION
@@ -275,6 +278,7 @@ class ParameterExtractor:
             corner="CONDITION",
             stdname=filename,
             path=path,
+            main=mainpath
         )
 
     def get_parameter(path):
@@ -288,6 +292,7 @@ class ParameterExtractor:
             dict: Dictionary containing extracted parameters
         """
         # Split path and extract components
+        mainpath = os.path.abspath(path)
         path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
         path = path.replace(".\\STDF\\", "")
         splitted = path.split("\\")[:]
@@ -341,6 +346,7 @@ class ParameterExtractor:
             "GROUP": "MDRF - EP - GPAM",
             "TEST_NUM": "",
             "CSV": stdname,
+            "MAIN": mainpath,
         }
 
         return parameter
@@ -356,6 +362,7 @@ class ParameterExtractor:
         corner: str,
         stdname: str,
         path: str,
+        main: str,
     ) -> Dict:
         """
         Create standardized parameter dictionary.
@@ -389,6 +396,7 @@ class ParameterExtractor:
             "GROUP": "MDRF - EP - GPAM",
             "TEST_NUM": "",
             "CSV": stdname,
+            "MAIN": main,
         }
 
 

@@ -323,7 +323,7 @@ def process_ptr(td):
 
     if td.is_empty():
         print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
-        return pl.DataFrame()
+        return pl.DataFrame(), pl.DataFrame()
 
     # Data preparation
     td = td.clone()
@@ -705,7 +705,7 @@ def process_ftr(td):
 
     if td.is_empty():
         print(HEAD, f"Empty dataframe received".ljust(150), end="\r", flush=True)
-        return pl.DataFrame()
+        return pl.DataFrame(), pl.DataFrame()
 
     # Data preparation
     td = td.clone()
@@ -786,7 +786,7 @@ def get_web_content(filename):
 
 
 def get_product_image(product):
-    folder_path = os.path.join(MAIN_PATH, product, "ARTstdf")
+    folder_path = os.path.join(MAIN_PATH, product)
 
     for filename in os.listdir(folder_path):
         if filename.lower().endswith(".svg"):
@@ -894,6 +894,9 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
     )
 
     td = df_stdf["ptr"].filter(pl.col("TestName") == tname)
+
+    if td.is_empty():
+        return
 
     stats, td, ftrflag = process_ptr(td)
 
@@ -1016,6 +1019,9 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         report_path, parameter["COM"], f"{tname.replace(':','_')}.html"
     )
     td = df_stdf["ftr"].filter(pl.col("TestName") == tname)
+
+    if td.is_empty():
+        return
 
     stats, td = process_ftr(td)
     print(
@@ -1208,6 +1214,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     print(HEAD, f"PTR test list... ".ljust(150), end="\r", flush=True)
     ptrtname = (
         ptr.select(["TestName", "TestNumber"])
+        .filter(~pl.col("TestName").str.contains("LOG_TTIME"))
         .sort("TestNumber")
         .unique(subset=["TestName"])
         .select("TestName")
@@ -1220,6 +1227,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     print(HEAD, f"FTR test list... ".ljust(150), end="\r", flush=True)
     ftrtname = (
         ftr.select(["TestName", "TestNumber"])
+        .filter(~pl.col("TestName").str.contains("LOG_TTIME"))
         .sort("TestNumber")
         .unique(subset=["TestName"])
         .select("TestName")
