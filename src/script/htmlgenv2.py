@@ -45,25 +45,25 @@ def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
             return value * (1 - adjustment_percent)  # Less positive
 
 
-def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
+def detect_clamps(
+    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=6
+):
     """
-    Detect clamp values using improved distance-based algorithm.
+    Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.
 
     Algorithm:
-    1. Find min and max values
-    2. Find second min and second max
-    3. Calculate distance between extreme and second extreme
-    4. If distance > (std_deviation * std_multiplier), it's likely a clamp
-    5. If no limits are set: remove all detected clamps
-    6. If limits are set: remove clamps only if they violate the limits
-    7. Set threshold by adjusting extreme value by adjustment_percent
-    8. Filter values beyond threshold
+    1. Calculate 6-sigma bounds
+    2. Find min and max values and calculate extreme thresholds
+    3. Compare sigma bounds vs extreme thresholds and choose most stringent
+    4. Filter once with most stringent thresholds
+    5. Save clamps with chosen thresholds
 
     Args:
         subset: Polars DataFrame subset for specific corner/temperature
         limits: Dict with 'low' and 'high' limit values
         std_multiplier: Multiplier for std deviation to determine clamp distance (default 1.9)
         adjustment_percent: Percentage to adjust threshold from extreme value (default 0.01 = 1%)
+        sigma_threshold: Number of standard deviations for outlier removal (default 6)
 
     Returns:
         Tuple of (clamps_min_df, clamps_max_df, filtered_subset)
@@ -76,108 +76,164 @@ def detect_clamps(subset, limits, std_multiplier=1.9, adjustment_percent=0.01):
 
     # Get basic statistics
     values = subset["Value"]
+    mean_val = values.mean()
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
     if std_dev == 0 or std_dev < 1e-10:
         return clamps_min, clamps_max, subset
 
+    # Step 1: Calculate 6-sigma bounds
+    lower_sigma_bound = mean_val - (sigma_threshold * std_dev)
+    upper_sigma_bound = mean_val + (sigma_threshold * std_dev)
+
     # Get sorted unique values for distance calculation
     sorted_values = values.unique().sort()
 
     if len(sorted_values) < 2:
-        # Not enough unique values to detect clamps
-        return clamps_min, clamps_max, subset
+        # Not enough unique values to detect clamps, use only sigma
+        clamps_min = subset.filter(pl.col("Value") < lower_sigma_bound)
+        clamps_max = subset.filter(pl.col("Value") > upper_sigma_bound)
+
+        if not clamps_min.is_empty():
+            clamps_min = clamps_min.with_columns(
+                pl.lit(lower_sigma_bound).alias("clamp_threshold")
+            )
+        if not clamps_max.is_empty():
+            clamps_max = clamps_max.with_columns(
+                pl.lit(upper_sigma_bound).alias("clamp_threshold")
+            )
+
+        filtered_subset = subset.filter(
+            (pl.col("Value") >= lower_sigma_bound)
+            & (pl.col("Value") <= upper_sigma_bound)
+        )
+        return clamps_min, clamps_max, filtered_subset
 
     min_val = sorted_values[0]
     max_val = sorted_values[-1]
 
-    # Check if limits exist (both non-zero means limits are set)
+    # Check if limits exist
     has_limits = limits["low"] != 0 or limits["high"] != 0
 
-    # Detect minimum clamps
+    # Initialize final thresholds with sigma bounds
+    final_threshold_min = lower_sigma_bound
+    final_threshold_max = upper_sigma_bound
+    threshold_type_min = "sigma"
+    threshold_type_max = "sigma"
+
+    # Step 2: Check for extreme clamps and compare with sigma
+
+    # Check minimum clamps
     if len(sorted_values) >= 2:
         second_min = sorted_values[1]
         distance_min = abs(second_min - min_val)
-
-        # Check if distance is significant compared to standard deviation
         is_min_clamp = distance_min > (std_dev * std_multiplier)
 
-        # Determine if we should remove this clamp based on limits
         should_remove_min_clamp = False
-
         if is_min_clamp:
             if not has_limits:
-                # No limits set: remove all detected clamps
                 should_remove_min_clamp = True
             else:
-                # Limits exist: remove clamp only if it violates low limit
                 should_remove_min_clamp = limits["low"] != 0 and min_val < limits["low"]
 
         if should_remove_min_clamp:
-            # Calculate threshold by adjusting minimum value
-            threshold_min = calculate_clamp_threshold(
+            threshold_min_extreme = calculate_clamp_threshold(
                 min_val, "min", adjustment_percent
             )
-            potential_clamps_min = subset.filter(pl.col("Value") <= threshold_min)
+            # Choose most stringent (highest value for minimum threshold)
+            if threshold_min_extreme > final_threshold_min:
+                final_threshold_min = threshold_min_extreme
+                threshold_type_min = "extreme"
 
-            if not potential_clamps_min.is_empty():
-                clamps_min = potential_clamps_min.with_columns(
-                    pl.lit(threshold_min).alias("clamp_threshold")
-                )
-                subset = subset.filter(pl.col("Value") > threshold_min)
-                print(
-                    HEAD,
-                    f"Min clamp detected: {len(clamps_min)} values <= {threshold_min:.3f} (distance: {distance_min:.3f}, std: {std_dev:.3f})".ljust(
-                        150
-                    ),
-                    end="\r",
-                    flush=True,
-                )
-
-    # Detect maximum clamps
+    # Check maximum clamps
     if len(sorted_values) >= 2:
         second_max = sorted_values[-2]
         distance_max = abs(max_val - second_max)
-
-        # Check if distance is significant compared to standard deviation
         is_max_clamp = distance_max > (std_dev * std_multiplier)
 
-        # Determine if we should remove this clamp based on limits
         should_remove_max_clamp = False
-
         if is_max_clamp:
             if not has_limits:
-                # No limits set: remove all detected clamps
                 should_remove_max_clamp = True
             else:
-                # Limits exist: remove clamp only if it violates high limit
                 should_remove_max_clamp = (
                     limits["high"] != 0 and max_val > limits["high"]
                 )
 
         if should_remove_max_clamp:
-            # Calculate threshold by adjusting maximum value
-            threshold_max = calculate_clamp_threshold(
+            threshold_max_extreme = calculate_clamp_threshold(
                 max_val, "max", adjustment_percent
             )
-            potential_clamps_max = subset.filter(pl.col("Value") >= threshold_max)
+            # Choose most stringent (lowest value for maximum threshold)
+            if threshold_max_extreme < final_threshold_max:
+                final_threshold_max = threshold_max_extreme
+                threshold_type_max = "extreme"
 
-            if not potential_clamps_max.is_empty():
-                clamps_max = potential_clamps_max.with_columns(
-                    pl.lit(threshold_max).alias("clamp_threshold")
-                )
-                subset = subset.filter(pl.col("Value") < threshold_max)
-                print(
-                    HEAD,
-                    f"Max clamp detected: {len(clamps_max)} values >= {threshold_max:.3f} (distance: {distance_max:.3f}, std: {std_dev:.3f})".ljust(
-                        150
-                    ),
-                    end="\r",
-                    flush=True,
-                )
+    # Step 3: Filter once with final thresholds and save clamps
 
-    return clamps_min, clamps_max, subset
+    # Save minimum clamps
+    potential_clamps_min = subset.filter(pl.col("Value") <= final_threshold_min)
+    if not potential_clamps_min.is_empty():
+        clamps_min = potential_clamps_min.with_columns(
+            pl.lit(final_threshold_min).alias("clamp_threshold")
+        )
+        print(
+            HEAD,
+            f"Min clamp ({threshold_type_min}): {len(clamps_min)} values <= {final_threshold_min:.3f}".ljust(
+                150
+            ),
+            end="\r",
+            flush=True,
+        )
+
+    # Save maximum clamps
+    potential_clamps_max = subset.filter(pl.col("Value") >= final_threshold_max)
+    if not potential_clamps_max.is_empty():
+        clamps_max = potential_clamps_max.with_columns(
+            pl.lit(final_threshold_max).alias("clamp_threshold")
+        )
+        print(
+            HEAD,
+            f"Max clamp ({threshold_type_max}): {len(clamps_max)} values >= {final_threshold_max:.3f}".ljust(
+                150
+            ),
+            end="\r",
+            flush=True,
+        )
+
+    # Filter subset with final thresholds
+    filtered_subset = subset.filter(
+        (pl.col("Value") > final_threshold_min)
+        & (pl.col("Value") < final_threshold_max)
+    )
+
+    # Verify final min/max relationships
+    if not filtered_subset.is_empty():
+        remaining_sorted = filtered_subset["Value"].unique().sort()
+        if len(remaining_sorted) >= 2:
+            new_min = remaining_sorted[0]
+            new_max = remaining_sorted[-1]
+            new_second_min = (
+                remaining_sorted[1] if len(remaining_sorted) > 1 else new_min
+            )
+            new_second_max = (
+                remaining_sorted[-2] if len(remaining_sorted) > 1 else new_max
+            )
+
+            min_verification = abs(new_second_min - new_min)
+            max_verification = abs(new_max - new_second_max)
+
+            print(
+                HEAD,
+                f"Final verification - Min dist: {min_verification:.3f}, Max dist: {max_verification:.3f}".ljust(
+                    150
+                ),
+                end="\r",
+                flush=True,
+            )
+
+    return clamps_min, clamps_max, filtered_subset
 
 
 def calculate_process_capability(data, limits, std_val, mean_val):
@@ -687,9 +743,9 @@ def process_ftr(td):
     )
 
     # Conversione e sort
-    pv_melted = pv_melted.with_columns(
-        pl.col("°C").cast(pl.Int32, strict=False)
-    ).sort(["°C", "Corner", "Metric"])
+    pv_melted = pv_melted.with_columns(pl.col("°C").cast(pl.Int32, strict=False)).sort(
+        ["°C", "Corner", "Metric"]
+    )
 
     # Pivot con Split come colonne
     pv_pivot = pv_melted.pivot(
@@ -1151,18 +1207,27 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     # Ottieni i nomi dei test unici
     print(HEAD, f"PTR test list... ".ljust(150), end="\r", flush=True)
     ptrtname = (
-        ptr.select(pl.col("TestName")).unique().to_series().to_list()
+        ptr.select(["TestName", "TestNumber"])
+        .sort("TestNumber")
+        .unique(subset=["TestName"])
+        .select("TestName")
+        .to_series()
+        .to_list()
         if ptr.height > 0
         else []
     )
     ptrtname = ordina_test_name(ptrtname)
     print(HEAD, f"FTR test list... ".ljust(150), end="\r", flush=True)
     ftrtname = (
-        ftr.select(pl.col("TestName")).unique().to_series().to_list()
+        ftr.select(["TestName", "TestNumber"])
+        .sort("TestNumber")
+        .unique(subset=["TestName"])
+        .select("TestName")
+        .to_series()
+        .to_list()
         if ftr.height > 0
         else []
     )
-    ftrtname = ordina_test_name(ftrtname)
 
     print(HEAD, f"Write HTML... ".ljust(150), end="\r", flush=True)
     html_content += '<h2 id="TableOfContent">Table of Contents<a class="anchor-link" href="#TableOfContent"></a></h2><hr>'
