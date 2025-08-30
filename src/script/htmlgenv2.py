@@ -1,6 +1,7 @@
 import os
 import json5
 import datetime
+import numpy as np
 import polars as pl
 import plotly.offline as pyo
 from scipy.stats import kurtosis
@@ -98,7 +99,7 @@ def detect_clamps(
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
-    if std_dev == 0 or std_dev < 1e-10:
+    if std_dev == 0 or std_dev < 1e-10 or np.isnan(std_dev) or std_dev is None:
         return clamps_min, clamps_max, subset
 
     # Step 1: Calculate 6-sigma bounds
@@ -250,6 +251,8 @@ def detect_clamps(
                 end="\r",
                 flush=True,
             )
+    else:
+        return
 
     return clamps_min, clamps_max, filtered_subset
 
@@ -268,10 +271,10 @@ def calculate_process_capability(data, limits, std_val, mean_val):
         Dict with Cp, Cpk values or "-" if no limits
     """
     if limits["low"] == 0 and limits["high"] == 0:
-        return {"Cp": "-", "Cpk": "-"}
+        return {"Cp": 0.0, "Cpk": 0.0}
 
     if std_val == 0:
-        return {"Cp": "-", "Cpk": "-"}
+        return {"Cp": 0.0, "Cpk": 0.0}
 
     # Calculate Cp (process capability)
     cp = (limits["high"] - limits["low"]) / (6 * std_val)
@@ -296,7 +299,7 @@ def calculate_yield_metrics(data, limits):
         Dict with yield metrics or "-" if no limits
     """
     if limits["low"] == 0 and limits["high"] == 0:
-        return "-"
+        return 100.0
 
     data_with_limits = data.with_columns(
         [
@@ -494,6 +497,9 @@ def process_ptr(td):
 
     # Calculate process capability metrics ON FILTERED DATA
     capability_data = []
+    if stats.is_empty():
+        return
+
     for row in stats.iter_rows(named=True):
         subset_data = filtered_data.filter(
             (pl.col("°C") == row["°C"]) & (pl.col("Corner") == row["Corner"])
