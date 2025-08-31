@@ -99,7 +99,7 @@ def detect_clamps(
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
-    if std_dev == 0 or std_dev < 1e-10 or np.isnan(std_dev) or std_dev is None:
+    if std_dev == 0 or std_dev is None or np.isnan(std_dev) or std_dev < 1e-10:
         return clamps_min, clamps_max, subset
 
     # Step 1: Calculate 6-sigma bounds
