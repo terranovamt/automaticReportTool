@@ -1740,8 +1740,8 @@ class STDFProcessingSystem:
 def main():
     """Main execution function."""
     # Set watch path
-    watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
-    # watch_path = r".\STDF"
+    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    watch_path = r".\STDF"
     # Alternative path for Unix systems:
     # watch_path = "/prj/ENGI_MCD_STDF"
 
