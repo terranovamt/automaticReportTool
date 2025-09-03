@@ -77,7 +77,6 @@ class ProcessingConfig:
 
 from logging.handlers import BaseRotatingHandler
 
-
 class LineCountRotatingFileHandler(BaseRotatingHandler):
     """
     Custom rotating file handler that rotates log files based on line count
@@ -203,7 +202,7 @@ class ParameterExtractor:
         """
         # Split path and extract components
         mainpath = os.path.abspath(path)
-        path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
+        path = path.replace("\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
         path = path.replace(".\\STDF\\", "")
         splitted = path.split("\\")[:]
 
@@ -215,7 +214,7 @@ class ParameterExtractor:
             waf_badge = waf_badge_combined
         else:
             raise ValueError(
-                f"Formato path non supportato: {len(splitted)} componenti in {path}"
+                f"Formato stdf path non supportato: {len(splitted)} componenti in {path}: {splitted}"
             )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
@@ -293,9 +292,10 @@ class ParameterExtractor:
         """
         # Split path and extract components
         mainpath = os.path.abspath(path)
-        path = path.replace("\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
-        path = path.replace(".\\STDF\\", "")
-        splitted = path.split("\\")[:]
+        clearpath = path
+        clearpath = clearpath.replace("\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\", "")
+        clearpath = clearpath.replace(".\\STDF\\", "")
+        splitted = clearpath.split("\\")[:]
 
         if len(splitted) == 7:
             product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = splitted
@@ -315,7 +315,7 @@ class ParameterExtractor:
             stdname = path
         else:
             raise ValueError(
-                f"Formato path non supportato: {len(splitted)} componenti in {path}"
+                f"Formato path non supportato: {len(splitted)} componenti in {path}: {splitted}"
             )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
@@ -777,7 +777,8 @@ class DirectoryPoller:
             if len(std_files) == 0:
                 return
             char_list.add(os.path.dirname(path))
-            print(f"[Polling] New CHAR found: {path}")
+            parameter=ParameterExtractor.get_parameter(path=path)
+            print(f"[Polling] New CHAR found: {parameter['CUT']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['FILE'][parameter['WAFER']]['corner']}")
 
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
         """
@@ -1527,7 +1528,7 @@ class CharWorker(ProcessingWorker):
             # break  # UNCOMMET IF ONE COMP
         mainfolder = path.split("CHAR")[0] + "CHAR"
         marker_name, marker_content = self.get_completion_marker_info()
-        # FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
+        FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
 
 
 # ==================================================
@@ -1708,8 +1709,10 @@ class STDFProcessingSystem:
                         f"STDF={stdf_count}, Report={csv_count + char_count}, Condition={condition_count}, SHMOO={shmoo_count}"
                     )
                 else:
-                    False and print(
-                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process"
+                    print(
+                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process", 
+                        end="\r", 
+                        flush=True
                     )
 
                 # Sleep before next cycle
@@ -1734,9 +1737,10 @@ class STDFProcessingSystem:
 def main():
     """Main execution function."""
     # Set watch path
-    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
-    watch_path = r".\STDF"
-    # Alternative path for Unix systems: watch_path = "/prj/ENGI_MCD_STDF"
+    watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    # watch_path = r".\STDF"
+    # Alternative path for Unix systems: 
+    # watch_path = "/prj/ENGI_MCD_STDF"
 
     # Create and run the processing system
     processing_system = STDFProcessingSystem(watch_path)
