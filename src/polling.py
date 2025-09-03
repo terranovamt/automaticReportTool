@@ -77,6 +77,7 @@ class ProcessingConfig:
 
 from logging.handlers import BaseRotatingHandler
 
+
 class LineCountRotatingFileHandler(BaseRotatingHandler):
     """
     Custom rotating file handler that rotates log files based on line count
@@ -232,7 +233,7 @@ class ParameterExtractor:
             corner=corner,
             stdname=stdname,
             path=path,
-            main= mainpath,
+            main=mainpath,
         )
 
     @staticmethod
@@ -277,7 +278,7 @@ class ParameterExtractor:
             corner="CONDITION",
             stdname=filename,
             path=path,
-            main=mainpath
+            main=mainpath,
         )
 
     def get_parameter(path):
@@ -470,8 +471,8 @@ class CompositeManager:
 
         # Process-specific skips
         if process_type == ProcessType.CSV2REPORT:
-            return ("X30" in param_type and "TTIME" in composite) or (
-                "X30" in param_type and "YIELD" in composite
+            return ("LOOP" in param_type and "TTIME" in composite) or (
+                "LOOP" in param_type and "YIELD" in composite
             )
         elif process_type in (ProcessType.CONDITION2REPORT, ProcessType.CHAR):
             return composite in ["TTIME", "YIELD"]
@@ -777,8 +778,10 @@ class DirectoryPoller:
             if len(std_files) == 0:
                 return
             char_list.add(os.path.dirname(path))
-            parameter=ParameterExtractor.get_parameter(path=path)
-            print(f"[Polling] New CHAR found: {parameter['CUT']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['FILE'][parameter['WAFER']]['corner']}")
+            parameter = ParameterExtractor.get_parameter(path=path)
+            print(
+                f"[Polling] New CHAR found: {parameter['CUT']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['FILE'][parameter['WAFER']]['corner']}"
+            )
 
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
         """
@@ -1153,8 +1156,8 @@ class DirectoryPoller:
         seen_paths: Set[str],
         logger: logging.Logger,
     ):
-        """Process wafer subfolders (x30, VOLUME)."""
-        for subfolder in ["x30", "VOLUME"]:
+        """Process wafer subfolders (LOOP, VOLUME)."""
+        for subfolder in ["LOOP", "VOLUME"]:
             subfolder_path = os.path.join(base_path, subfolder)
 
             if os.path.isdir(subfolder_path):
@@ -1710,9 +1713,9 @@ class STDFProcessingSystem:
                     )
                 else:
                     print(
-                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process", 
-                        end="\r", 
-                        flush=True
+                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process",
+                        end="\r",
+                        flush=True,
                     )
 
                 # Sleep before next cycle
@@ -1739,7 +1742,7 @@ def main():
     # Set watch path
     watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
     # watch_path = r".\STDF"
-    # Alternative path for Unix systems: 
+    # Alternative path for Unix systems:
     # watch_path = "/prj/ENGI_MCD_STDF"
 
     # Create and run the processing system
