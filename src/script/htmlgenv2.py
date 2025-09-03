@@ -1281,37 +1281,10 @@ def gen_composite(parameter, df_stdf, destinationfolder):
 
     # Populate the list in HTML using composite_list items
     content = ""
-    if len(ptrtname) != 0 and len(ftrtname) != 0:
-        for tname in ptrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-        for tname in ftrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-    elif len(ptrtname) != 0:
-        for tname in ptrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-    elif len(ftrtname) != 0:
-        for tname in ftrtname:
+    testnames = sorted(ptrtname + ftrtname)
+
+    if len(testnames) != 0:
+        for tname in testnames:
             content = (
                 content
                 + "<a class='btn' href='"
