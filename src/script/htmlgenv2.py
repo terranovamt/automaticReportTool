@@ -148,8 +148,9 @@ def detect_clamps(
     # Check minimum clamps
     if len(sorted_values) >= 2:
         second_min = sorted_values[1]
-        distance_min = abs(second_min - min_val)
-        is_min_clamp = distance_min > (std_dev * std_multiplier)
+        is_min_clamp = (abs(second_min - min_val) > (std_dev * std_multiplier)) or (
+            abs(min_val - mean_val) > (7 * std_dev)
+        )
 
         should_remove_min_clamp = False
         if is_min_clamp:
@@ -171,7 +172,9 @@ def detect_clamps(
     if len(sorted_values) >= 2:
         second_max = sorted_values[-2]
         distance_max = abs(max_val - second_max)
-        is_max_clamp = distance_max > (std_dev * std_multiplier)
+        is_max_clamp = (distance_max > (std_dev * std_multiplier)) or (
+            abs(max_val - mean_val) > (7 * std_dev)
+        )
 
         should_remove_max_clamp = False
         if is_max_clamp:
@@ -417,7 +420,7 @@ def process_ptr(td):
             processed_combinations += 1
             print(
                 HEAD,
-                f"Processing {processed_combinations}/{total_combinations} corner/temperature combinations".ljust(
+                f"Processing {processed_combinations}/{total_combinations} {corner} {temp} combinations".ljust(
                     150
                 ),
                 end="\r",
@@ -933,6 +936,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         return
 
     stats, td, ftrflag = process_ptr(td)
+    # stats.write_csv(f'tmp/{tname.split(":")[0]}.csv')
 
     if ftrflag:
         df_stdf["ftr"] = df_stdf["ptr"].filter(pl.col("TestName") == tname)

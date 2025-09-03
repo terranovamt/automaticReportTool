@@ -22,7 +22,7 @@ def process_composite(parameter, csv_name, df_stdf):
         csv_name (str): CSV file name to process.
     """
     try:
-        tsr = pd.read_csv(os.path.abspath(f"{csv_name}.tsr.csv"))
+        tsr = pd.read_parquet(os.path.abspath(f"{csv_name}.tsr.parquet"))
 
         if str(parameter["COM"]).upper() == "TTIME":
             process_ttime(parameter, tsr, parameter["COM"], csv_name, df_stdf)

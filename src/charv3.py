@@ -158,6 +158,39 @@ def load_personalization_data(code: str) -> dict:
         return {}
 
 
+def read_parquet_file_polars(
+    file_path: str, columns=None, file_type=None
+) -> pl.DataFrame:
+    """Read Parquet file using polars with appropriate schema for each file type."""
+    if not os.path.exists(file_path):
+        print(f"[WARNING] File not found: {file_path}")
+        return pl.DataFrame()
+
+    try:
+        # Read parquet file with optional column selection
+        df = pl.read_parquet(file_path, columns=columns)
+
+        # Apply schema overrides if specified
+        if file_type and file_type in DTYPE_CONFIGS:
+            schema_overrides = DTYPE_CONFIGS[file_type]
+
+            # Cast columns to specified types if they exist in the dataframe
+            for col_name, dtype in schema_overrides.items():
+                if col_name in df.columns:
+                    try:
+                        df = df.with_columns(pl.col(col_name).cast(dtype))
+                    except Exception as cast_error:
+                        print(
+                            f"[WARNING] Could not cast {col_name} to {dtype}: {cast_error}"
+                        )
+
+        return df
+
+    except Exception as e:
+        print(f"[ERROR] Error reading {file_path}: {e}")
+        return pl.DataFrame()
+
+
 def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:
     """Read CSV file using polars with appropriate schema for each file type."""
     if not os.path.exists(file_path):
@@ -217,7 +250,7 @@ def read_stdf_files(csv_path: str) -> dict:
 
     df_stdf = {}
     for file_type, config in file_configs.items():
-        file_path = f"{csv_path}.{file_type}.csv"
+        file_path = f"{csv_path}.{file_type}.parquet"
         print(
             HEAD,
             f"Reading... {os.path.basename(file_path)}".ljust(150),
@@ -225,7 +258,7 @@ def read_stdf_files(csv_path: str) -> dict:
             flush=True,
         )
 
-        df_stdf[file_type] = read_csv_file_polars(
+        df_stdf[file_type] = read_parquet_file_polars(
             file_path, config["columns"], file_type
         )
 

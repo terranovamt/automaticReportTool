@@ -77,6 +77,7 @@ class ProcessingConfig:
 
 from logging.handlers import BaseRotatingHandler
 
+
 class LineCountRotatingFileHandler(BaseRotatingHandler):
     """
     Custom rotating file handler that rotates log files based on line count
@@ -232,7 +233,7 @@ class ParameterExtractor:
             corner=corner,
             stdname=stdname,
             path=path,
-            main= mainpath,
+            main=mainpath,
         )
 
     @staticmethod
@@ -277,7 +278,7 @@ class ParameterExtractor:
             corner="CONDITION",
             stdname=filename,
             path=path,
-            main=mainpath
+            main=mainpath,
         )
 
     def get_parameter(path):
@@ -470,8 +471,8 @@ class CompositeManager:
 
         # Process-specific skips
         if process_type == ProcessType.CSV2REPORT:
-            return ("X30" in param_type and "TTIME" in composite) or (
-                "X30" in param_type and "YIELD" in composite
+            return ("LOOP" in param_type and "TTIME" in composite) or (
+                "LOOP" in param_type and "YIELD" in composite
             )
         elif process_type in (ProcessType.CONDITION2REPORT, ProcessType.CHAR):
             return composite in ["TTIME", "YIELD"]
@@ -651,7 +652,7 @@ class DirectoryPoller:
             # Check if CSV files already exist
             if os.path.isdir(csv_folder_path):
                 csv_files = [
-                    f for f in os.listdir(csv_folder_path) if f.endswith(".csv")
+                    f for f in os.listdir(csv_folder_path) if f.endswith(".parquet")
                 ]
                 if len(csv_files) > 8:
                     return True
@@ -690,7 +691,7 @@ class DirectoryPoller:
                     csv_files = [
                         cf
                         for cf in os.listdir(csv_folder_path)
-                        if cf.endswith(".csv") and cf.startswith(f)
+                        if cf.endswith(".parquet") and cf.startswith(f)
                     ]
                     if len(csv_files) <= 8:
                         all_ready = False
@@ -777,8 +778,10 @@ class DirectoryPoller:
             if len(std_files) == 0:
                 return
             char_list.add(os.path.dirname(path))
-            parameter=ParameterExtractor.get_parameter(path=path)
-            print(f"[Polling] New CHAR found: {parameter['CUT']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['FILE'][parameter['WAFER']]['corner']}")
+            parameter = ParameterExtractor.get_parameter(path=path)
+            print(
+                f"[Polling] New CHAR found: {parameter['CUT']} {parameter['FLOW']} {parameter['LOT']} {parameter['WAFER']} {parameter['FILE'][parameter['WAFER']]['corner']}"
+            )
 
     def check_shmoo_folders(self, folder_path: str, shmoo_list: List[str]) -> bool:
         """
@@ -1153,8 +1156,8 @@ class DirectoryPoller:
         seen_paths: Set[str],
         logger: logging.Logger,
     ):
-        """Process wafer subfolders (x30, VOLUME)."""
-        for subfolder in ["x30", "VOLUME"]:
+        """Process wafer subfolders."""
+        for subfolder in ["VOLUME", "LOOP"]:
             subfolder_path = os.path.join(base_path, subfolder)
 
             if os.path.isdir(subfolder_path):
@@ -1233,7 +1236,7 @@ class ProcessingWorker:
             if os.path.exists(file_path):
                 try:
                     # print(f"[ERROR] reading {file_path}")
-                    return pd.read_csv(file_path, usecols=usecols, low_memory=False)
+                    return pd.read_parquet(file_path, usecols=usecols, low_memory=False)
                 except Exception as e:
                     print(f"[ERROR] Error reading {file_path}: {e}")
                     return pd.DataFrame()
@@ -1243,14 +1246,14 @@ class ProcessingWorker:
 
         # Legge tutti i file CSV necessari
         ptr = read_csv_file(
-            f"{csv_path}.ptr.csv", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15]
+            f"{csv_path}.ptr.parquet", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15]
         )
-        ftr = read_csv_file(f"{csv_path}.ftr.csv", usecols=[0, 1, 4, 23])
-        mir = read_csv_file(f"{csv_path}.mir.csv")
-        prr = read_csv_file(f"{csv_path}.prr.csv")
-        pcr = read_csv_file(f"{csv_path}.pcr.csv")
-        hbr = read_csv_file(f"{csv_path}.hbr.csv")
-        sbr = read_csv_file(f"{csv_path}.sbr.csv")
+        ftr = read_csv_file(f"{csv_path}.ftr.parquet", usecols=[0, 1, 4, 23])
+        mir = read_csv_file(f"{csv_path}.mir.parquet")
+        prr = read_csv_file(f"{csv_path}.prr.parquet")
+        pcr = read_csv_file(f"{csv_path}.pcr.parquet")
+        hbr = read_csv_file(f"{csv_path}.hbr.parquet")
+        sbr = read_csv_file(f"{csv_path}.sbr.parquet")
 
         # Crea un dizionario per accedere ai DataFrame
         df_stdf = {
@@ -1408,14 +1411,15 @@ class STDFWorker(ProcessingWorker):
         parameter = ParameterExtractor.get_parameter_from_stdf_path(path)
         print(
             f"[STDF2CSV] Start stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}"
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}".ljust(150),end="\r",
+        flush=True,
         )
 
         self._convert_stdf_to_csv(path, logger)
 
         print(
             f"[STDF2CSV] End stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}"
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}".ljust(150),
         )
 
     def _convert_stdf_to_csv(self, path: str, logger: logging.Logger):
@@ -1710,9 +1714,9 @@ class STDFProcessingSystem:
                     )
                 else:
                     print(
-                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process", 
-                        end="\r", 
-                        flush=True
+                        f"[SYSTEM] Cycle {cycle_count} completed: No files to process",
+                        end="\r",
+                        flush=True,
                     )
 
                 # Sleep before next cycle
@@ -1737,9 +1741,9 @@ class STDFProcessingSystem:
 def main():
     """Main execution function."""
     # Set watch path
-    watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
-    # watch_path = r".\STDF"
-    # Alternative path for Unix systems: 
+    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    watch_path = r".\STDF"
+    # Alternative path for Unix systems:
     # watch_path = "/prj/ENGI_MCD_STDF"
 
     # Create and run the processing system
