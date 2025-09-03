@@ -93,13 +93,15 @@ def detect_clamps(
     clamps_min = pl.DataFrame()
     clamps_max = pl.DataFrame()
 
+    # return clamps_min, clamps_max, subset
+
     # Get basic statistics
     values = subset["Value"]
     mean_val = values.mean()
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
-    if std_dev == 0 or std_dev < 1e-10 or np.isnan(std_dev) or std_dev is None:
+    if std_dev == 0 or std_dev is None or np.isnan(std_dev) or std_dev < 1e-10:
         return clamps_min, clamps_max, subset
 
     # Step 1: Calculate 6-sigma bounds
@@ -191,68 +193,76 @@ def detect_clamps(
 
     # Step 3: Filter once with final thresholds and save clamps
 
-    # Save minimum clamps
-    potential_clamps_min = subset.filter(pl.col("Value") <= final_threshold_min)
-    if not potential_clamps_min.is_empty():
-        clamps_min = potential_clamps_min.with_columns(
-            pl.lit(final_threshold_min).alias("clamp_threshold")
-        )
-        print(
-            HEAD,
-            f"Min clamp ({threshold_type_min}): {len(clamps_min)} values <= {final_threshold_min:.3f}".ljust(
-                150
-            ),
-            end="\r",
-            flush=True,
-        )
-
-    # Save maximum clamps
-    potential_clamps_max = subset.filter(pl.col("Value") >= final_threshold_max)
-    if not potential_clamps_max.is_empty():
-        clamps_max = potential_clamps_max.with_columns(
-            pl.lit(final_threshold_max).alias("clamp_threshold")
-        )
-        print(
-            HEAD,
-            f"Max clamp ({threshold_type_max}): {len(clamps_max)} values >= {final_threshold_max:.3f}".ljust(
-                150
-            ),
-            end="\r",
-            flush=True,
-        )
-
     # Filter subset with final thresholds
     filtered_subset = subset.filter(
         (pl.col("Value") > final_threshold_min)
         & (pl.col("Value") < final_threshold_max)
     )
-
-    # Verify final min/max relationships
     if not filtered_subset.is_empty():
-        remaining_sorted = filtered_subset["Value"].unique().sort()
-        if len(remaining_sorted) >= 2:
-            new_min = remaining_sorted[0]
-            new_max = remaining_sorted[-1]
-            new_second_min = (
-                remaining_sorted[1] if len(remaining_sorted) > 1 else new_min
+        # Save minimum clamps
+        potential_clamps_min = subset.filter(pl.col("Value") <= final_threshold_min)
+        if not potential_clamps_min.is_empty():
+            clamps_min = potential_clamps_min.with_columns(
+                pl.lit(final_threshold_min).alias("clamp_threshold")
             )
-            new_second_max = (
-                remaining_sorted[-2] if len(remaining_sorted) > 1 else new_max
-            )
-
-            min_verification = abs(new_second_min - new_min)
-            max_verification = abs(new_max - new_second_max)
-
             print(
                 HEAD,
-                f"Final verification - Min dist: {min_verification:.3f}, Max dist: {max_verification:.3f}".ljust(
+                f"Min clamp ({threshold_type_min}): {len(clamps_min)} values <= {final_threshold_min:.3f}".ljust(
                     150
                 ),
                 end="\r",
                 flush=True,
             )
+
+        # Save maximum clamps
+        potential_clamps_max = subset.filter(pl.col("Value") >= final_threshold_max)
+        if not potential_clamps_max.is_empty():
+            clamps_max = potential_clamps_max.with_columns(
+                pl.lit(final_threshold_max).alias("clamp_threshold")
+            )
+            print(
+                HEAD,
+                f"Max clamp ({threshold_type_max}): {len(clamps_max)} values >= {final_threshold_max:.3f}".ljust(
+                    150
+                ),
+                end="\r",
+                flush=True,
+            )
+
     else:
-        return
+        filtered_subset = subset.filter(
+            (pl.col("Value") > lower_sigma_bound)
+            & (pl.col("Value") < upper_sigma_bound)
+        )
+        # Save minimum clamps
+        potential_clamps_min = subset.filter(pl.col("Value") <= lower_sigma_bound)
+        if not potential_clamps_min.is_empty():
+            clamps_min = potential_clamps_min.with_columns(
+                pl.lit(lower_sigma_bound).alias("clamp_threshold")
+            )
+            print(
+                HEAD,
+                f"Min clamp ({threshold_type_min}): {len(clamps_min)} values <= {lower_sigma_bound:.3f}".ljust(
+                    150
+                ),
+                end="\r",
+                flush=True,
+            )
+
+        # Save maximum clamps
+        potential_clamps_max = subset.filter(pl.col("Value") >= upper_sigma_bound)
+        if not potential_clamps_max.is_empty():
+            clamps_max = potential_clamps_max.with_columns(
+                pl.lit(upper_sigma_bound).alias("clamp_threshold")
+            )
+            print(
+                HEAD,
+                f"Max clamp ({threshold_type_max}): {len(clamps_max)} values >= {upper_sigma_bound:.3f}".ljust(
+                    150
+                ),
+                end="\r",
+                flush=True,
+            )
 
     return clamps_min, clamps_max, filtered_subset
 
@@ -1274,37 +1284,10 @@ def gen_composite(parameter, df_stdf, destinationfolder):
 
     # Populate the list in HTML using composite_list items
     content = ""
-    if len(ptrtname) != 0 and len(ftrtname) != 0:
-        for tname in ptrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-        for tname in ftrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-    elif len(ptrtname) != 0:
-        for tname in ptrtname:
-            content = (
-                content
-                + "<a class='btn' href='"
-                + tname.replace(":", "_")
-                + ".html'> "
-                + tname
-                + " </a>\n"
-            )
-    elif len(ftrtname) != 0:
-        for tname in ftrtname:
+    testnames = sorted(ptrtname + ftrtname)
+
+    if len(testnames) != 0:
+        for tname in testnames:
             content = (
                 content
                 + "<a class='btn' href='"
