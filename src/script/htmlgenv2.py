@@ -95,7 +95,7 @@ def detect_clamps(
 
     # Get basic statistics
     values = subset["Value"]
-    mean_val = values.mode()[0]
+    mean_val = values.mean()
     std_dev = values.std()
 
     # If std is 0 or very small, no clamps can be detected reliably
