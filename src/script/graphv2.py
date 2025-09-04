@@ -407,6 +407,18 @@ def boxploth(
     x_min = global_min - margin
     x_max = global_max + margin
 
+    corner_order = [
+        "SSTT",
+        "SSXX",
+        "S1TT",
+        "SFTT",
+        "TTTT",
+        "FSTT",
+        "F1TT",
+        "FFMM",
+        "FFTT",
+    ]
+
     # =========================
     # PART 1: BOX PLOT with facet for Split
     # =========================
@@ -417,6 +429,14 @@ def boxploth(
 
         for j, temp in enumerate(all_temps):
             temp_split_data = split_data.filter(pl.col("°C") == temp)
+
+            corners = temp_split_data.select("Corner").to_series().to_list()
+            unique_corners = list(set(corners))
+            unique_corners.sort(
+                key=lambda x: (
+                    corner_order.index(x) if x in corner_order else len(corner_order)
+                )
+            )
 
             if len(temp_split_data) > 0:
                 fig.add_trace(
@@ -460,7 +480,7 @@ def boxploth(
     # =========================
     # FINAL LAYOUT
     # =========================
-    base_height = 1200 + max(0, (n_splits - 2) * 600)
+    base_height = 1200 + max(0, (n_splits - 2) * 1200)
 
     fig.update_layout(
         autosize=True,
@@ -487,7 +507,8 @@ def boxploth(
             row=split_idx + 1,
             col=1,
         )
-        fig.update_yaxes(title="Corner", row=split_idx + 1, col=1)
+        fig.update_yaxes(title="Corner", row=split_idx + 1, col=1,categoryorder='array', categoryarray=corner_order)
+
 
     return fig
 

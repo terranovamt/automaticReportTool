@@ -1253,7 +1253,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     print(HEAD, f"PTR test list... ".ljust(150), end="\r", flush=True)
     ptrtname = (
         ptr.select(["TestName", "TestNumber"])
-        .filter(~pl.col("TestName").str.contains("LOG_TTIME"))
+        .filter(~pl.col("TestName").cast(pl.Utf8).str.contains("LOG_TTIME"))
         .sort("TestNumber")
         .unique(subset=["TestName"])
         .select("TestName")
@@ -1266,7 +1266,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
     print(HEAD, f"FTR test list... ".ljust(150), end="\r", flush=True)
     ftrtname = (
         ftr.select(["TestName", "TestNumber"])
-        .filter(~pl.col("TestName").str.contains("LOG_TTIME"))
+        .filter(~pl.col("TestName").cast(pl.Utf8).str.contains("LOG_TTIME"))
         .sort("TestNumber")
         .unique(subset=["TestName"])
         .select("TestName")

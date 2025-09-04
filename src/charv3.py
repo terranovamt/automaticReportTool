@@ -446,17 +446,23 @@ def remove_retests(prr_df: pl.DataFrame, test_type: str) -> pl.DataFrame:
 def parse_test_names_regex(
     df: pl.DataFrame, composite: str, is_ttime: bool = False
 ) -> pl.DataFrame:
-    """Parse test names using regex patterns optimized for polars."""
+    """Parse test names using regex patterns optimized for polars with categorical TEST_TXT."""
 
     if is_ttime:
-        # TTIME handling - simpler pattern based on pandas logic
+        # TTIME handling - convert to string temporarily for regex operations
         regex_ttime = rf"(?P<COM>{composite})__(?P<TestName>.*)::(?P<TARGET>.*)"
 
         df = df.with_columns(
             [
-                pl.col("TEST_TXT").str.extract(regex_ttime, 2).alias("TestName"),
+                pl.col("TEST_TXT")
+                .cast(pl.Utf8)
+                .str.extract(regex_ttime, 2)
+                .alias("TestName"),
                 pl.lit(composite).alias("COM"),
-                pl.col("TEST_TXT").str.extract(regex_ttime, 3).alias("TARGET"),
+                pl.col("TEST_TXT")
+                .cast(pl.Utf8)
+                .str.extract(regex_ttime, 3)
+                .alias("TARGET"),
                 pl.lit("STD").alias("pltype"),
                 pl.lit("Standard").alias("Split"),
             ]
@@ -471,9 +477,14 @@ def parse_test_names_regex(
         # Prima estrarre i gruppi unici di TEST_TXT e TEST_NUM
         unique_groups = df.select(["TEST_TXT", "TEST_NUM"]).unique()
 
+        # Convert to string for regex operations
+        unique_groups = unique_groups.with_columns(
+            pl.col("TEST_TXT").cast(pl.Utf8).alias("TEST_TXT_str")
+        )
+
         # Creare una colonna binaria temporanea per identificare i casi split sui gruppi unici
         unique_groups = unique_groups.with_columns(
-            pl.col("TEST_TXT").str.contains(split_pattern).alias("_is_split")
+            pl.col("TEST_TXT_str").str.contains(split_pattern).alias("_is_split")
         )
 
         # Identificare i gruppi con più TEST_NUM per lo stesso TEST_TXT sui gruppi unici
@@ -493,7 +504,7 @@ def parse_test_names_regex(
                     pl.when(pl.col("_is_split"))
                     .then(
                         pl.when(
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(split_pattern, 7)
                             .is_not_null()
                         )
@@ -501,39 +512,43 @@ def parse_test_names_regex(
                             # Caso con gruppo 7 presente: include il gruppo 7
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT")
+                                    pl.col("TEST_TXT_str")
                                     .str.extract(split_pattern, 1)
                                     .str.to_uppercase(),
                                     pl.lit(":"),
-                                    pl.col("TEST_TXT").str.extract(split_pattern, 7),
+                                    pl.col("TEST_TXT_str").str.extract(
+                                        split_pattern, 7
+                                    ),
                                 ]
                             )
                         )
                         .otherwise(
                             # Caso senza gruppo 7: solo prefix
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(split_pattern, 1)
                             .str.to_uppercase()
                         )
                     )
                     .otherwise(
                         pl.when(
-                            pl.col("TEST_TXT").str.extract(std_pattern, 4).is_not_null()
+                            pl.col("TEST_TXT_str")
+                            .str.extract(std_pattern, 4)
+                            .is_not_null()
                         )
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT")
+                                    pl.col("TEST_TXT_str")
                                     .str.extract(std_pattern, 1)
                                     .str.to_uppercase(),
                                     pl.lit(":"),
-                                    pl.col("TEST_TXT").str.extract(std_pattern, 4),
+                                    pl.col("TEST_TXT_str").str.extract(std_pattern, 4),
                                 ]
                             )
                         )
                         .otherwise(
                             # Caso senza gruppo 4: solo prefix
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(std_pattern, 1)
                             .str.to_uppercase()
                         )
@@ -541,7 +556,7 @@ def parse_test_names_regex(
                     .alias("new_TEST_TXT"),
                     # SPLIT: Estrarre il valore split o "standard"
                     pl.when(pl.col("_is_split"))
-                    .then(pl.col("TEST_TXT").str.extract(split_pattern, 4))
+                    .then(pl.col("TEST_TXT_str").str.extract(split_pattern, 4))
                     .otherwise(pl.lit("standard"))
                     .alias("Split"),
                     # pltype: "SPLIT" o "STD"
@@ -608,44 +623,48 @@ def parse_test_names_regex(
                     pl.when(pl.col("_is_split"))
                     .then(
                         pl.when(
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(split_pattern, 7)
                             .is_not_null()
                         )
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT")
+                                    pl.col("TEST_TXT_str")
                                     .str.extract(split_pattern, 1)
                                     .str.to_uppercase(),
                                     pl.lit(":"),
-                                    pl.col("TEST_TXT").str.extract(split_pattern, 7),
+                                    pl.col("TEST_TXT_str").str.extract(
+                                        split_pattern, 7
+                                    ),
                                 ]
                             )
                         )
                         .otherwise(
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(split_pattern, 1)
                             .str.to_uppercase()
                         )
                     )
                     .otherwise(
                         pl.when(
-                            pl.col("TEST_TXT").str.extract(std_pattern, 4).is_not_null()
+                            pl.col("TEST_TXT_str")
+                            .str.extract(std_pattern, 4)
+                            .is_not_null()
                         )
                         .then(
                             pl.concat_str(
                                 [
-                                    pl.col("TEST_TXT")
+                                    pl.col("TEST_TXT_str")
                                     .str.extract(std_pattern, 1)
                                     .str.to_uppercase(),
                                     pl.lit(":"),
-                                    pl.col("TEST_TXT").str.extract(std_pattern, 4),
+                                    pl.col("TEST_TXT_str").str.extract(std_pattern, 4),
                                 ]
                             )
                         )
                         .otherwise(
-                            pl.col("TEST_TXT")
+                            pl.col("TEST_TXT_str")
                             .str.extract(std_pattern, 1)
                             .str.to_uppercase()
                         )
@@ -653,7 +672,7 @@ def parse_test_names_regex(
                     .alias("new_TEST_TXT"),
                     # SPLIT: Estrarre il valore split o "Standard"
                     pl.when(pl.col("_is_split"))
-                    .then(pl.col("TEST_TXT").str.extract(split_pattern, 4))
+                    .then(pl.col("TEST_TXT_str").str.extract(split_pattern, 4))
                     .otherwise(pl.lit("Standard"))
                     .alias("Split"),
                     # pltype: "SPLIT" o "STD"
@@ -673,7 +692,9 @@ def parse_test_names_regex(
             processed_groups = groups_single
 
         # Rimuovere le colonne temporanee
-        processed_groups = processed_groups.drop(["_is_split", "_has_multiple"])
+        processed_groups = processed_groups.drop(
+            ["_is_split", "_has_multiple", "TEST_TXT_str"]
+        )
 
         # Ora fare il join con il dataframe originale per riassegnare i valori
         df = df.join(
@@ -684,10 +705,10 @@ def parse_test_names_regex(
             how="left",
         )
 
-        # Riassegnare TEST_TXT con il nuovo valore
-        df = df.with_columns(pl.col("new_TEST_TXT").alias("TEST_TXT")).drop(
-            "new_TEST_TXT"
-        )
+        # Riassegnare TEST_TXT con il nuovo valore e convertire di nuovo a categorical
+        df = df.with_columns(
+            pl.col("new_TEST_TXT").cast(pl.Categorical).alias("TEST_TXT")
+        ).drop("new_TEST_TXT")
 
     return df
 
@@ -696,10 +717,6 @@ def process_ptr_data(ptr_df: pl.DataFrame, composite: str) -> pl.DataFrame:
     """Process PTR data with all transformations."""
     if ptr_df.is_empty():
         return ptr_df
-
-    # Apply scaling
-    ptr_df = apply_result_scaling(ptr_df)
-    ptr_df = apply_unit_prefixes(ptr_df)
 
     print(HEAD, f"Name extract... ".ljust(150), end="\r", flush=True)
 
@@ -859,6 +876,7 @@ def process_single_corner_file(
                 pl.col("PARM_FLG").cast(pl.String).str.to_integer(base=2, strict=False)
             )
             .otherwise(None)
+            .cast(pl.UInt16)
             .alias("PARM_FLG")
         )
         df_stdf["ptr"] = df_stdf["ptr"].filter(pl.col("RESULT").is_not_null())
@@ -879,6 +897,10 @@ def process_single_corner_file(
             df_stdf["ptr"], df_stdf["prr"], product_data, parameter["FLOW"]
         )
 
+        # Apply scaling
+        df_stdf["ptr"] = apply_result_scaling(df_stdf["ptr"])
+        df_stdf["ptr"] = apply_unit_prefixes(df_stdf["ptr"])
+
         return {
             "data": df_stdf,
             "temperature": temperature,
@@ -892,12 +914,8 @@ def process_single_corner_file(
 
 
 def consolidate_corner_data(corner_results: list) -> dict:
-    """Consolidate data from all corners into single dataframes."""
-    all_data = {
-        # key: [] for key in ["ptr", "ftr", "mir", "prr", "pcr", "hbr", "sbr", "tsr"]
-        key: []
-        for key in ["ptr", "ftr", "mir", "prr"]
-    }
+    """Consolidate data from all corners into single dataframes with memory optimization."""
+    all_data = {key: [] for key in ["ptr", "ftr", "mir", "prr"]}
 
     for result in corner_results:
         if result is None:
@@ -907,12 +925,19 @@ def consolidate_corner_data(corner_results: list) -> dict:
             if key in result["data"] and not result["data"][key].is_empty():
                 all_data[key].append(result["data"][key])
 
-    # Concatenate all dataframes
+    # Concatenate all dataframes with optimization
     consolidated = {}
     for key, data_list in all_data.items():
         print(HEAD, f"Merge... {key}".ljust(150), end="\r", flush=True)
         if data_list:
+            # Prima concatena
             consolidated[key] = pl.concat(data_list, rechunk=True)
+
+            # Ottimizza solo TEST_TXT se esiste
+            if "TEST_TXT" in consolidated[key].columns:
+                consolidated[key] = consolidated[key].with_columns(
+                    pl.col("TEST_TXT").cast(pl.Categorical)
+                )
         else:
             consolidated[key] = pl.DataFrame()
 
@@ -955,37 +980,43 @@ def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:
     )
 
     # Join coordinate information to PTR and FTR
-    prr_coords = consolidated_data["prr"].select(
-        [
-            "PartID",
-            "X_COORD",
-            "Y_COORD",
-            "SOFT_BIN",
-            "HARD_BIN",
-            "CORNER",
-            "TEMPERATURE",
-        ]
-    )
+    # prr_coords = consolidated_data["prr"].select(
+    #     [
+    #         "PartID",
+    #         "X_COORD",
+    #         "Y_COORD",
+    #         # "SOFT_BIN",
+    #         # "HARD_BIN",
+    #         "CORNER",
+    #         "TEMPERATURE",
+    #     ]
+    # )
 
-    if not consolidated_data["ptr"].is_empty():
-        consolidated_data["ptr"] = consolidated_data["ptr"].join(
-            prr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
-        )
+    # if not consolidated_data["ptr"].is_empty():
+    #     consolidated_data["ptr"] = consolidated_data["ptr"].join(
+    #         prr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
+    #     )
 
-    if not consolidated_data["ftr"].is_empty():
-        ftr_coords = consolidated_data["prr"].select(
-            ["PartID", "X_COORD", "Y_COORD", "CORNER", "TEMPERATURE"]
-        )
-        consolidated_data["ftr"] = consolidated_data["ftr"].join(
-            ftr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
-        )
+    #     for col in consolidated_data["ptr"].columns:
+    #         dtype = consolidated_data["ptr"][col].dtype
+    #         size_bytes = consolidated_data["ptr"][col].estimated_size()
+    #         size_mb = size_bytes / (1024**2)
+    #         print(f"Colonna '{col}': tipo={dtype}, memoria stimata={size_mb:.6f} MB")
 
-        # Remove FTR retests
-        consolidated_data["ftr"] = consolidated_data["ftr"].unique(
-            subset=["X_COORD", "Y_COORD", "CORNER", "TEMPERATURE", "TEST_TXT"],
-            keep="last",
-        )
+    # if not consolidated_data["ftr"].is_empty():
+    #     ftr_coords = consolidated_data["prr"].select(
+    #         ["PartID", "X_COORD", "Y_COORD", "CORNER", "TEMPERATURE"]
+    #     )
+    #     consolidated_data["ftr"] = consolidated_data["ftr"].join(
+    #         ftr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
+    #     )
 
+    #     # Remove FTR retests
+    #     consolidated_data["ftr"] = consolidated_data["ftr"].unique(
+    #         subset=["X_COORD", "Y_COORD", "CORNER", "TEMPERATURE", "TEST_TXT"],
+    #         keep="last",
+    #     )
+    
     # Process PTR and FTR data
     consolidated_data["ptr"] = process_ptr_data(consolidated_data["ptr"], composite)
     consolidated_data["ftr"] = process_ftr_data(consolidated_data["ftr"], composite)

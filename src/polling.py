@@ -219,6 +219,8 @@ class ParameterExtractor:
             )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
+        if len(parts) > 0 and parts[0].startswith("ID") and parts[0][2:].isdigit():
+            parts = parts[1:]
         lot_pkg = parts[0]
         waf_badge = parts[1] if len(parts) > 1 else ""
         corner = parts[2] if len(parts) > 2 and parts[2] != "TTTT" else "TTTT"
@@ -320,6 +322,8 @@ class ParameterExtractor:
             )
 
         parts = (waf_badge + "_TTTT").split("_")[:-1]
+        if len(parts) > 0 and parts[0].startswith("ID") and parts[0][2:].isdigit():
+            parts = parts[1:]
         lot_pkg = parts[0]
         waf_badge = parts[1] if len(parts) > 1 else ""
         corner = parts[2] if len(parts) > 2 and parts[2] != "TTTT" else "TTTT"
