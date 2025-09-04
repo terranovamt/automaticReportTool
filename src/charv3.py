@@ -463,8 +463,8 @@ def parse_test_names_regex(
                 .cast(pl.Utf8)
                 .str.extract(regex_ttime, 3)
                 .alias("TARGET"),
-                pl.lit("STD").alias("pltype"),
-                pl.lit("Standard").alias("Split"),
+                pl.lit("STD").cast(pl.Categorical).alias("pltype"),
+                pl.lit("Standard").cast(pl.Categorical).alias("Split"),
             ]
         )
 
@@ -558,11 +558,13 @@ def parse_test_names_regex(
                     pl.when(pl.col("_is_split"))
                     .then(pl.col("TEST_TXT_str").str.extract(split_pattern, 4))
                     .otherwise(pl.lit("standard"))
+                    .cast(pl.Categorical)
                     .alias("Split"),
                     # pltype: "SPLIT" o "STD"
                     pl.when(pl.col("_is_split"))
                     .then(pl.lit("SPLIT"))
                     .otherwise(pl.lit("STD"))
+                    .cast(pl.Categorical)
                     .alias("pltype"),
                 ]
             )
@@ -604,9 +606,11 @@ def parse_test_names_regex(
                             .cast(pl.String)
                             .str.pad_start(pl.col("_digits"), "0"),
                         ]
-                    ).alias("Split"),
+                    )
+                    .cast(pl.Categorical)
+                    .alias("Split"),
                     # Update pltype column
-                    pl.lit("SPLIT").alias("pltype"),
+                    pl.lit("SPLIT").cast(pl.Categorical).alias("pltype"),
                 ]
             )
 
@@ -674,11 +678,13 @@ def parse_test_names_regex(
                     pl.when(pl.col("_is_split"))
                     .then(pl.col("TEST_TXT_str").str.extract(split_pattern, 4))
                     .otherwise(pl.lit("Standard"))
+                    .cast(pl.Categorical)
                     .alias("Split"),
                     # pltype: "SPLIT" o "STD"
                     pl.when(pl.col("_is_split"))
                     .then(pl.lit("SPLIT"))
                     .otherwise(pl.lit("STD"))
+                    .cast(pl.Categorical)
                     .alias("pltype"),
                 ]
             )
@@ -1016,7 +1022,7 @@ def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:
     #         subset=["X_COORD", "Y_COORD", "CORNER", "TEMPERATURE", "TEST_TXT"],
     #         keep="last",
     #     )
-    
+
     # Process PTR and FTR data
     consolidated_data["ptr"] = process_ptr_data(consolidated_data["ptr"], composite)
     consolidated_data["ftr"] = process_ftr_data(consolidated_data["ftr"], composite)

@@ -65,7 +65,7 @@ def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):
 
 
 def detect_clamps(
-    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=6
+    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=5
 ):
     """
     Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.
@@ -414,7 +414,7 @@ def process_ptr(td):
             processed_combinations += 1
             print(
                 HEAD,
-                f"Processing {processed_combinations}/{total_combinations} corner/temperature combinations".ljust(
+                f"Processing {processed_combinations}/{total_combinations} {corner} {temp} combinations".ljust(
                     150
                 ),
                 end="\r",
@@ -565,7 +565,13 @@ def process_ptr(td):
                     (pl.col("°C") == temp) & (pl.col("Corner") == corner)
                 )
                 if not subset.is_empty():
-                    kurt_val = kurtosis(subset["Value"].to_numpy())
+                    std = subset["Value"].std()
+                    if std == 0 or std is None or np.isnan(std) or std < 1e-10:
+                        kurt_val = 0  # Correzione: mancava "= 0"
+                    else:
+                        kurt_val = kurtosis(subset["Value"].to_numpy())
+                    
+                    # Aggiungi sempre alla lista (sia che sia 0 o calcolato)
                     kurtosis_data.append(
                         {"°C": temp, "Corner": corner, "Kurtosis": round(kurt_val, 3)}
                     )
@@ -1420,7 +1426,17 @@ def main_ptr():
         "GROUP": "MDRF - EP - GPAM",
         "TEST_NUM": "",
         "CSV": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
+        "MAIN": ".\\STDF\\44E\\44EZ\\EWSCHAR\\Q445172_05_TTTT",
     }
+
+    # Test case 1
+    td = pl.read_csv("./src/MEAS_PLLFASTpll_144storvar.csv")
+    path = "./"
+    tname = "MEAS_PLLFAST:pll_144storvar"
+    td = td.with_columns(pl.col("°C").cast(pl.Utf8))
+    df_stdf = {}
+    df_stdf["ptr"] = td
+    gen_ptr(tname, parameter, df_stdf, path)
 
     # Test case 1
     td = pl.read_csv("./src/df_stdf_ptr_MBIST.csv")
@@ -1457,6 +1473,6 @@ def main_ptr():
 
 if __name__ == "__main__":
     DEBUG = True
-    main_ftr()
     main_ptr()
+    main_ftr()
     # main_graph(DEBUG)
