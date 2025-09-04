@@ -511,7 +511,7 @@ def boxploth(
             row=split_idx + 1,
             col=1,
         )
-        fig.update_yaxes(title="Corner", row=split_idx + 1, col=1,categoryorder='array', categoryarray=corner_order)
+        fig.update_yaxes(title="Corner", row=split_idx + 1, col=1,categoryorder='array', categoryarray=unique_corners)
 
 
     return fig
