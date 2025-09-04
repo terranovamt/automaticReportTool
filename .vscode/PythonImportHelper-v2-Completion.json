@@ -161,6 +161,15 @@
         "documentation": {}
     },
     {
+        "label": "json5",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json5",
+        "description": "json5",
+        "detail": "json5",
+        "documentation": {}
+    },
+    {
         "label": "glob",
         "kind": 6,
         "isExtraImport": true,
@@ -1243,6 +1252,15 @@
         "documentation": {}
     },
     {
+        "label": "get_personalizzation",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):\n        return {}\n    with open(file_path, \"r\", encoding=\"utf-8\") as file:\n        dati = json5.load(file)\n    if name in dati:\n        dato = dati[name]",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
         "label": "calculate_clamp_threshold",
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
@@ -1256,7 +1274,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def detect_clamps(\n    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=6\n):\n    \"\"\"\n    Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.\n    Algorithm:\n    1. Calculate 6-sigma bounds\n    2. Find min and max values and calculate extreme thresholds\n    3. Compare sigma bounds vs extreme thresholds and choose most stringent\n    4. Filter once with most stringent thresholds",
+        "peekOfCode": "def detect_clamps(\n    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=5\n):\n    \"\"\"\n    Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.\n    Algorithm:\n    1. Calculate 6-sigma bounds\n    2. Find min and max values and calculate extreme thresholds\n    3. Compare sigma bounds vs extreme thresholds and choose most stringent\n    4. Filter once with most stringent thresholds",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1373,7 +1391,7 @@
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def main_graph(DEBUG):\n    td = pl.read_csv(\"./src/td.csv\")\n    stats, td = process_ptr(td)\n    print(HEAD, f\"Generate graph... \".ljust(150), end=\"\\r\", flush=True)\n    STPalette = {\n        \"-40\": \"#03234B\",\n        \"-10\": \"#3CB4E6\",\n        \"30\": \"#49B170\",\n        \"60\": \"#A4C238\",\n        \"90\": \"#FFD200\",",
+        "peekOfCode": "def main_graph(DEBUG):\n    td = pl.read_csv(\"./src/td.csv\")\n    stats, td = process_ptr(td)\n    print(HEAD, f\"Generate graph... \".ljust(150), end=\"\\r\", flush=True)\n    STPaletteChar = {\n        \"-40\": \"#03234B\",\n        \"-10\": \"#3CB4E6\",\n        \"30\": \"#49B170\",\n        \"60\": \"#A4C238\",\n        \"90\": \"#FFD200\",",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1400,7 +1418,7 @@
         "kind": 5,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "MAIN_PATH = \".\\\\STDF\"\nHEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):\n    \"\"\"\n    Calculate clamp threshold values with percentage-based adjustment.\n    Args:",
+        "peekOfCode": "MAIN_PATH = \".\\\\STDF\"\nHEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1409,7 +1427,7 @@
         "kind": 5,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):\n    \"\"\"\n    Calculate clamp threshold values with percentage-based adjustment.\n    Args:\n        value: Current extreme value (min or max)",
+        "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1724,7 +1742,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:\n    \"\"\"Parse test names using regex patterns optimized for polars.\"\"\"\n    if is_ttime:\n        # TTIME handling - simpler pattern based on pandas logic\n        regex_ttime = rf\"(?P<COM>{composite})__(?P<TestName>.*)::(?P<TARGET>.*)\"\n        df = df.with_columns(\n            [\n                pl.col(\"TEST_TXT\").str.extract(regex_ttime, 2).alias(\"TestName\"),",
+        "peekOfCode": "def parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:\n    \"\"\"Parse test names using regex patterns optimized for polars with categorical TEST_TXT.\"\"\"\n    if is_ttime:\n        # TTIME handling - convert to string temporarily for regex operations\n        regex_ttime = rf\"(?P<COM>{composite})__(?P<TestName>.*)::(?P<TARGET>.*)\"\n        df = df.with_columns(\n            [\n                pl.col(\"TEST_TXT\")",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1733,7 +1751,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def process_ptr_data(ptr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process PTR data with all transformations.\"\"\"\n    if ptr_df.is_empty():\n        return ptr_df\n    # Apply scaling\n    ptr_df = apply_result_scaling(ptr_df)\n    ptr_df = apply_unit_prefixes(ptr_df)\n    print(HEAD, f\"Name extract... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    is_ttime = \"TTIME\" in composite",
+        "peekOfCode": "def process_ptr_data(ptr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process PTR data with all transformations.\"\"\"\n    if ptr_df.is_empty():\n        return ptr_df\n    print(HEAD, f\"Name extract... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    is_ttime = \"TTIME\" in composite\n    ptr_df = parse_test_names_regex(ptr_df, composite, is_ttime)\n    # Process chart type and target\n    print(HEAD, f\"PTR Cleaning... \".ljust(150), end=\"\\r\", flush=True)",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1760,7 +1778,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def consolidate_corner_data(corner_results: list) -> dict:\n    \"\"\"Consolidate data from all corners into single dataframes.\"\"\"\n    all_data = {\n        # key: [] for key in [\"ptr\", \"ftr\", \"mir\", \"prr\", \"pcr\", \"hbr\", \"sbr\", \"tsr\"]\n        key: []\n        for key in [\"ptr\", \"ftr\", \"mir\", \"prr\"]\n    }\n    for result in corner_results:\n        if result is None:\n            continue",
+        "peekOfCode": "def consolidate_corner_data(corner_results: list) -> dict:\n    \"\"\"Consolidate data from all corners into single dataframes with memory optimization.\"\"\"\n    all_data = {key: [] for key in [\"ptr\", \"ftr\", \"mir\", \"prr\"]}\n    for result in corner_results:\n        if result is None:\n            continue\n        for key in all_data:\n            if key in result[\"data\"] and not result[\"data\"][key].is_empty():\n                all_data[key].append(result[\"data\"][key])\n    # Concatenate all dataframes with optimization",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -2165,7 +2183,7 @@
         "kind": 2,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    # watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    watch_path = r\".\\STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    # watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    watch_path = r\".\\STDF\"\n    # Alternative path for Unix systems:\n    # watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:",
         "detail": "src.polling",
         "documentation": {}
     },

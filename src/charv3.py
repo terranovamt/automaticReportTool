@@ -986,17 +986,17 @@ def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:
     )
 
     # Join coordinate information to PTR and FTR
-    # prr_coords = consolidated_data["prr"].select(
-    #     [
-    #         "PartID",
-    #         "X_COORD",
-    #         "Y_COORD",
-    #         # "SOFT_BIN",
-    #         # "HARD_BIN",
-    #         "CORNER",
-    #         "TEMPERATURE",
-    #     ]
-    # )
+    prr_coords = consolidated_data["prr"].select(
+        [
+            "PartID",
+            "X_COORD",
+            "Y_COORD",
+            # "SOFT_BIN",
+            # "HARD_BIN",
+            "CORNER",
+            "TEMPERATURE",
+        ]
+    )
 
     # if not consolidated_data["ptr"].is_empty():
     #     consolidated_data["ptr"] = consolidated_data["ptr"].join(
@@ -1009,19 +1009,19 @@ def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:
     #         size_mb = size_bytes / (1024**2)
     #         print(f"Colonna '{col}': tipo={dtype}, memoria stimata={size_mb:.6f} MB")
 
-    # if not consolidated_data["ftr"].is_empty():
-    #     ftr_coords = consolidated_data["prr"].select(
-    #         ["PartID", "X_COORD", "Y_COORD", "CORNER", "TEMPERATURE"]
-    #     )
-    #     consolidated_data["ftr"] = consolidated_data["ftr"].join(
-    #         ftr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
-    #     )
+    if not consolidated_data["ftr"].is_empty():
+        ftr_coords = consolidated_data["prr"].select(
+            ["PartID", "X_COORD", "Y_COORD", "CORNER", "TEMPERATURE"]
+        )
+        consolidated_data["ftr"] = consolidated_data["ftr"].join(
+            ftr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
+        )
 
-    #     # Remove FTR retests
-    #     consolidated_data["ftr"] = consolidated_data["ftr"].unique(
-    #         subset=["X_COORD", "Y_COORD", "CORNER", "TEMPERATURE", "TEST_TXT"],
-    #         keep="last",
-    #     )
+        # Remove FTR retests
+        consolidated_data["ftr"] = consolidated_data["ftr"].unique(
+            subset=["X_COORD", "Y_COORD", "CORNER", "TEMPERATURE", "TEST_TXT"],
+            keep="last",
+        )
 
     # Process PTR and FTR data
     consolidated_data["ptr"] = process_ptr_data(consolidated_data["ptr"], composite)

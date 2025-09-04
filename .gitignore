@@ -171,3 +171,4 @@ cython_debug/
 #.idea/
 src/jupiter/cfg.json
 src/post.json
+.vscode/PythonImportHelper-v2-Completion.json
