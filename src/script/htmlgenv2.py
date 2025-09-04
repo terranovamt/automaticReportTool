@@ -12,9 +12,9 @@ MAIN_PATH = ".\\STDF"
 HEAD = "[CHAR]"
 
 try:
-    import script.graphv2 as graph
-except ModuleNotFoundError:
     import graphv2 as graph
+except ModuleNotFoundError:
+    import script.graphv2 as graph
 
 
 def get_personalizzation(parameter, name):
@@ -994,8 +994,6 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
             ul,
             units,
             STPaletteChar,
-            xwafer,
-            ywafer,
         )
 
     else:
@@ -1005,8 +1003,6 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
             ul,
             units,
             STPaletteChar,
-            xwafer,
-            ywafer,
         )
 
     print(
@@ -1099,16 +1095,12 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         fig = graph.scatter(
             td_split,
             STPaletteChar,
-            xwafer,
-            ywafer,
         )
 
     else:
         fig = graph.scatter(
             td,
             STPaletteChar,
-            xwafer,
-            ywafer,
         )
 
     print(
@@ -1474,5 +1466,5 @@ def main_ptr():
 if __name__ == "__main__":
     DEBUG = True
     main_ptr()
-    main_ftr()
+    # main_ftr()
     # main_graph(DEBUG)

@@ -365,9 +365,6 @@ def boxploth(
     ul,
     units,
     STPalette,
-    xwafer,
-    ywafer,
-    gradientcolor=["#03234B", "#3CB4E6", "#FFD200", "#E6007E"],
     limit_color="#E6007E",
 ):
     # Initial parameters - sort temperatures numerically
@@ -391,7 +388,7 @@ def boxploth(
     fig = make_subplots(
         rows=total_rows,
         cols=1,
-        horizontal_spacing=0.08,
+        vertical_spacing=0.05,
         specs=subplot_specs,
     )
 
@@ -401,7 +398,7 @@ def boxploth(
     Q1 = td.select("Value").quantile(0.25)["Value"][0]
     Q3 = td.select("Value").quantile(0.75)["Value"][0]
     IQR = Q3 - Q1
-    
+
     global_min = Q1 - 1.5 * IQR
     global_max = Q3 + 1.5 * IQR
 
@@ -423,6 +420,14 @@ def boxploth(
         "FFTT",
     ]
 
+    corners = td.select("Corner").unique().sort("Corner").to_series().to_list()
+    corners = sorted(
+        corners,
+        key=lambda c: (
+            corner_order.index(c) if c in corner_order else len(corner_order)
+        ),
+    )
+
     # =========================
     # PART 1: BOX PLOT with facet for Split
     # =========================
@@ -433,14 +438,6 @@ def boxploth(
 
         for j, temp in enumerate(all_temps):
             temp_split_data = split_data.filter(pl.col("°C") == temp)
-
-            corners = temp_split_data.select("Corner").to_series().to_list()
-            unique_corners = list(set(corners))
-            unique_corners.sort(
-                key=lambda x: (
-                    corner_order.index(x) if x in corner_order else len(corner_order)
-                )
-            )
 
             if len(temp_split_data) > 0:
                 fig.add_trace(
@@ -504,15 +501,25 @@ def boxploth(
     # =========================
     # CONFIGURE AXES WITH UNIFIED LIMITS
     # =========================
+    title = (
+        f"Value ({units}) - Split: {all_split[split_idx]}"
+        if units != ""
+        else f"Result at Split: {all_split[split_idx]}"
+    )
     for split_idx in range(n_splits):
         fig.update_xaxes(
-            title=f"Value ({units}) - Split: {all_split[split_idx]}",
+            title=title,
             range=[x_min, x_max],  # Apply unified limits
             row=split_idx + 1,
             col=1,
         )
-        fig.update_yaxes(title="Corner", row=split_idx + 1, col=1,categoryorder='array', categoryarray=corner_order)
-
+        fig.update_yaxes(
+            title="Corner",
+            row=split_idx + 1,
+            col=1,
+            categoryorder="array",
+            categoryarray=corners,
+        )
 
     return fig
 
@@ -520,10 +527,6 @@ def boxploth(
 def scatter(
     td,
     STPalette,
-    xwafer,
-    ywafer,
-    gradientcolor=["#03234B", "#3CB4E6", "#FFD200", "#E6007E"],
-    limit_color="#E6007E",
 ):
     # Calculate total tests for each Split/°C/Corner combination
     total_counts = (
