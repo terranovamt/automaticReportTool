@@ -1411,14 +1411,16 @@ class STDFWorker(ProcessingWorker):
         parameter = ParameterExtractor.get_parameter_from_stdf_path(path)
         print(
             f"[STDF2CSV] Start stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}".ljust(150), end="\r", flush=True
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}".ljust(150),
+            end="\r",
+            flush=True,
         )
 
         self._convert_stdf_to_csv(path, logger)
 
         print(
             f"[STDF2CSV] End stdf2csv {parameter['CUT']} {parameter['FLOW']} "
-            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}"
+            f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE']}".ljust(150)
         )
 
     def _convert_stdf_to_csv(self, path: str, logger: logging.Logger):
