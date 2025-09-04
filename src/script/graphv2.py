@@ -398,8 +398,12 @@ def boxploth(
     # =========================
     # CALCULATE GLOBAL X-AXIS LIMITS
     # =========================
-    global_min = td.select("Value").min().item()
-    global_max = td.select("Value").max().item()
+    Q1 = td.select("Value").quantile(0.25)["Value"][0]
+    Q3 = td.select("Value").quantile(0.75)["Value"][0]
+    IQR = Q3 - Q1
+    
+    global_min = Q1 - 1.5 * IQR
+    global_max = Q3 + 1.5 * IQR
 
     # Add small margin (3% of range)
     value_range = global_max - global_min
