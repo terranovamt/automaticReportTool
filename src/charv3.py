@@ -1069,11 +1069,21 @@ def run_report(parameter: dict, df_stdf: dict, path: str):
 
     if ptrtname:
         for tname in ptrtname:
-            gen_ptr(tname, parameter, df_stdf, path)
+            try:
+                gen_ptr(tname, parameter, df_stdf, path)
+            except Exception as e:
+                print(
+                    f"{HEAD} Error in {tname}: {e}"
+                )
 
     if ftrtname:
         for tname in ftrtname:
-            gen_ftr(tname, parameter, df_stdf, path)
+            try:
+                gen_ftr(tname, parameter, df_stdf, path)
+            except Exception as e:
+                print(
+                    f"{HEAD} Error in {tname}: {e}"
+                )
 
     print(
         f"{HEAD} End report {parameter["COM"]}".ljust(150),

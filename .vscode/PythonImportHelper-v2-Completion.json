@@ -941,7 +941,7 @@
         "kind": 2,
         "importPath": "src.script.graphv2",
         "description": "src.script.graphv2",
-        "peekOfCode": "def boxploth(\n    td,\n    ll,\n    ul,\n    units,\n    STPalette,\n    xwafer,\n    ywafer,\n    gradientcolor=[\"#03234B\", \"#3CB4E6\", \"#FFD200\", \"#E6007E\"],\n    limit_color=\"#E6007E\",",
+        "peekOfCode": "def boxploth(\n    td,\n    ll,\n    ul,\n    units,\n    STPalette,\n    limit_color=\"#E6007E\",\n):\n    # Initial parameters - sort temperatures numerically\n    all_temps = td.select(\"°C\").unique().sort(\"°C\").to_series().to_list()",
         "detail": "src.script.graphv2",
         "documentation": {}
     },
@@ -950,7 +950,7 @@
         "kind": 2,
         "importPath": "src.script.graphv2",
         "description": "src.script.graphv2",
-        "peekOfCode": "def scatter(\n    td,\n    STPalette,\n    xwafer,\n    ywafer,\n    gradientcolor=[\"#03234B\", \"#3CB4E6\", \"#FFD200\", \"#E6007E\"],\n    limit_color=\"#E6007E\",\n):\n    # Calculate total tests for each Split/°C/Corner combination\n    total_counts = (",
+        "peekOfCode": "def scatter(\n    td,\n    STPalette,\n):\n    # Calculate total tests for each Split/°C/Corner combination\n    total_counts = (\n        td.group_by([\"Split\", \"°C\", \"Corner\"])\n        .agg(pl.count(\"RESULT\").alias(\"Total\"))\n        .sort([\"Split\", \"°C\", \"Corner\"])\n    )",
         "detail": "src.script.graphv2",
         "documentation": {}
     },
@@ -1418,7 +1418,7 @@
         "kind": 5,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "MAIN_PATH = \".\\\\STDF\"\nHEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )",
+        "peekOfCode": "MAIN_PATH = \".\\\\STDF\"\nHEAD = \"[CHAR]\"\ntry:\n    import graphv2 as graph\nexcept ModuleNotFoundError:\n    import script.graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1427,7 +1427,7 @@
         "kind": 5,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):",
+        "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import graphv2 as graph\nexcept ModuleNotFoundError:\n    import script.graphv2 as graph\ndef get_personalizzation(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1805,7 +1805,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def run_report(parameter: dict, df_stdf: dict, path: str):\n    \"\"\"Generate reports from processed data.\"\"\"\n    ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)\n    if ptrtname:\n        for tname in ptrtname:\n            gen_ptr(tname, parameter, df_stdf, path)\n    if ftrtname:\n        for tname in ftrtname:\n            gen_ftr(tname, parameter, df_stdf, path)\n    print(",
+        "peekOfCode": "def run_report(parameter: dict, df_stdf: dict, path: str):\n    \"\"\"Generate reports from processed data.\"\"\"\n    ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)\n    if ptrtname:\n        for tname in ptrtname:\n            try:\n                gen_ptr(tname, parameter, df_stdf, path)\n            except Exception as e:\n                print(\n                    f\"{HEAD} Error in {tname}: {e}\"",
         "detail": "src.charv3",
         "documentation": {}
     },

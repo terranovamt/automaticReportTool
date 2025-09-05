@@ -278,10 +278,10 @@ def calculate_process_capability(data, limits, std_val, mean_val):
         Dict with Cp, Cpk values or "-" if no limits
     """
     if limits["low"] == 0 and limits["high"] == 0:
-        return {"Cp": 0.0, "Cpk": 0.0}
+        return {"Cp": "-", "Cpk": "-"}
 
     if std_val == 0:
-        return {"Cp": 0.0, "Cpk": 0.0}
+        return {"Cp": "-", "Cpk": "-"}
 
     # Calculate Cp (process capability)
     cp = (limits["high"] - limits["low"]) / (6 * std_val)
