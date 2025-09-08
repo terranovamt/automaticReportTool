@@ -278,10 +278,10 @@ def calculate_process_capability(data, limits, std_val, mean_val):
         Dict with Cp, Cpk values or "-" if no limits
     """
     if limits["low"] == 0 and limits["high"] == 0:
-        return {"Cp": "-", "Cpk": "-"}
+        return {"Cp": 0.0, "Cpk": 0.0}
 
     if std_val == 0:
-        return {"Cp": "-", "Cpk": "-"}
+        return {"Cp": 0.0, "Cpk": 0.0}
 
     # Calculate Cp (process capability)
     cp = (limits["high"] - limits["low"]) / (6 * std_val)
@@ -364,15 +364,17 @@ def process_ptr(td):
 
     print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
-    # Extract limits and units (preferably from 30°C, otherwise use first available)
     temp_30_data = td.filter(pl.col("°C") == "30")
-    if not temp_30_data.is_empty():
-        reference_row = temp_30_data.row(0, named=True)
+    if temp_30_data.height > 0:
+        ul = temp_30_data.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = temp_30_data.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = temp_30_data.select(pl.col("Unit")).to_series().mode()[0]
     else:
-        reference_row = td.row(0, named=True)
+        ul = td.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = td.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = td.select(pl.col("Unit")).to_series().mode()[0]
 
-    limits = {"low": reference_row["Low Limit"], "high": reference_row["High Limit"]}
-    units = reference_row["Unit"]
+    limits = {"low": ll, "high": ul}
 
     print(
         HEAD,
@@ -520,7 +522,7 @@ def process_ptr(td):
         metrics["Yield"] = calculate_yield_metrics(subset_data, limits)
         capability_data.append(metrics)
 
-    capability_df = pl.DataFrame(capability_data)
+    capability_df = pl.DataFrame(capability_data, infer_schema_length=None)
     stats = stats.with_columns(
         [capability_df["Cp"], capability_df["Cpk"], capability_df["Yield"]]
     )
@@ -954,32 +956,19 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         flush=True,
     )
 
-    STPaletteChar = {
-        "-40": "#03234B",
-        "-10": "#3CB4E6",
-        "30": "#49B170",
-        "60": "#A4C238",
-        "90": "#FFD200",
-        "110": "#FBAB18",
-        "130": "#F3693F",
-        "140": "#E6007E",
-    }
-    xwafer = [19, 152]
-    ywafer = [21, 173]
-
     STPaletteChar = get_personalizzation(parameter, "STPaletteChar")
     xwafer = get_personalizzation(parameter, "xwafer")
     ywafer = get_personalizzation(parameter, "ywafer")
 
     temp_30_data = td.filter(pl.col("°C") == "30")
     if temp_30_data.height > 0:
-        ul = temp_30_data.select(pl.col("High Limit")).unique().item(0, 0)
-        ll = temp_30_data.select(pl.col("Low Limit")).unique().item(0, 0)
-        units = temp_30_data.select(pl.col("Unit")).unique().item(0, 0)
+        ul = temp_30_data.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = temp_30_data.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = temp_30_data.select(pl.col("Unit")).to_series().mode()[0]
     else:
-        ul = td.select(pl.col("High Limit")).unique().item(0, 0)
-        ll = td.select(pl.col("Low Limit")).unique().item(0, 0)
-        units = td.select(pl.col("Unit")).unique().item(0, 0)
+        ul = td.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = td.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = td.select(pl.col("Unit")).to_series().mode()[0]
 
     # Get the unique values from the 'pltype' column
     pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
@@ -1332,13 +1321,13 @@ def main_graph(DEBUG):
 
     temp_30_data = td.filter(pl.col("°C") == "30")
     if temp_30_data.height > 0:
-        ul = temp_30_data.select(pl.col("High Limit")).unique().item(0, 0)
-        ll = temp_30_data.select(pl.col("Low Limit")).unique().item(0, 0)
-        units = temp_30_data.select(pl.col("Unit")).unique().item(0, 0)
+        ul = temp_30_data.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = temp_30_data.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = temp_30_data.select(pl.col("Unit")).to_series().mode()[0]
     else:
-        ul = td.select(pl.col("High Limit")).unique().item(0, 0)
-        ll = td.select(pl.col("Low Limit")).unique().item(0, 0)
-        units = td.select(pl.col("Unit")).unique().item(0, 0)
+        ul = td.select(pl.col("High Limit")).to_series().mode()[0]
+        ll = td.select(pl.col("Low Limit")).to_series().mode()[0]
+        units = td.select(pl.col("Unit")).to_series().mode()[0]
 
     pl_types = td.select(pl.col("pltype")).unique().to_series().to_list()
     if pl_types[0] == "STD":

@@ -301,8 +301,9 @@ def filter_test_numbers(
 
 def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:
     """Apply result scaling using polars expressions."""
-    print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
+    return ptr_df.drop(["LLM_SCAL", "HLM_SCAL"])
     return ptr_df.with_columns(
+    print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
         [
             pl.when(pl.col("RES_SCAL").is_not_null())
             .then(pl.col("RESULT") * (10.0 ** pl.col("RES_SCAL")))
@@ -328,6 +329,7 @@ def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:
     # Convert UNITS to string first
     print(HEAD, f"Unit Scaling... ".ljust(150), end="\r", flush=True)
     df = ptr_df.with_columns(pl.col("UNITS").cast(pl.Utf8))
+    return df.drop(["RES_SCAL"])
     mapping_df = pl.DataFrame(
         {
             "RES_SCAL": list(SCALE_PREFIXES.keys()),
@@ -469,7 +471,7 @@ def parse_test_names_regex(
         )
 
     else:
-        SPLIT = "(vio|vbt|v11|v12|v33|FRC)"
+        SPLIT = "(vio|vbt|v11|v12|v33|FRC|frc)"
         # Regex pattern for split cases (with split patterns)
         split_pattern = rf"(.+)_({SPLIT})_([^_]+)_({composite})_([^:]+)(?::(.+))?"
         std_pattern = rf"(.*)_({composite})_([^:]+)(?::(.+))?"

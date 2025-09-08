@@ -1706,7 +1706,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply result scaling using polars expressions.\"\"\"\n    print(HEAD, f\"Result Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    return ptr_df.with_columns(\n        [\n            pl.when(pl.col(\"RES_SCAL\").is_not_null())\n            .then(pl.col(\"RESULT\") * (10.0 ** pl.col(\"RES_SCAL\")))\n            .otherwise(pl.col(\"RESULT\"))\n            .cast(pl.Float32)\n            .alias(\"RESULT\"),",
+        "peekOfCode": "def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply result scaling using polars expressions.\"\"\"\n    return ptr_df.drop([\"LLM_SCAL\", \"HLM_SCAL\"])\n    return ptr_df.with_columns(\n    print(HEAD, f\"Result Scaling... \".ljust(150), end=\"\\r\", flush=True)\n        [\n            pl.when(pl.col(\"RES_SCAL\").is_not_null())\n            .then(pl.col(\"RESULT\") * (10.0 ** pl.col(\"RES_SCAL\")))\n            .otherwise(pl.col(\"RESULT\"))\n            .cast(pl.Float32)",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1715,7 +1715,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply unit prefixes based on scale values.\"\"\"\n    # Convert UNITS to string first\n    print(HEAD, f\"Unit Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    df = ptr_df.with_columns(pl.col(\"UNITS\").cast(pl.Utf8))\n    mapping_df = pl.DataFrame(\n        {\n            \"RES_SCAL\": list(SCALE_PREFIXES.keys()),\n            \"PREFIX\": list(SCALE_PREFIXES.values()),\n        }",
+        "peekOfCode": "def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply unit prefixes based on scale values.\"\"\"\n    # Convert UNITS to string first\n    print(HEAD, f\"Unit Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    df = ptr_df.with_columns(pl.col(\"UNITS\").cast(pl.Utf8))\n    return df.drop([\"RES_SCAL\"])\n    mapping_df = pl.DataFrame(\n        {\n            \"RES_SCAL\": list(SCALE_PREFIXES.keys()),\n            \"PREFIX\": list(SCALE_PREFIXES.values()),",
         "detail": "src.charv3",
         "documentation": {}
     },

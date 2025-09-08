@@ -501,14 +501,12 @@ def boxploth(
     # =========================
     # CONFIGURE AXES WITH UNIFIED LIMITS
     # =========================
-    title = (
-        f"Value ({units}) - Split: {all_split[split_idx]}"
-        if units != ""
-        else f"Result at Split: {all_split[split_idx]}"
-    )
+
     for split_idx in range(n_splits):
         fig.update_xaxes(
-            title=title,
+            title=(f"Value ({units}) - Split: {all_split[split_idx]}"
+        if units != ""
+        else f"Result at Split: {all_split[split_idx]}"),
             range=[x_min, x_max],  # Apply unified limits
             row=split_idx + 1,
             col=1,
@@ -735,7 +733,6 @@ def generate_colored_ptrtable_html(
     df_sorted = df_pandas.reset_index(drop=True).sort_values(
         by=["°C", "Corner", "Split"]
     )
-
     # Genera HTML base della tabella (senza indice)
     html_table = df_sorted.to_html(
         classes="display compact cell-border",
