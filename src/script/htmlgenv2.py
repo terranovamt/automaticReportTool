@@ -572,7 +572,7 @@ def process_ptr(td):
                         kurt_val = 0  # Correzione: mancava "= 0"
                     else:
                         kurt_val = kurtosis(subset["Value"].to_numpy())
-                    
+
                     # Aggiungi sempre alla lista (sia che sia 0 o calcolato)
                     kurtosis_data.append(
                         {"°C": temp, "Corner": corner, "Kurtosis": round(kurt_val, 3)}
@@ -1017,9 +1017,13 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         <style>{get_web_content("style.css")}</style>
     </head>
     <body>
+    <main>
         {get_web_content("navbar.html")}
         {html_plot} 
         {html_table} 
+        {get_web_content("gotop.html")} 
+    </main>
+        {get_web_content("footer.html")} 
     <script>
     </script>
     """
@@ -1115,9 +1119,13 @@ def gen_ftr(tname, parameter, df_stdf, report_path):
         <style>{get_web_content("style.css")}</style>
     </head>
     <body>
+        <main>
         {get_web_content("navbar.html")}
         {html_plot} 
         {html_table} 
+        {get_web_content("gotop.html")} 
+        </main>
+        {get_web_content("footer.html")} 
     <script>
     </script>
     """

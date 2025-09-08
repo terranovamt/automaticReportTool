@@ -388,7 +388,7 @@ def boxploth(
     fig = make_subplots(
         rows=total_rows,
         cols=1,
-        vertical_spacing=0.15/total_rows,
+        vertical_spacing=0.15 / total_rows,
         specs=subplot_specs,
     )
 

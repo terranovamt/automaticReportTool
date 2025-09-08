@@ -301,9 +301,9 @@ def filter_test_numbers(
 
 def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:
     """Apply result scaling using polars expressions."""
+    print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
     return ptr_df.drop(["LLM_SCAL", "HLM_SCAL"])
     return ptr_df.with_columns(
-    print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
         [
             pl.when(pl.col("RES_SCAL").is_not_null())
             .then(pl.col("RESULT") * (10.0 ** pl.col("RES_SCAL")))
@@ -347,8 +347,6 @@ def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:
         .otherwise(pl.col("UNITS"))
         .alias("UNITS")
     ).drop("PREFIX")
-
-    return df.drop(["RES_SCAL"])
 
 
 def process_coordinate_recalculation(
@@ -1074,18 +1072,14 @@ def run_report(parameter: dict, df_stdf: dict, path: str):
             try:
                 gen_ptr(tname, parameter, df_stdf, path)
             except Exception as e:
-                print(
-                    f"{HEAD} Error in {tname}: {e}"
-                )
+                print(f"{HEAD} Error in {tname}: {e}")
 
     if ftrtname:
         for tname in ftrtname:
             try:
                 gen_ftr(tname, parameter, df_stdf, path)
             except Exception as e:
-                print(
-                    f"{HEAD} Error in {tname}: {e}"
-                )
+                print(f"{HEAD} Error in {tname}: {e}")
 
     print(
         f"{HEAD} End report {parameter["COM"]}".ljust(150),
