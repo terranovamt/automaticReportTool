@@ -29,7 +29,9 @@ h2 {
   cursor: pointer;
   transition-duration: 0.4s;
   padding: 10px 15px;
+  border-radius: 12px 0;
   height: auto;
+  background: var(--ui-font-color1);
   max-width: auto;
   color: var(--ui-font-color0);
   font-weight: bold;

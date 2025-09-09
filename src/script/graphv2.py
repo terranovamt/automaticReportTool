@@ -504,9 +504,11 @@ def boxploth(
 
     for split_idx in range(n_splits):
         fig.update_xaxes(
-            title=(f"Value ({units}) - Split: {all_split[split_idx]}"
-        if units != ""
-        else f"Result at Split: {all_split[split_idx]}"),
+            title=(
+                f"Value ({units}) - Split: {all_split[split_idx]}"
+                if units != ""
+                else f"Result at Split: {all_split[split_idx]}"
+            ),
             range=[x_min, x_max],  # Apply unified limits
             row=split_idx + 1,
             col=1,
@@ -590,6 +592,7 @@ def scatter(
     # Create subplot with facet for Corner
     fig = make_subplots(
         rows=n_corners,
+        vertical_spacing=0.25 / n_corners,
         cols=1,
         subplot_titles=[f"Corner: {corner}" for corner in corners],
     )
@@ -735,7 +738,7 @@ def generate_colored_ptrtable_html(
     )
     # Genera HTML base della tabella (senza indice)
     html_table = df_sorted.to_html(
-        classes="display compact cell-border",
+        classes="display compact",
         table_id="colored-table",
         # escape=False,
         border=0,
@@ -772,14 +775,31 @@ def generate_colored_ptrtable_html(
     }}
     
     #colored-table {{
-        width: 100%;
+        width: max-content;
+        min-width: 100%;
         table-layout: auto;
         border-collapse: collapse;
         font-family: Arial, sans-serif;
         margin: 0px;
     }}
     
-    #colored-table thead th {{
+    .table-container {{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+        
+    .table-wrapper {{
+            width: 100%;
+            max-height: 1000px;
+            overflow: auto;
+            position: relative;
+        }}
+    
+    #colored-table thead tr {{
         background-color: {STyellow};
         color: {STblue};
         font-weight: bold;
@@ -787,24 +807,102 @@ def generate_colored_ptrtable_html(
         font-size: 12px;
         padding: 8px;
         border: 1px solid #ddd;
+        z-index:3;
+        position:sticky;
+        top:0;
     }}
     
     /* Colorazione per le colonne indice (°C, Corner, Split, index) */
-    #colored-table tbody tr td:nth-child(1),
-    #colored-table tbody tr td:nth-child(2), 
-    #colored-table tbody tr td:nth-child(3),
-    #colored-table tbody tr td:nth-child(4) {{
-        background-color: {STyellow};
-        color: {STblue};
-        font-weight: bold;
-    }}
+        #colored-table tbody tr td:nth-child(1) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 0;
+          z-index: 2;
+          width: 40px;
+        text-align: center;
+        }}
+
+        #colored-table thead tr th:nth-child(1) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 0;
+          top:0;
+          z-index: 4;
+          width: 40px;
+        text-align: center;
+
+        }}
+
+        #colored-table tbody tr td:nth-child(2) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 56px;
+          z-index: 2;
+          width: 60px;
+              text-align: center;
+
+        }}
+        
+        #colored-table thead tr th:nth-child(2) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 56px;
+          top:0;
+          z-index: 4;
+          width: 60px;
+              text-align: center;
+
+        }}
+
+        #colored-table tbody tr td:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 132px;
+          z-index: 2;
+          width: 30px;
+              text-align: center;
+
+        }}
+        
+        #colored-table thead tr th:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 132px;
+          top:0;
+          z-index: 4;
+          width: 30px;
+              text-align: center;
+
+        }}
+
+        #colored-table tbody thead tr th:nth-child(1),
+        #colored-table tbody thead tr th:nth-child(2),
+        #colored-table tbody thead tr th:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          z-index: 4;
+          position: sticky;
+        }}
     
     /* Colorazione alternata per le altre colonne */
-    #colored-table tbody tr:nth-child(even) td:nth-child(n+5) {{
+    #colored-table tbody tr:nth-child(even) td:nth-child(n+4) {{
         background-color: {color_light};
     }}
     
-    #colored-table tbody tr:nth-child(odd) td:nth-child(n+5) {{
+    #colored-table tbody tr:nth-child(odd) td:nth-child(n+4) {{
         background-color: {color_dark};
     }}
     
@@ -854,11 +952,13 @@ def generate_colored_ptrtable_html(
 
     # Pulsante per export CSV
     html_content = f"""
-    <div class="table">
-    <div class="filter-container">
-        <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
-    </div>
-        {html_table}
+    <div class="table-container">
+        <div class="filter-container">
+            <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
+        </div>
+        <div class="table-wrapper">
+            {html_table}
+        </div>
     </div>
     """
 
@@ -990,7 +1090,7 @@ def generate_colored_ftrtable_html(
 
     # Genera HTML base della tabella (senza indice)
     html_table = df_pandas.to_html(
-        classes="display compact cell-border",
+        classes="display compact ",
         table_id="colored-table",
         # escape=False,
         border=0,
@@ -1026,15 +1126,37 @@ def generate_colored_ftrtable_html(
         opacity: 0.8;
     }}
     
+        
+    .btn:hover {{
+        opacity: 0.8;
+    }}
+    
     #colored-table {{
-        width: 100%;
+        width: max-content;
+        min-width: 100%;
         table-layout: auto;
         border-collapse: collapse;
         font-family: Arial, sans-serif;
         margin: 0px;
     }}
     
-    #colored-table thead th {{
+    .table-container {{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }}
+        
+    .table-wrapper {{
+            width: 100%;
+            max-height: 1000px;
+            overflow: auto;
+            position: relative;
+        }}
+    
+    #colored-table thead tr {{
         background-color: {STyellow};
         color: {STblue};
         font-weight: bold;
@@ -1042,16 +1164,97 @@ def generate_colored_ftrtable_html(
         font-size: 12px;
         padding: 8px;
         border: 1px solid #ddd;
+        z-index:3;
+        position:sticky;
+        top:0;
     }}
     
-    #colored-table tbody tr td:nth-child(1),
-    #colored-table tbody tr td:nth-child(2), 
-    #colored-table tbody tr td:nth-child(3) {{
-        background-color: {STyellow};
-        color: {STblue};
-        font-weight: bold;
-    }}
+    /* Colorazione per le colonne indice (°C, Corner, Split, index) */
+        #colored-table tbody tr td:nth-child(1) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 0;
+          z-index: 2;
+          width: 40px;
+        text-align: center;
+        }}
+
+        #colored-table thead tr th:nth-child(1) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 0;
+          top:0;
+          z-index: 4;
+          width: 40px;
+        text-align: center;
+
+        }}
+
+        #colored-table tbody tr td:nth-child(2) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 56px;
+          z-index: 2;
+          width: 60px;
+              text-align: center;
+
+        }}
+        
+        #colored-table thead tr th:nth-child(2) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 56px;
+          top:0;
+          z-index: 4;
+          width: 60px;
+              text-align: center;
+
+        }}
+
+        #colored-table tbody tr td:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 132px;
+          z-index: 2;
+          width: 30px;
+              text-align: center;
+
+        }}
+        
+        #colored-table thead tr th:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          position: sticky;
+          left: 132px;
+          top:0;
+          z-index: 4;
+          width: 30px;
+              text-align: center;
+
+        }}
+
+        #colored-table tbody thead tr th:nth-child(1),
+        #colored-table tbody thead tr th:nth-child(2),
+        #colored-table tbody thead tr th:nth-child(3) {{
+          background-color: #ffd200;
+          color: #03234b;
+          font-weight: bold;
+          z-index: 4;
+          position: sticky;
+        }}
     
+    /* Colorazione alternata per le altre colonne */
     #colored-table tbody tr:nth-child(even) td:nth-child(n+4) {{
         background-color: {color_light};
     }}
@@ -1067,22 +1270,52 @@ def generate_colored_ftrtable_html(
         vertical-align: middle;
         padding: 8px;
         border: 1px solid #ddd;
+        white-space: nowrap;
     }}
     
     .hidden-row {{
         display: none !important;
     }}
+    
+    /* Classi per colorazione specifica delle celle */
+    .cpk-red {{ background-color: #F23202 !important; color: white; }}
+    .cpk-orange-dark {{ background-color: #E85D04 !important; color: white; }}
+    .cpk-orange {{ background-color: #F48C06 !important; color: white; }}
+    .cpk-yellow-dark {{ background-color: #FAA307 !important; color: black; }}
+    .cpk-yellow {{ background-color: #FFBA08 !important; color: black; }}
+
+    .yield-1 {{ background-color: #FFEB93 !important; color: black; }}
+    .yield-2 {{ background-color: #FFE678 !important; color: black; }}
+    .yield-3 {{ background-color: #FFE15D !important; color: black; }}
+    .yield-4 {{ background-color: #FFDF50 !important; color: black; }}
+    .yield-5 {{ background-color: #FFDC42 !important; color: black; }}
+    .yield-6 {{ background-color: #FFD626 !important; color: black; }}
+    .yield-7 {{ background-color: #FFBA08 !important; color: black; }}
+    .yield-8 {{ background-color: #FCB007 !important; color: black; }}
+    .yield-9 {{ background-color: #FBA607 !important; color: black; }}
+    .yield-10 {{ background-color: #FB9C07 !important; color: black; }}
+    .yield-11 {{ background-color: #FAA307 !important; color: black; }}
+    .yield-12 {{ background-color: #F99806 !important; color: black; }}
+    .yield-13 {{ background-color: #F78E06 !important; color: black; }}
+    .yield-14 {{ background-color: #F68406 !important; color: black; }}
+    .yield-15 {{ background-color: #F48C06 !important; color: white; }}
+    .yield-16 {{ background-color: #F17505 !important; color: white; }}
+    .yield-17 {{ background-color: #EE6905 !important; color: white; }}
+    .yield-18 {{ background-color: #EA6104 !important; color: white; }}
+    .yield-19 {{ background-color: #E85D04 !important; color: white; }}
+    .yield-critical {{ background-color: #F23202 !important; color: white; }}
     </style>
     """
 
     # Pulsante per export CSV
     html_content = f"""
-    
-    <div class="table">
-    <div class="filter-container">
-        <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
-    </div>
-        {html_table}
+    <div class="table-container">
+        <div class="filter-container">
+            <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
+        </div>
+        <div class="table-wrapper">
+            {html_table}
+        </div>
     </div>
     """
 
