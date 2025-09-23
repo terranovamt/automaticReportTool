@@ -1154,6 +1154,9 @@ def gen_limits(stats, parameter, report_path):
             html_main += html_plot
             html_table = graph.generate_colored_limittable_html(df =limits_data, tname=key)
             html_main += html_table
+            
+        if html_main == "":
+            return
 
     # Sample HTML content for the file
     html_content = f"""
