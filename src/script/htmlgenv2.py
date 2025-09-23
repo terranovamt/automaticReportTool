@@ -944,7 +944,7 @@ def get_limit_data(key, value):
         # Definisci le temperature target
         target_temps = [temp_min, temp_mid, temp_max]
     except Exception:
-            username = input("Insert your username SVN: ")
+            print("[ERROR]")
 
     def determine_scaling(values, unit):
         """Determina il fattore di scaling e l'unità appropriata basandosi sui valori"""
