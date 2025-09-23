@@ -1334,7 +1334,7 @@ class ReportWorker(ProcessingWorker):
                     )
             else:
                 print(
-                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}".rjust(
+                    f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}".ljust(
                         150
                     ),
                 )
@@ -1743,13 +1743,8 @@ class STDFProcessingSystem:
 # ==================================================
 
 
-def main():
+def main(watch_path = r".\STDF" ):
     """Main execution function."""
-    # Set watch path
-    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
-    watch_path = r".\STDF"
-    # Alternative path for Unix systems:
-    # watch_path = "/prj/ENGI_MCD_STDF"
 
     # Create and run the processing system
     processing_system = STDFProcessingSystem(watch_path)
@@ -1764,4 +1759,10 @@ def main():
 
 
 if __name__ == "__main__":
-    exit(main())
+    # Set watch path
+    # watch_path = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF"
+    # Alternative path for Unix systems:
+    # watch_path = "/prj/ENGI_MCD_STDF"
+    # Local path
+    watch_path = r".\STDF"
+    exit(main(watch_path))

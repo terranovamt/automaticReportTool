@@ -3,7 +3,7 @@ import polars as pl
 import glob
 import json
 import numpy as np
-from script.htmlgenv2 import gen_menu, gen_composite, gen_ptr, gen_ftr
+from script.htmlgenv2 import gen_menu, gen_composite, gen_ptr, gen_ftr, gen_limits
 
 HEAD = "[CHAR]"
 
@@ -161,7 +161,7 @@ def load_personalization_data(code: str) -> dict:
 def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:
     """Read CSV file using polars with appropriate schema for each file type."""
     if not os.path.exists(file_path):
-        print(f"[WARNING] File not found: {file_path}")
+        # print(f"[WARNING] File not found: {file_path}")
         return pl.DataFrame()
 
     try:
@@ -302,6 +302,9 @@ def filter_test_numbers(
 def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:
     """Apply result scaling using polars expressions."""
     print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
+    ptr_df = ptr_df.with_columns(ptr_df['RESULT'].cast(pl.Float32))
+    ptr_df = ptr_df.with_columns(ptr_df['LO_LIMIT'].cast(pl.Float32))
+    ptr_df = ptr_df.with_columns(ptr_df['HI_LIMIT'].cast(pl.Float32))
     return ptr_df.drop(["LLM_SCAL", "HLM_SCAL"])
     return ptr_df.with_columns(
         [
@@ -435,7 +438,7 @@ def process_coordinate_recalculation(
 
 def remove_retests(prr_df: pl.DataFrame, test_type: str) -> pl.DataFrame:
     """Remove retests keeping the last occurrence."""
-    if test_type.upper() == "X30":
+    if test_type.upper() == "LOOP":
         return prr_df
 
     return prr_df.unique(
@@ -553,6 +556,7 @@ def parse_test_names_regex(
                             .str.to_uppercase()
                         )
                     )
+                    .cast(pl.Categorical)
                     .alias("new_TEST_TXT"),
                     # SPLIT: Estrarre il valore split o "standard"
                     pl.when(pl.col("_is_split"))
@@ -673,6 +677,7 @@ def parse_test_names_regex(
                             .str.to_uppercase()
                         )
                     )
+                    .cast(pl.Categorical)
                     .alias("new_TEST_TXT"),
                     # SPLIT: Estrarre il valore split o "Standard"
                     pl.when(pl.col("_is_split"))
@@ -702,12 +707,12 @@ def parse_test_names_regex(
             ["_is_split", "_has_multiple", "TEST_TXT_str"]
         )
 
-        # Ora fare il join con il dataframe originale per riassegnare i valori
+        df = df.drop("TEST_TXT")
         df = df.join(
             processed_groups.select(
-                ["TEST_TXT", "TEST_NUM", "new_TEST_TXT", "Split", "pltype"]
+                ["TEST_NUM", "new_TEST_TXT", "Split", "pltype"]
             ),
-            on=["TEST_TXT", "TEST_NUM"],
+            on=["TEST_NUM"],
             how="left",
         )
 
@@ -1066,11 +1071,13 @@ def get_ordered_corner_folders(main_folder: str) -> list:
 def run_report(parameter: dict, df_stdf: dict, path: str):
     """Generate reports from processed data."""
     ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)
-
+    stats = {}
+    ptrtname = sorted(ptrtname)
+    ftrtname = sorted(ftrtname)
     if ptrtname:
         for tname in ptrtname:
             try:
-                gen_ptr(tname, parameter, df_stdf, path)
+                stats[tname] = gen_ptr(tname, parameter, df_stdf, path)
             except Exception as e:
                 print(f"{HEAD} Error in {tname}: {e}")
 
@@ -1080,7 +1087,9 @@ def run_report(parameter: dict, df_stdf: dict, path: str):
                 gen_ftr(tname, parameter, df_stdf, path)
             except Exception as e:
                 print(f"{HEAD} Error in {tname}: {e}")
-
+                
+    gen_limits(stats, parameter, path)
+    
     print(
         f"{HEAD} End report {parameter["COM"]}".ljust(150),
     )

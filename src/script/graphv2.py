@@ -696,26 +696,6 @@ def color_yield(val):
     else:
         return "#F23202"
 
-
-def generate_colored_ptrtable_html(df: pl.DataFrame):
-    """
-    Generate HTML table with colored cells for Polars DataFrame
-    """
-    if df.is_empty():
-        return "<div>Il DataFrame è vuoto.</div>"
-
-    # Convert to pandas for HTML generation (Polars doesn't have direct HTML output)
-    df_pandas = df.to_pandas()
-
-    # 1. Multi-column sorting (first by temperature, then alphabetic)
-    df_sorted = df_pandas.reset_index().sort_values(by=["°C", "Corner", "Split"])
-
-    # Rest of the HTML generation remains the same...
-    # [HTML generation code continues as before]
-
-    return "HTML content would be generated here using the pandas version"
-
-
 def generate_colored_ptrtable_html(
     df: pl.DataFrame,
 ):
@@ -954,7 +934,7 @@ def generate_colored_ptrtable_html(
     html_content = f"""
     <div class="table-container">
         <div class="filter-container">
-            <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
+            <button class="btncsv btn-success" onclick="exportToCSV()">to CSV</button>
         </div>
         <div class="table-wrapper">
             {html_table}
@@ -1311,7 +1291,7 @@ def generate_colored_ftrtable_html(
     html_content = f"""
     <div class="table-container">
         <div class="filter-container">
-            <button class="btn btn-success" onclick="exportToCSV()">to CSV</button>
+            <button class="btncsv btn-success" onclick="exportToCSV()">to CSV</button>
         </div>
         <div class="table-wrapper">
             {html_table}
@@ -1362,3 +1342,295 @@ def generate_colored_ftrtable_html(
     """
 
     return css_styles + html_content + js_script
+
+
+def generate_limits(tname, df, STPalette, limit_color="#E6007E"):
+    STtemplate = go.layout.Template()
+    STtemplate.layout = go.Layout(
+        plot_bgcolor="white",
+        xaxis=dict(gridcolor="#ebf0f8", zerolinecolor="#dee3ea"),
+        yaxis=dict(gridcolor="#ebf0f8", zerolinecolor="#dee3ea"),
+    )
+
+    fig = go.Figure()
+
+    # Collect all limit values to determine x-axis range
+    all_limits = []
+
+    for i in range(len(df)):
+        temp = df["°C"][i]
+        avg = df["Average"][i]
+        std = df["Std"][i]
+        ll_new = df["LL new"][i]
+        hl_new = df["HL new"][i]
+        low_limit = df["Low Limit"][i]
+        high_limit = df["High Limit"][i]
+        unit = df["unit"][i]
+
+        # Collect all limit values for this row
+        all_limits.extend([ll_new, hl_new, low_limit, high_limit])
+
+        # Get color for this temperature
+        temp_color = STPalette.get(temp, "#000000")
+
+        # Calculate 3-sigma limits
+        sigma_3_low = avg - 3 * std
+        sigma_3_high = avg + 3 * std
+
+        # Create histogram data points (simulated normal distribution)
+        x_vals = np.linspace(avg - 4 * std, avg + 4 * std, 100)
+        y_vals = np.exp(-0.5 * ((x_vals - avg) / std) ** 2) / (std * np.sqrt(2 * np.pi))
+
+        # Add histogram outline only
+        fig.add_trace(
+            go.Scatter(
+                x=x_vals,
+                y=y_vals,
+                mode="lines",
+                name=f"{temp}°C",
+                line=dict(color=temp_color, width=2),
+                fill=None,
+                legendgroup=f"temp_{temp}",  # Group histogram with its limits
+                showlegend=True,
+            )
+        )
+
+        # Add new limit lines (grouped with histogram)
+        fig.add_trace(
+            go.Scatter(
+                x=[ll_new, ll_new],
+                y=[0, max(y_vals) * 0.9],
+                mode="lines",
+                line=dict(color=temp_color, dash="dot", width=2),
+                name=f"New Low Limit ({temp}°C)",
+                legendgroup=f"temp_{temp}",
+                showlegend=False,
+                hovertemplate=f"New LL: %{{x:.2f}} {unit} @{temp}°C<extra></extra>",
+            )
+        )
+
+        # fig.add_trace(
+        #     go.Scatter(
+        #         x=[sigma_3_low, sigma_3_low],
+        #         y=[0, max(y_vals) * 0.3],
+        #         mode="lines",
+        #         line=dict(color=temp_color, dash="dot", width=2),
+        #         name=f"3sigma ({temp}°C)",
+        #         legendgroup=f"temp_{temp}",
+        #         showlegend=False,
+        #         hovertemplate=f"3sigma: %{{x:.2f}} {unit} @{temp}°C<extra></extra>",
+        #     )
+        # )
+
+        # fig.add_trace(
+        #     go.Scatter(
+        #         x=[sigma_3_high, sigma_3_high],
+        #         y=[0, max(y_vals) * 0.3],
+        #         mode="lines",
+        #         line=dict(color=temp_color, dash="dot", width=2),
+        #         name=f"3sigma ({temp}°C)",
+        #         legendgroup=f"temp_{temp}",
+        #         showlegend=False,
+        #         hovertemplate=f"3sigma: %{{x:.2f}} {unit} @{temp}°C<extra></extra>",
+        #     )
+        # )
+
+        fig.add_trace(
+            go.Scatter(
+                x=[hl_new, hl_new],
+                y=[0, max(y_vals) * 0.9],
+                mode="lines",
+                line=dict(color=temp_color, dash="dot", width=2),
+                name=f"New High Limit ({temp}°C)",
+                legendgroup=f"temp_{temp}",
+                showlegend=False,
+                hovertemplate=f"New HL: %{{x:.2f}} {unit} @{temp}°C<extra></extra>",
+            )
+        )
+
+    # Calculate x-axis range based on all limits
+    x_min = min(all_limits)
+    x_max = max(all_limits)
+    x_range = x_max - x_min
+    x_axis_min = x_min - 0.05 * x_range
+    x_axis_max = x_max + 0.05 * x_range
+
+    fig.add_vline(
+        x=low_limit,
+        line=dict(color=limit_color, width=2),
+        annotation_text=f"LL: {low_limit:.2f}",
+        annotation_position="top",
+    )
+
+    fig.add_vline(
+        x=high_limit,
+        line=dict(color=limit_color, width=2),
+        annotation_text=f"HL: {high_limit:.2f}",
+        annotation_position="top",
+    )
+
+    fig.update_layout(
+        xaxis=dict(range=[x_axis_min, x_axis_max]),
+        xaxis_title=f"Value ({unit})",
+        yaxis_title="Probability Density",
+        height=500,
+        template=STtemplate,
+        hovermode="x unified",
+        showlegend=True,
+        barmode="overlay",
+        margin=dict(l=50, r=120, t=120, b=50),
+        title_text=str(tname.upper()),
+        title_x=0.5,
+        title_font=dict(size=24),
+        title_pad=dict(t=10, r=0, b=15, l=0),
+    )
+
+    return fig
+
+
+def generate_colored_limittable_html(
+    df: pl.DataFrame, tname : str
+):
+    """
+    Versione migliorata che restituisce l'HTML della tabella con:
+    - Nasconde la colonna indice
+    - Mostra sempre tutti i dati
+    - Filtri checkbox per le prime 4 colonne
+    - Pulsante per esportare in CSV
+    """
+    if df.is_empty():
+        return "<div>Il DataFrame è vuoto.</div>"
+
+    df_pandas = df.to_pandas()
+
+    # 1. Ordinamento multi-colonna (prima per temperatura, poi alfabetico)
+    # df_sorted = df_pandas.reset_index(drop=True).sort_values(by=["°C"])
+    # Genera HTML base della tabella (senza indice)
+    html_table = df_pandas.to_html(
+        classes="display compact",
+        table_id="colored-table",
+        # escape=False,
+        border=0,
+        index=False,  # Nasconde la colonna indice
+    )
+
+    # Pulsante per export CSV
+    html_content = f"""
+    <div class="table-container">
+        <div class="filter-container">
+            <a href="./{tname.upper().replace(":","_")}.html" class="btncsv btn-success">to Chart</a>
+            <button class="btncsv btn-success" onclick="exportToCSV()">to CSV</button>
+        </div>
+        <div class="table-wrapper">
+            {html_table}
+        </div>
+    </div>
+    """
+
+    # JavaScript per colorazione dinamica e export CSV
+    js_script = f"""
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+    // Dati della tabella per l'export
+    const tableData = {df_pandas.to_json(orient='records')};
+    const columnNames = {df_pandas.columns.tolist()};
+
+    // Funzioni di colorazione
+    function colorCpk(value) {{
+        if (value === null || value === undefined || isNaN(value)) return null;
+        if (value < 1.2) return "cpk-red";
+        if (value >= 1.2 && value < 1.3) return "cpk-orange-dark";
+        if (value >= 1.3 && value < 1.4) return "cpk-orange";
+        if (value >= 1.4 && value < 1.5) return "cpk-yellow-dark";
+        if (value >= 1.5 && value <= 1.6) return "cpk-yellow";
+        return null;
+    }}
+
+    function colorYield(value) {{
+        if (value === null || value === undefined || isNaN(value)) return null;
+        if (value >= 97.5) return null;
+        if (value >= 95) return "yield-1";
+        if (value >= 92.5) return "yield-2";
+        if (value >= 90) return "yield-3";
+        if (value >= 87.5) return "yield-4";
+        if (value >= 85) return "yield-5";
+        if (value >= 82.5) return "yield-6";
+        if (value >= 80) return "yield-7";
+        if (value >= 77.5) return "yield-8";
+        if (value >= 75) return "yield-9";
+        if (value >= 72.5) return "yield-10";
+        if (value >= 70) return "yield-11";
+        if (value >= 67.5) return "yield-12";
+        if (value >= 65) return "yield-13";
+        if (value >= 62.5) return "yield-14";
+        if (value >= 60) return "yield-15";
+        if (value >= 57.5) return "yield-16";
+        if (value >= 55) return "yield-17";
+        if (value >= 52.5) return "yield-18";
+        if (value >= 50) return "yield-19";
+        return "yield-critical";
+    }}
+
+    // Applica colorazione alle celle specifiche
+    function applySpecificColoring() {{
+        $('#colored-table tbody tr').each(function(rowIndex) {{
+            $(this).find('td').each(function(colIndex) {{
+                const columnName = columnNames[colIndex];
+                const cellValue = parseFloat($(this).text());
+                let colorClass = null;
+                
+                if (columnName === 'Cpk') {{
+                    colorClass = colorCpk(cellValue);
+                }} else if (columnName === 'Yield') {{
+                    colorClass = colorYield(cellValue);
+                }}
+                
+                if (colorClass) {{
+                    $(this).addClass(colorClass);
+                }}
+            }});
+        }});
+    }}
+
+    function exportToCSV() {{
+        // Converti in CSV
+        let csvContent = columnNames.join(',') + '\\n';
+        tableData.forEach(row => {{
+            const rowArray = columnNames.map(col => {{
+                const value = row[col];
+                // Gestisci valori con virgole o caratteri speciali
+                if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {{
+                    return '"' + value.replace(/"/g, '""') + '"';
+                }}
+                return value !== null && value !== undefined ? value : '';
+            }});
+            csvContent += rowArray.join(',') + '\\n';
+        }});
+        
+        // Trova l'elemento con la classe 'gtitle'
+        const titleElement = document.querySelector('.gtitle');
+        const fileName = titleElement ? titleElement.textContent.trim() : 'ptr_table';
+
+        // Scarica il file
+        const blob = new Blob([csvContent], {{ type: 'text/csv;charset=utf-8;' }});
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${{fileName}}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url); // Pulisci l'URL per evitare memory leak
+    }}
+
+    // Applica la colorazione specifica quando la pagina è caricata
+    $(document).ready(function() {{
+        applySpecificColoring();
+    }});
+    </script>
+    """
+
+    return html_content + js_script
+

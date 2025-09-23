@@ -284,6 +284,14 @@
         "documentation": {}
     },
     {
+        "label": "gen_limits",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
+        "documentation": {}
+    },
+    {
         "label": "fileinput",
         "kind": 6,
         "isExtraImport": true,
@@ -977,15 +985,6 @@
         "kind": 2,
         "importPath": "src.script.graphv2",
         "description": "src.script.graphv2",
-        "peekOfCode": "def generate_colored_ptrtable_html(df: pl.DataFrame):\n    \"\"\"\n    Generate HTML table with colored cells for Polars DataFrame\n    \"\"\"\n    if df.is_empty():\n        return \"<div>Il DataFrame è vuoto.</div>\"\n    # Convert to pandas for HTML generation (Polars doesn't have direct HTML output)\n    df_pandas = df.to_pandas()\n    # 1. Multi-column sorting (first by temperature, then alphabetic)\n    df_sorted = df_pandas.reset_index().sort_values(by=[\"°C\", \"Corner\", \"Split\"])",
-        "detail": "src.script.graphv2",
-        "documentation": {}
-    },
-    {
-        "label": "generate_colored_ptrtable_html",
-        "kind": 2,
-        "importPath": "src.script.graphv2",
-        "description": "src.script.graphv2",
         "peekOfCode": "def generate_colored_ptrtable_html(\n    df: pl.DataFrame,\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella PTR con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Ordinamento multi-colonna (prima per temperatura, poi alfabetico)\n    - Colorazione specifica per Cpk, Yield, Cp\n    - Pulsante per esportare in CSV",
         "detail": "src.script.graphv2",
         "documentation": {}
@@ -996,6 +995,24 @@
         "importPath": "src.script.graphv2",
         "description": "src.script.graphv2",
         "peekOfCode": "def generate_colored_ftrtable_html(\n    df: pl.DataFrame,\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Filtri checkbox per le prime 4 colonne\n    - Pulsante per esportare in CSV\n    \"\"\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_limits",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_limits(tname, df, STPalette, limit_color=\"#E6007E\"):\n    STtemplate = go.layout.Template()\n    STtemplate.layout = go.Layout(\n        plot_bgcolor=\"white\",\n        xaxis=dict(gridcolor=\"#ebf0f8\", zerolinecolor=\"#dee3ea\"),\n        yaxis=dict(gridcolor=\"#ebf0f8\", zerolinecolor=\"#dee3ea\"),\n    )\n    fig = go.Figure()\n    # Collect all limit values to determine x-axis range\n    all_limits = []",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_colored_limittable_html",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_colored_limittable_html(\n    df: pl.DataFrame, tname : str\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Filtri checkbox per le prime 4 colonne\n    - Pulsante per esportare in CSV\n    \"\"\"",
         "detail": "src.script.graphv2",
         "documentation": {}
     },
@@ -1360,11 +1377,29 @@
         "documentation": {}
     },
     {
+        "label": "get_limit_data",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_limit_data(key, value):\n    try :\n        value = value.select([col for col in value.columns if \"clamp\" not in col.lower()])\n        # Prendi i valori unici dalla colonna \"°C\" e convertili in interi\n        temp_values = value.select(\"°C\").unique().to_series().to_list()\n        temp_values_int = [int(temp) for temp in temp_values if temp is not None]\n        # Trova temperatura minima e massima\n        temp_min = min(temp_values_int)\n        temp_max = max(temp_values_int)\n        temp_mid = 30",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_limits",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_limits(stats, parameter, report_path):\n    file_path = os.path.join(report_path, parameter[\"COM\"], \"limits.html\")\n    html_main = \"\"\n    STPaletteChar = get_personalizzation(parameter, \"STPaletteChar\")\n    for key, value in stats.items():\n        print(\n            HEAD,\n            f\"Generate limits {key}\".ljust(150),\n            end=\"\\r\",\n            flush=True,",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
         "label": "gen_ptr",
         "kind": 2,
         "importPath": "src.script.htmlgenv2",
         "description": "src.script.htmlgenv2",
-        "peekOfCode": "def gen_ptr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(\":\",\"_\")}.html\"\n    )\n    td = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return\n    stats, td, ftrflag = process_ptr(td)\n    if ftrflag:\n        df_stdf[\"ftr\"] = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)",
+        "peekOfCode": "def gen_ptr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(\":\",\"_\")}.html\"\n    )\n    td = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return pl.DataFrame()\n    stats, td, ftrflag = process_ptr(td)\n    if ftrflag:\n        df_stdf[\"ftr\"] = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)",
         "detail": "src.script.htmlgenv2",
         "documentation": {}
     },
@@ -1661,7 +1696,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:\n    \"\"\"Read CSV file using polars with appropriate schema for each file type.\"\"\"\n    if not os.path.exists(file_path):\n        print(f\"[WARNING] File not found: {file_path}\")\n        return pl.DataFrame()\n    try:\n        # Usa lo schema appropriato per il tipo di file\n        schema_overrides = DTYPE_CONFIGS.get(file_type, {})\n        return pl.read_csv(\n            file_path,",
+        "peekOfCode": "def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:\n    \"\"\"Read CSV file using polars with appropriate schema for each file type.\"\"\"\n    if not os.path.exists(file_path):\n        # print(f\"[WARNING] File not found: {file_path}\")\n        return pl.DataFrame()\n    try:\n        # Usa lo schema appropriato per il tipo di file\n        schema_overrides = DTYPE_CONFIGS.get(file_type, {})\n        return pl.read_csv(\n            file_path,",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1706,7 +1741,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply result scaling using polars expressions.\"\"\"\n    return ptr_df.drop([\"LLM_SCAL\", \"HLM_SCAL\"])\n    return ptr_df.with_columns(\n    print(HEAD, f\"Result Scaling... \".ljust(150), end=\"\\r\", flush=True)\n        [\n            pl.when(pl.col(\"RES_SCAL\").is_not_null())\n            .then(pl.col(\"RESULT\") * (10.0 ** pl.col(\"RES_SCAL\")))\n            .otherwise(pl.col(\"RESULT\"))\n            .cast(pl.Float32)",
+        "peekOfCode": "def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply result scaling using polars expressions.\"\"\"\n    print(HEAD, f\"Result Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    ptr_df = ptr_df.with_columns(ptr_df['RESULT'].cast(pl.Float32))\n    ptr_df = ptr_df.with_columns(ptr_df['LO_LIMIT'].cast(pl.Float32))\n    ptr_df = ptr_df.with_columns(ptr_df['HI_LIMIT'].cast(pl.Float32))\n    return ptr_df.drop([\"LLM_SCAL\", \"HLM_SCAL\"])\n    return ptr_df.with_columns(\n        [\n            pl.when(pl.col(\"RES_SCAL\").is_not_null())",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1733,7 +1768,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def remove_retests(prr_df: pl.DataFrame, test_type: str) -> pl.DataFrame:\n    \"\"\"Remove retests keeping the last occurrence.\"\"\"\n    if test_type.upper() == \"X30\":\n        return prr_df\n    return prr_df.unique(\n        subset=[\"X_COORD\", \"Y_COORD\", \"CORNER\", \"TEMPERATURE\"], keep=\"last\"\n    )\ndef parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:",
+        "peekOfCode": "def remove_retests(prr_df: pl.DataFrame, test_type: str) -> pl.DataFrame:\n    \"\"\"Remove retests keeping the last occurrence.\"\"\"\n    if test_type.upper() == \"LOOP\":\n        return prr_df\n    return prr_df.unique(\n        subset=[\"X_COORD\", \"Y_COORD\", \"CORNER\", \"TEMPERATURE\"], keep=\"last\"\n    )\ndef parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1805,7 +1840,7 @@
         "kind": 2,
         "importPath": "src.charv3",
         "description": "src.charv3",
-        "peekOfCode": "def run_report(parameter: dict, df_stdf: dict, path: str):\n    \"\"\"Generate reports from processed data.\"\"\"\n    ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)\n    if ptrtname:\n        for tname in ptrtname:\n            try:\n                gen_ptr(tname, parameter, df_stdf, path)\n            except Exception as e:\n                print(\n                    f\"{HEAD} Error in {tname}: {e}\"",
+        "peekOfCode": "def run_report(parameter: dict, df_stdf: dict, path: str):\n    \"\"\"Generate reports from processed data.\"\"\"\n    ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)\n    stats = {}\n    ptrtname = sorted(ptrtname)\n    ftrtname = sorted(ftrtname)\n    if ptrtname:\n        for tname in ptrtname:\n            try:\n                stats[tname] = gen_ptr(tname, parameter, df_stdf, path)",
         "detail": "src.charv3",
         "documentation": {}
     },
@@ -1949,7 +1984,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
+        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"LOOP\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -2183,7 +2218,7 @@
         "kind": 2,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    # watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    watch_path = r\".\\STDF\"\n    # Alternative path for Unix systems:\n    # watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:",
+        "peekOfCode": "def main(watch_path = r\".\\STDF\" ):\n    \"\"\"Main execution function.\"\"\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:\n        print(f\"[MAIN] Fatal error: {e}\")\n        return 1\n    return 0",
         "detail": "src.polling",
         "documentation": {}
     },

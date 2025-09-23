@@ -357,10 +357,10 @@ def process_ptr(td):
     td = td.clone()
     td = td.with_columns([pl.col("°C").cast(pl.String), pl.col("Unit").fill_null("")])
 
-    # Verifica e filtra condizionalmente
-    unique_splits = set(td["Split"].unique().to_list())
-    if len(unique_splits) > 1:
-        td = td.filter(pl.col("Split") != "Standard")
+    # # Verifica e filtra condizionalmente
+    # unique_splits = set(td["Split"].unique().to_list())
+    # if len(unique_splits) > 1:
+    #     td = td.filter(pl.col("Split") != "Standard")
 
     print(HEAD, f"Data prepared - {len(td)} rows".ljust(150), end="\r", flush=True)
 
@@ -927,6 +927,271 @@ def gen_menu(parameter, destinationfolder):
     )
 
 
+
+def get_limit_data(key, value):
+    try :
+        value = value.select([col for col in value.columns if "clamp" not in col.lower()])
+
+        # Prendi i valori unici dalla colonna "°C" e convertili in interi
+        temp_values = value.select("°C").unique().to_series().to_list()
+        temp_values_int = [int(temp) for temp in temp_values if temp is not None]
+
+        # Trova temperatura minima e massima
+        temp_min = min(temp_values_int)
+        temp_max = max(temp_values_int)
+        temp_mid = 30
+
+        # Definisci le temperature target
+        target_temps = [temp_min, temp_mid, temp_max]
+    except Exception:
+            username = input("Insert your username SVN: ")
+
+    def determine_scaling(values, unit):
+        """Determina il fattore di scaling e l'unità appropriata basandosi sui valori"""
+        # Trova il valore massimo assoluto per determinare la scala
+        max_abs = max(abs(val) for val in values if val is not None)
+
+        if max_abs >= 1e12:
+            return (
+                1e-12,
+                f"T{unit}",
+            )  # Tera (10^12)
+        elif max_abs >= 1e9:
+            return 1e-9, f"G{unit}"  # Giga (10^9)
+        elif max_abs >= 1e6:
+            return 1e-6, f"M{unit}"  # Mega (10^6)
+        elif max_abs >= 1e3:
+            return 1e-3, f"k{unit}"  # Kilo (10^3)
+        elif max_abs >= 1:
+            return 1, unit  # unità base
+        elif max_abs >= 1e-3:
+            return 1e3, f"m{unit}"  # milli (10^-3)
+        elif max_abs >= 1e-6:
+            return 1e6, f"µ{unit}"  # micro (10^-6)
+        elif max_abs >= 1e-9:
+            return 1e9, f"n{unit}"  # nano (10^-9)
+        else:
+            return 1e12, f"p{unit}"  # pico (10^-12)
+
+    grouped = (
+        value.filter(
+            (pl.col("°C").is_in(target_temps)) & 
+            (pl.col("Split") == "Standard")
+        )
+        .group_by("°C")
+        .agg(
+            [
+                pl.col("Mean").mean().alias("Average"),
+                pl.col("Min").min().alias("Min_val"),
+                pl.col("Max").max().alias("Max_val"),
+                pl.col("Std").max().alias("Std_max"),
+                pl.col("Low Limit").first().alias("Low_Limit"),
+                pl.col("High Limit").first().alias("High_Limit"),
+                pl.col("unit").first().alias("unit"),
+            ]
+        )
+        .with_columns(pl.col("°C").cast(pl.Utf8))
+    )
+    if not len(grouped):
+        grouped = (
+            value.filter(
+                (pl.col("°C").is_in(target_temps)) & 
+                (pl.col("Split") == "3v3")
+            )
+            .group_by("°C")
+            .agg(
+                [
+                    pl.col("Mean").mean().alias("Average"),
+                    pl.col("Min").min().alias("Min_val"),
+                    pl.col("Max").max().alias("Max_val"),
+                    pl.col("Std").max().alias("Std_max"),
+                    pl.col("Low Limit").first().alias("Low_Limit"),
+                    pl.col("High Limit").first().alias("High_Limit"),
+                    pl.col("unit").first().alias("unit"),
+                ]
+            )
+            .with_columns(pl.col("°C").cast(pl.Utf8))
+        )
+
+    # Raccogli tutti i valori per determinare il scaling
+    all_values = []
+    for row in grouped.iter_rows(named=True):
+        all_values.extend([row["Average"], row["Min_val"], row["Max_val"]])
+
+    unit = grouped["unit"].first()
+
+    # Determina il fattore di scaling e l'unità
+    if not len(all_values): 
+        return []
+    scale_factor, unit = determine_scaling(all_values, unit)
+
+    # print(f"Scaling applicato: {scale_factor}x, Unità: {unit}")
+    # print(f"Temperature elaborate: {target_temps}")
+
+    results = []
+
+    for row in grouped.iter_rows(named=True):
+        temp = row["°C"]
+        average = row["Average"]
+        min_val = row["Min_val"]
+        max_val = row["Max_val"]
+        std_max = row["Std_max"]
+        low_limit = row["Low_Limit"]
+        high_limit = row["High_Limit"]
+        
+        # Applica il scaling
+        average_scaled = average * scale_factor
+        min_val_scaled = min_val * scale_factor
+        max_val_scaled = max_val * scale_factor
+        std_max_scaled = std_max * scale_factor
+        low_limit_scaled = low_limit * scale_factor
+        high_limit_scaled = high_limit * scale_factor
+        
+        # Controllo iterativo per assicurarsi che Cp e Cpk > 1.67
+        actual_cpk = 1.67
+        target_cpk = 1.67
+        max_iterations = 100  # Limite per evitare loop infiniti
+        iteration = 0
+        
+        # Valori iniziali per i limiti
+        ll_new = low_limit_scaled
+        hl_new = high_limit_scaled
+        
+        while iteration < max_iterations:
+            # Calcola limiti per Cpk > target_cpk
+            required_distance = target_cpk * 3 * std_max_scaled
+            ll_calc = average_scaled - required_distance
+            hl_calc = average_scaled + required_distance
+            
+            # Aggiorna i limiti
+            ll_new = round(ll_calc, 2)
+            hl_new = round(hl_calc, 2)
+            
+            # Calcola Cp e Cpk finali (usando valori scalati)
+            if std_max_scaled > 0:
+                cp = (hl_new - ll_new) / (6 * std_max_scaled)
+                cpk_lower = (average_scaled - ll_new) / (3 * std_max_scaled)
+                cpk_upper = (hl_new - average_scaled) / (3 * std_max_scaled)
+                cpk = min(cpk_lower, cpk_upper)
+            else:
+                cp = float("inf")
+                cpk = float("inf")
+            
+            # Controlla se i valori sono sufficienti
+            if cp > target_cpk and cpk > target_cpk:
+                break
+            
+            # Se non sono sufficienti, aumenta il target per la prossima iterazione
+            # Questo amplia progressivamente i limiti
+            actual_cpk += 0.01  # Incremento piccolo per affinamento
+            iteration += 1
+        
+        # Se non è riuscito a convergere, usa i limiti calcolati con il target originale
+        if iteration >= max_iterations:
+            required_distance = 1.67 * 3 * std_max_scaled
+            ll_new = round(average_scaled - required_distance, 2)
+            hl_new = round(average_scaled + required_distance, 2)
+            
+            # Ricalcola Cp e Cpk finali
+            if std_max_scaled > 0:
+                cp = (hl_new - ll_new) / (6 * std_max_scaled)
+                cpk_lower = (average_scaled - ll_new) / (3 * std_max_scaled)
+                cpk_upper = (hl_new - average_scaled) / (3 * std_max_scaled)
+                cpk = min(cpk_lower, cpk_upper)
+            else:
+                cp = float("inf")
+                cpk = float("inf")
+        
+        results.append(
+            {
+                "°C": temp,
+                "Low Limit": round(low_limit_scaled, 3),
+                "LL new": ll_new,
+                "Average": round(average_scaled, 3),
+                "Std": round(std_max_scaled, 6),
+                "HL new": hl_new,
+                "High Limit": round(high_limit_scaled, 3),
+                "unit": unit,
+                "Cp": round(cp, 2),
+                "Cpk": round(cpk, 2)
+            }
+        )
+
+    # Ordina i risultati per temperatura
+    results.sort(key=lambda x: x["°C"])
+
+    # Crea tabella finale
+    results_df = pl.DataFrame(results)
+
+    # Stampa la tabella per verifica
+    # print(results_df)
+
+    return results_df
+
+
+def gen_limits(stats, parameter, report_path):
+    file_path = os.path.join(report_path, parameter["COM"], "limits.html")
+    html_main = ""
+
+    STPaletteChar = get_personalizzation(parameter, "STPaletteChar")
+
+    for key, value in stats.items():
+        
+        print(
+            HEAD,
+            f"Generate limits {key}".ljust(150),
+            end="\r",
+            flush=True,
+        )
+        if not len(value):
+            continue
+        limits_data = get_limit_data(key, value)
+        if len(limits_data): 
+            fig = graph.generate_limits(key, limits_data, STPaletteChar)
+            html_plot = pyo.plot(
+                fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
+            )
+            html_main += html_plot
+            html_table = graph.generate_colored_limittable_html(df =limits_data, tname=key)
+            html_main += html_table
+
+    # Sample HTML content for the file
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{parameter["COM"].replace("_"," ")} {parameter["CUT"]} CHAR</title>
+        <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
+        <style>{get_web_content("style.css")}</style>
+    </head>
+    <body>
+    <main>
+        {get_web_content("navbar.html")}
+        {html_main}
+        {get_web_content("gotop.html")} 
+    </main>
+        {get_web_content("footer.html")} 
+    <script>
+    </script>
+    """
+    print(
+        HEAD,
+        f"Write html".ljust(150),
+        end="\r",
+        flush=True,
+    )
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+
+    print(
+        HEAD,
+        f"File created: {file_path}".ljust(150),
+        end="\r",
+        flush=True,
+    )
+
+
 def gen_ptr(tname, parameter, df_stdf, report_path):
     file_path = os.path.join(
         report_path, parameter["COM"], f"{tname.replace(":","_")}.html"
@@ -935,7 +1200,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
     td = df_stdf["ptr"].filter(pl.col("TestName") == tname)
 
     if td.is_empty():
-        return
+        return pl.DataFrame()
 
     stats, td, ftrflag = process_ptr(td)
 
@@ -947,8 +1212,11 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
             .alias("RESULT")
         )
         gen_ftr(tname, parameter, df_stdf, report_path)
-        return
-
+        return pl.DataFrame()
+    
+    # td.write_csv(f"{tname.replace(":","_")}.csv")
+    # return
+    
     print(
         HEAD,
         f"Generate graph".ljust(150),
@@ -1042,6 +1310,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         end="\r",
         flush=True,
     )
+    return stats
 
 
 def gen_ftr(tname, parameter, df_stdf, report_path):
@@ -1289,7 +1558,7 @@ def gen_composite(parameter, df_stdf, destinationfolder):
                 + " </a>\n"
             )
 
-    html_content += '<div class="contentconteiner">' + content + "</div>"
+        html_content += '<div class="contentconteiner">' + content + "<a class='btn' href='limits.html'>Limits</a></div>"
 
     html_content += f"""
     <script>{get_web_content("script.js")}</script>

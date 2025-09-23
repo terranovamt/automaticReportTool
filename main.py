@@ -6,5 +6,7 @@ if __name__ == "__main__":
 
     import polling
 
-    polling.main()
-
+    if len(sys.argv) > 1:
+        polling.main(sys.argv[1])
+    else:
+        polling.main()

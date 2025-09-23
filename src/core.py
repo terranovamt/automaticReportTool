@@ -77,7 +77,7 @@ def process_yield(parameter, tsr, composite, csv_file, df_stdf):
         composite (str): Composite name to process.
         csv_file (str): CSV file name to process.
     """
-    if parameter["TYPE"].upper() == "X30":
+    if parameter["TYPE"].upper() == "LOOP":
         return
 
     uty.write_log(f"Converting tests by test list", FILENAME)
@@ -234,7 +234,7 @@ def convert_notebook_to_html(parameter):
     timestartsub = datetime.datetime.now()
     str_output = parameter["TITLE"]
     if parameter["TYPE"] == "YIELD" or parameter["TYPE"] == "TTIME":
-        if parameter["FLOW"].contain("CHAR"):
+        if "CHAR" in parameter["FLOW"]:
             dir_output = os.path.abspath(
                 os.path.join(
                     os.path.dirname(

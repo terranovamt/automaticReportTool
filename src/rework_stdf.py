@@ -222,7 +222,7 @@ def rework_stdf(parameter, df_stdf):
     # ----------==================================================---------- #
     # Remove retest
     # ----------==================================================---------- #
-    if str(parameter["TYPE"]).upper() != "X30":
+    if str(parameter["TYPE"]).upper() != "LOOP":
         prr = prr.drop_duplicates(subset=["X_COORD", "Y_COORD"], keep="last")
         # ----------==================================================---------- #
         if not tmpptr.empty:
