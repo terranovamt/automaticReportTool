@@ -1,10 +1,12 @@
 import os
 import json5
 import datetime
+import traceback
 import numpy as np
 import polars as pl
 import plotly.offline as pyo
 from scipy.stats import kurtosis
+
 
 
 # MAIN_PATH = "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF"
@@ -930,8 +932,6 @@ def gen_menu(parameter, destinationfolder):
 
 def get_limit_data(key, value):
     try :
-        value = value.select([col for col in value.columns if "clamp" not in col.lower()])
-
         # Prendi i valori unici dalla colonna "°C" e convertili in interi
         temp_values = value.select("°C").unique().to_series().to_list()
         temp_values_int = [int(temp) for temp in temp_values if temp is not None]
@@ -943,8 +943,8 @@ def get_limit_data(key, value):
 
         # Definisci le temperature target
         target_temps = [temp_min, temp_mid, temp_max]
-    except Exception:
-            print("[ERROR]")
+    except Exception as e:
+            print(f"[ERROR] {e}")
 
     def determine_scaling(values, unit):
         """Determina il fattore di scaling e l'unità appropriata basandosi sui valori"""
@@ -1118,7 +1118,7 @@ def get_limit_data(key, value):
         )
 
     # Ordina i risultati per temperatura
-    results.sort(key=lambda x: x["°C"])
+    results.sort(key=lambda x: float(x["°C"]))
 
     # Crea tabella finale
     results_df = pl.DataFrame(results)
@@ -1135,28 +1135,78 @@ def gen_limits(stats, parameter, report_path):
 
     STPaletteChar = get_personalizzation(parameter, "STPaletteChar")
 
+    grouped_stats = {}
     for key, value in stats.items():
+        # Estrai il prefisso (parte prima dei ":")
+        prefix = key.split(':')[0] if ':' in key else key
+        value = value.select([col for col in value.columns if "clamp" not in col.lower()])
         
+        if value.width == 0 : 
+            continue        
+        # Se il prefisso non esiste ancora, inizializza con il primo DataFrame
+        if prefix not in grouped_stats:
+            grouped_stats[prefix] = value
+        else:
+            try:
+                # Prova vstack normale
+                grouped_stats[prefix] = grouped_stats[prefix].vstack(value)
+            except Exception as e:
+                # print(f"Conflitto di tipi per {prefix}, unificando...")
+                
+                existing_df = grouped_stats[prefix]
+                
+                # Unifica i tipi
+                common_schema = {}
+                for col in existing_df.columns:
+                    if col in value.columns:
+                        type1 = existing_df[col].dtype
+                        type2 = value[col].dtype
+                        
+                        if type1 != type2:
+                            if type1 == pl.String or type2 == pl.String:
+                                common_schema[col] = pl.String
+                            elif type1 == pl.Float64 or type2 == pl.Float64:
+                                common_schema[col] = pl.Float64
+                            elif type1 == pl.Float32 or type2 == pl.Float32:
+                                common_schema[col] = pl.Float32
+                            elif type1 == pl.Int64 or type2 == pl.Int64:
+                                common_schema[col] = pl.Int64
+                            else:
+                                common_schema[col] = pl.String
+                
+                # Cast e riprova
+                if common_schema:
+                    existing_df_casted = existing_df.cast(common_schema)
+                    value_casted = value.cast(common_schema)
+                    grouped_stats[prefix] = existing_df_casted.vstack(value_casted)
+                else:
+                    # Nessun conflitto di tipi, riprova il vstack
+                    grouped_stats[prefix] = existing_df.vstack(value)
+
+    # Ora processa i dati raggruppati
+    for prefix, combined_df in grouped_stats.items():
         print(
             HEAD,
-            f"Generate limits {key}".ljust(150),
+            f"Generate limits {prefix}".ljust(150),
             end="\r",
             flush=True,
         )
-        if not len(value):
+        
+        if combined_df.is_empty():
             continue
-        limits_data = get_limit_data(key, value)
+            
+        limits_data = get_limit_data(prefix, combined_df)
         if len(limits_data): 
-            fig = graph.generate_limits(key, limits_data, STPaletteChar)
+            fig = graph.generate_limits(prefix, limits_data, STPaletteChar)
             html_plot = pyo.plot(
                 fig, output_type="div", include_plotlyjs=True, config={"responsive": True}
             )
             html_main += html_plot
-            html_table = graph.generate_colored_limittable_html(df =limits_data, tname=key)
+            html_table = graph.generate_colored_limittable_html(df=limits_data, tname=prefix)
             html_main += html_table
-            
-        if html_main == "":
-            return
+
+    if html_main == "":
+        return
 
     # Sample HTML content for the file
     html_content = f"""
@@ -1217,7 +1267,7 @@ def gen_ptr(tname, parameter, df_stdf, report_path):
         gen_ftr(tname, parameter, df_stdf, report_path)
         return pl.DataFrame()
     
-    # td.write_csv(f"{tname.replace(":","_")}.csv")
+    stats.write_csv(f"appli/{tname.replace(":","_")}.csv")
     # return
     
     print(

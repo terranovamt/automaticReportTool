@@ -18,6 +18,8 @@ from enum import Enum
 from dataclasses import dataclass
 from typing import List, Dict, Set, Tuple
 
+import traceback
+
 import core
 import stdf2csv
 import shmoo
@@ -1332,6 +1334,7 @@ class ReportWorker(ProcessingWorker):
                     print(
                         f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
                     )
+                    traceback.print_exc()
             else:
                 print(
                     f"[{self.process_type.value.upper()}] Report done {os.path.basename(report_path)}".ljust(
@@ -1526,6 +1529,7 @@ class CharWorker(ProcessingWorker):
                     print(
                         f"[{self.process_type.value.upper()}] Error in {composite}: {e}"
                     )
+                    traceback.print_exc()
             else:
                 print(
                     f"[{self.process_type.value.upper()}] Report done {composite}".ljust(
