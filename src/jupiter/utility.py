@@ -1,16 +1,16 @@
 import numpy
 
-def read_csv_with_fallback(path):
-    import pandas as pd
+
+def read_with_fallback(path):
+    import polars as pl
     from pandas.errors import EmptyDataError, ParserError
     import os
 
     try:
-        # print (os.path.abspath(path))
-        return pd.read_csv(os.path.abspath(path))
+        return pl.read_parquet(path)
     except (EmptyDataError, FileNotFoundError, ParserError) as e:
         # print("ERROR:", e)
-        return pd.DataFrame()
+        return pl.DataFrame()
 
 
 # Customize cell colors
@@ -224,30 +224,11 @@ def create_heatmap(td, gradientcolor, xwafer, ywafer):
     if step < 1e-5:
         step = std_dev
 
-    additional_data = pd.DataFrame(
-        {
-            "XId": [
-                td["XId"].min() - 1,
-                td["XId"].min() - 1,
-                td["XId"].max() + 1,
-                td["XId"].max() + 1,
-            ],
-            "YId": [
-                td["YId"].min() - 1,
-                td["YId"].max() + 1,
-                td["YId"].min() - 1,
-                td["YId"].max() + 1,
-            ],
-            "Value": [np.nan, np.nan, np.nan, np.nan],
-        }
-    )
-    td = pd.concat([td, additional_data], ignore_index=True)
-
     fig = go.Figure(
         data=go.Heatmap(
-            z=td["Value"],
-            x=td["XId"],
-            y=td["YId"],
+            z=td["Value"].astype(float),
+            x=td["XId"].astype(int),
+            y=td["YId"].astype(int),
             colorscale=gradientcolor,
             colorbar=dict(title="Value"),
             hoverongaps=False,

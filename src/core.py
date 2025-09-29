@@ -3,7 +3,7 @@ import json
 import warnings
 import datetime
 import subprocess
-import pandas as pd
+import polars as pl
 import jupiter.utility as uty
 from rework_stdf import rework_stdf
 from condition import condition_rework
@@ -12,7 +12,8 @@ warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 FILENAME = os.path.abspath("src/run.log")
 
-def process_composite(parameter, csv_name,df_stdf):
+
+def process_composite(parameter, data_name, df_stdf):
     """
     Process the composite data from a CSV file and execute the report generation.
 
@@ -21,20 +22,18 @@ def process_composite(parameter, csv_name,df_stdf):
         csv_name (str): CSV file name to process.
     """
     try:
-        tsr = pd.read_csv(os.path.abspath(f"{csv_name}.tsr.csv"))
+        tsr = pl.read_parquet(os.path.abspath(f"{data_name}.tsr.parquet"))
 
         if str(parameter["COM"]).upper() == "TTIME":
-            process_ttime(
-                parameter, tsr, parameter["COM"], csv_name,df_stdf)
+            process_ttime(parameter, tsr, parameter["COM"], data_name, df_stdf)
         elif str(parameter["COM"]).upper() == "YIELD":
-            process_yield(
-                parameter, tsr, parameter["COM"], csv_name,df_stdf)
+            process_yield(parameter, tsr, parameter["COM"], data_name, df_stdf)
         elif str(parameter["COM"]).upper() == "CONDITION":
-            process_condition(
-                parameter, tsr, parameter["COM"], csv_name,df_stdf)
+            process_condition(parameter, tsr, parameter["COM"], data_name, df_stdf)
         else:
             process_single_composite(
-                parameter, tsr, parameter["COM"], csv_name,df_stdf)
+                parameter, tsr, parameter["COM"], data_name, df_stdf
+            )
     except Exception as e:
         print(f"Error processing composite: {e}")
 
@@ -65,7 +64,7 @@ def process_condition(parameter, stdf_folder,df_stdf):
     parameter["TEST_NUM"] = ""
     parameter["CSV"] = csv_file
 
-    exec(parameter,df_stdf)
+    generate_report(parameter, df_stdf)
 
 
 def process_yield(parameter, tsr, composite, csv_file, df_stdf):
@@ -95,7 +94,7 @@ def process_yield(parameter, tsr, composite, csv_file, df_stdf):
     parameter["CSV"] = csv_file
     parameter["TYPE"] = "YIELD"
 
-    exec(parameter,df_stdf)
+    generate_report(parameter, df_stdf)
 
 
 def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
@@ -108,10 +107,25 @@ def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
         composite (str): Composite name to process.
         csv_file (str): CSV file name to process.
     """
-    match_group = tsr["TEST_NAM"].str.extract(r"(log_ttime.*)".format(composite))
-    tsr["match_group"] = match_group[0]
+        # Create regex pattern for matching test names
+    pattern = r"(log_ttime_.*)".format(composite)
 
-    test_numbers = tsr.loc[tsr["match_group"].notnull(), "TEST_NUM"].unique().tolist()
+    # Extract matches using Polars' str.extract
+    extracted = tsr.select(
+        pl.col("TEST_NAM").str.extract(pattern, 1).alias("match_group")
+    )
+
+    # Add match_group as a column to original DataFrame
+    tsr = tsr.with_columns(extracted["match_group"])
+
+    # Filter non-null matches and get unique test numbers
+    test_numbers = (
+        tsr.filter(pl.col("match_group").is_not_null())
+        .select("TEST_NUM")
+        .unique()
+        .to_series()
+        .to_list()
+    )
 
     if "EWS" not in str(parameter["FLOW"]).upper():
         tnum_keys = [
@@ -148,29 +162,44 @@ def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
     parameter["CSV"] = csv_file
     parameter["TYPE"] = "TTIME"
 
-    exec(parameter,df_stdf)
+    generate_report(parameter, df_stdf)
 
 
 def process_single_composite(
     parameter, tsr, composite, csv_file,df_stdf):
     """
-    Process a single composite and execute the report generation.
-
+    Process a single composite and execute the report generation using Polars.
     Args:
         parameter (dict): Parameters for processing.
-        tsr (DataFrame): DataFrame containing test results.
+        tsr (pl.DataFrame): Polars DataFrame containing test results.
         composite (str): Composite name to process.
         csv_file (str): CSV file name to process.
+        df_stdf (pl.DataFrame): Polars DataFrame for STDF data.
     """
-    match_group = tsr["TEST_NAM"].str.extract(
-        r"(.*_{0}_.*:.*|.*_{0}_..$|.*_{0}_.*_DELTA_.*)".format(composite)
-    )
-    tsr["match_group"] = match_group[0]
+    # Create regex pattern for matching test names
+    pattern = r"(.*_{0}_.*:.*|.*_{0}_..$|.*_{0}_.*_DELTA_.*)".format(composite)
 
-    test_numbers = tsr.loc[tsr["match_group"].notnull(), "TEST_NUM"].unique().tolist()
-    if len(test_numbers) < 1:
+    # Extract matches using Polars' str.extract
+    extracted = tsr.select(
+        pl.col("TEST_NAM").str.extract(pattern, 1).alias("match_group")
+    )
+
+    # Add match_group as a column to original DataFrame
+    tsr = tsr.with_columns(extracted["match_group"])
+
+    # Filter non-null matches and get unique test numbers
+    test_numbers = (
+        tsr.filter(pl.col("match_group").is_not_null())
+        .select("TEST_NUM")
+        .unique()
+        .to_series()
+        .to_list()
+    )
+
+    if not test_numbers:
         return
 
+    # Augment test numbers if not in EWS flow
     if "EWS" not in str(parameter["FLOW"]).upper():
         tnum_keys = [
             "XY_XL",
@@ -186,22 +215,25 @@ def process_single_composite(
             "XY_Lot5",
             "XY_Lot6",
         ]
+
+        # Load JSON configuration
         with open("src/jupiter/personalization.json", "r") as file:
             data = json.load(file)
         product_data = data.get(parameter["CODE"], {})
+
+        # Append valid test numbers from JSON
         for key in tnum_keys:
-            test_numbers.append(product_data.get(key, {}))
-    else:
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
-        product_data = data.get(parameter["CODE"], {})
+            if value := product_data.get(key):
+                test_numbers.append(value)
 
-    parameter["COM"] = composite
+    # Clean test numbers: remove duplicates and None values
     test_numbers = list(set(filter(None, test_numbers)))
-    parameter["TEST_NUM"] = test_numbers
-    parameter["CSV"] = csv_file
 
-    exec(parameter,df_stdf)
+    # Update parameters
+    parameter.update({"COM": composite, "TEST_NUM": test_numbers, "CSV": csv_file})
+
+    # Execute report generation (placeholder)
+    generate_report(parameter, df_stdf)
 
 
 def write_config_file(parameter):
@@ -215,7 +247,7 @@ def write_config_file(parameter):
     try:
         # Convert any Series objects in the parameter dictionary to lists
         parameter = {
-            k: v.tolist() if isinstance(v, pd.Series) else v
+            k: v.tolist() if isinstance(v, pl.Series) else v
             for k, v in parameter.items()
         }
 
@@ -345,7 +377,8 @@ def rework_report(parameter, dir_output, str_output):
         uty.write_log(f"ERROR: rework_report {e}", FILENAME)
         print(f"ERROR: rework_report {e}")
 
-def exec(parameter,df_stdf):
+
+def generate_report(parameter, df_stdf):
     """
     Execute the report generation steps.
 
