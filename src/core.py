@@ -15,11 +15,11 @@ FILENAME = os.path.abspath("src/run.log")
 
 def process_composite(parameter, data_name, df_stdf):
     """
-    Process the composite data from a CSV file and execute the report generation.
+    Process the composite data from a MAIN file and execute the report generation.
 
     Args:
         parameter (dict): Parameters for processing.
-        csv_name (str): CSV file name to process.
+        csv_name (str): MAIN file name to process.
     """
     try:
         tsr = pl.read_parquet(os.path.abspath(f"{data_name}.tsr.parquet"))
@@ -38,7 +38,7 @@ def process_composite(parameter, data_name, df_stdf):
         print(f"Error processing composite: {e}")
 
 
-def process_condition(parameter, stdf_folder,df_stdf):
+def process_condition(parameter, stdf_folder, df_stdf):
     """
     Process a FAKE composite for condition report and execute generation.
 
@@ -46,23 +46,16 @@ def process_condition(parameter, stdf_folder,df_stdf):
         parameter (dict): Parameters for processing.
         tsr (DataFrame): DataFrame containing test results.
         composite (str): Composite name to process.
-        csv_file (str): CSV file name to process.
+        csv_file (str): MAIN file name to process.
     """
 
     uty.write_log(f"Converting ANAFLOW by COM", FILENAME)
-    with open("src/jupiter/personalization.json", "r") as file:
-        data = json.load(file)
-
-    product_data = data.get(parameter["CODE"], {})
-    product_name = product_data.get("product_name", {})
-    
-    parameter["PRODUCT"] = product_name
     csv_file = condition_rework(parameter, stdf_folder)
     if len(csv_file) == 0:
         uty.write_log(f"No Extaction good : {parameter["COM"]}", FILENAME)
         return
     parameter["TEST_NUM"] = ""
-    parameter["CSV"] = csv_file
+    parameter["MAIN"] = stdf_folder
 
     generate_report(parameter, df_stdf)
 
@@ -75,29 +68,22 @@ def process_yield(parameter, tsr, composite, csv_file, df_stdf):
         parameter (dict): Parameters for processing.
         tsr (DataFrame): DataFrame containing test results.
         composite (str): Composite name to process.
-        csv_file (str): CSV file name to process.
+        csv_file (str): MAIN file name to process.
     """
     if parameter["TYPE"].upper() == "X30":
         return
-    
-    uty.write_log(f"Converting tests by test list", FILENAME)
-    with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
 
-    product_data = data.get(parameter["CODE"], {})
-    product_name = product_data.get("product_name", {})
-    
-    parameter["PRODUCT"] = product_name
+    uty.write_log(f"Converting tests by test list", FILENAME)
 
     parameter["COM"] = composite
     parameter["TEST_NUM"] = ""
-    parameter["CSV"] = csv_file
+    parameter["MAIN"] = csv_file
     parameter["TYPE"] = "YIELD"
 
     generate_report(parameter, df_stdf)
 
 
-def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
+def process_ttime(parameter, tsr, composite, csv_file, df_stdf):
     """
     Process a FAKE composite for test time analysis and execute the report generation.
 
@@ -105,9 +91,9 @@ def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
         parameter (dict): Parameters for processing.
         tsr (DataFrame): DataFrame containing test results.
         composite (str): Composite name to process.
-        csv_file (str): CSV file name to process.
+        csv_file (str): MAIN file name to process.
     """
-        # Create regex pattern for matching test names
+    # Create regex pattern for matching test names
     pattern = r"(log_ttime_.*)".format(composite)
 
     # Extract matches using Polars' str.extract
@@ -142,38 +128,27 @@ def process_ttime(parameter, tsr, composite, csv_file,df_stdf):
             "XY_Lot5",
             "XY_Lot6",
         ]
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
-        product_data = data.get(parameter["CODE"], {})
+
         for key in tnum_keys:
-            test_numbers.append(product_data.get(key, {}))
-        product_name = product_data.get("product_name", {})
-    else:
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
-        product_data = data.get(parameter["CODE"], {})
-        product_name = product_data.get("product_name", {})
-    
-    parameter["PRODUCT"] = product_name
+            test_numbers.append(uty.get_personalization(parameter, key))
 
     parameter["COM"] = composite
     test_numbers = list(set(filter(None, test_numbers)))
     parameter["TEST_NUM"] = test_numbers
-    parameter["CSV"] = csv_file
+    parameter["MAIN"] = csv_file
     parameter["TYPE"] = "TTIME"
 
     generate_report(parameter, df_stdf)
 
 
-def process_single_composite(
-    parameter, tsr, composite, csv_file,df_stdf):
+def process_single_composite(parameter, tsr, composite, csv_file, df_stdf):
     """
     Process a single composite and execute the report generation using Polars.
     Args:
         parameter (dict): Parameters for processing.
         tsr (pl.DataFrame): Polars DataFrame containing test results.
         composite (str): Composite name to process.
-        csv_file (str): CSV file name to process.
+        csv_file (str): MAIN file name to process.
         df_stdf (pl.DataFrame): Polars DataFrame for STDF data.
     """
     # Create regex pattern for matching test names
@@ -216,21 +191,14 @@ def process_single_composite(
             "XY_Lot6",
         ]
 
-        # Load JSON configuration
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
-        product_data = data.get(parameter["CODE"], {})
-
-        # Append valid test numbers from JSON
         for key in tnum_keys:
-            if value := product_data.get(key):
-                test_numbers.append(value)
+            test_numbers.append(uty.get_personalization(parameter, key))
 
     # Clean test numbers: remove duplicates and None values
     test_numbers = list(set(filter(None, test_numbers)))
 
     # Update parameters
-    parameter.update({"COM": composite, "TEST_NUM": test_numbers, "CSV": csv_file})
+    parameter.update({"COM": composite, "TEST_NUM": test_numbers, "MAIN": csv_file})
 
     # Execute report generation (placeholder)
     generate_report(parameter, df_stdf)
@@ -266,19 +234,19 @@ def convert_notebook_to_html(parameter):
     """
     uty.write_log("Start Jupyter conversion", FILENAME)
     timestartsub = datetime.datetime.now()
-    str_output = (
-        parameter["TITLE"]
-    )
-    if parameter["TYPE"] == "YIELD" or parameter["TYPE"]=="TTIME": 
+    str_output = parameter["TITLE"]
+    if parameter["TYPE"] == "YIELD" or parameter["TYPE"] == "TTIME":
         dir_output = os.path.abspath(
             os.path.join(
-                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
-                (parameter["LOT"]+"_"+parameter["WAFER"]),
+                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(
+                    parameter["LOT"] + "_" + parameter["WAFER"]
+                )[0],
+                (parameter["LOT"] + "_" + parameter["WAFER"]),
                 "VOLUME",
                 "Report",
             )
         )
-    elif parameter["TYPE"] == "CONDITION" : 
+    elif parameter["TYPE"] == "CONDITION":
         dir_output = os.path.abspath(
             os.path.join(
                 os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]),
@@ -288,8 +256,10 @@ def convert_notebook_to_html(parameter):
     else:
         dir_output = os.path.abspath(
             os.path.join(
-                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(parameter["LOT"]+"_"+parameter["WAFER"])[0],
-                (parameter["LOT"]+"_"+parameter["WAFER"]),
+                os.path.dirname(parameter["FILE"][parameter["WAFER"]]["path"]).split(
+                    parameter["LOT"] + "_" + parameter["WAFER"]
+                )[0],
+                (parameter["LOT"] + "_" + parameter["WAFER"]),
                 parameter["TYPE"],
                 "Report",
                 parameter["TYPE"].upper(),
@@ -306,11 +276,13 @@ def convert_notebook_to_html(parameter):
     #     )
     if not os.path.exists(dir_output):
         os.makedirs(dir_output)
-    
-    jupiter_path = os.path.abspath(f"./src/jupiter/{str(parameter['TYPE']).upper()}.ipynb")
+
+    jupiter_path = os.path.abspath(
+        f"./src/jupiter/{str(parameter['TYPE']).upper()}.ipynb"
+    )
 
     cmd = f'"C:\\Program Files\\Python\\python.exe" "C:\\Program Files\\Python\\Scripts\\jupyter-nbconvert.exe" ./src/jupiter/{str(parameter["TYPE"]).upper()}.ipynb --execute --no-input --to html --output "{dir_output}/{str_output}" '
-    print("[NbConvertApp] Converting ",str_output)
+    print("[NbConvertApp] Converting ", str_output)
     if (
         subprocess.call(
             args=cmd,
@@ -392,7 +364,7 @@ def generate_report(parameter, df_stdf):
         ):
             pass
         else:
-            parameter = rework_stdf(parameter,df_stdf)
+            parameter = rework_stdf(parameter, df_stdf)
             pass
         write_config_file(parameter)
         timestartsub, dir_output, str_output = convert_notebook_to_html(parameter)
@@ -427,8 +399,11 @@ def resetpost(file_path):
     with open(file_path, "w") as file:
         json.dump(data, file, indent=4)
 
+
 def get_parameter(path):
-    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split("\\",10)[4:]
+    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(
+        "\\", 10
+    )[4:]
     # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split("/")[3:]
     lot_pkg, waf_badge, corner = (waf_badge + "_TTTT").split("_", 2)
 
@@ -454,20 +429,25 @@ def get_parameter(path):
         "SITE": "Catania",
         "GROUP": "MDRF - EP - GPAM",
         "TEST_NUM": "",
-        "CSV": stdname,
+        "MAIN": stdname,
     }
 
     return parameter
 
+
 if __name__ == "__main__":
     print("\n\n--- REPORT GENERATOR ---")
-    path="\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\44E\\44EZ\\EWS1\\Q443616\\Q443616_04\\VOLUME\\r44exxxz_q443616_04_st44ez-t2kf1_e_ews1_tat2k06_20250301214005.std"
+    path = "\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\44E\\44EZ\\EWS1\\Q443616\\Q443616_04\\VOLUME\\r44exxxz_q443616_04_st44ez-t2kf1_e_ews1_tat2k06_20250301214005.std"
     parameter = get_parameter(path)
     composite = "INIT"
     parameter["COM"] = composite
-    
-    parameter["TITLE"] = f"{composite.upper().replace('_',' ')} {parameter['FLOW'].upper()} {parameter['TYPE'].lower()}"
-    
-    path=os.path.join("csv",os.path.basename(parameter['FILE'][parameter['WAFER']]['path']))
-    process_composite(parameter,path)
+
+    parameter["TITLE"] = (
+        f"{composite.upper().replace('_',' ')} {parameter['FLOW'].upper()} {parameter['TYPE'].lower()}"
+    )
+
+    path = os.path.join(
+        "csv", os.path.basename(parameter["FILE"][parameter["WAFER"]]["path"])
+    )
+    process_composite(parameter, path)
     print("|-->END\n")

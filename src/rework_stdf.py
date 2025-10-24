@@ -1,13 +1,9 @@
 import os
 import sys
 import json
-import datetime
-import numpy as np
-<<<<<<< Updated upstream
-import pandas as pd
-=======
+import datetime 
 import polars as pl
->>>>>>> Stashed changes
+from jupiter.utility import get_personalization
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "jupiter"))
 import jupiter.utility as uty
@@ -33,48 +29,27 @@ def find_value(value, calc_type):
         return value + adjustment if calc_type == "min" else value - adjustment
 
 
-<<<<<<< Updated upstream
-def rework_stdf(parameter,df_stdf):
-    # print(parameter)
-=======
 def rework_stdf(parameter, df_stdf):
->>>>>>> Stashed changes
     composite = parameter["COM"]
     flwtp = parameter["TYPE"]
     ptr_dict = {}
     ftr_dict = {}
     uty.write_log("Rework STDF START", FILENAME)
 
-    # Caricamento configurazione prodotto
-    with open("src/jupiter/personalization.json", "r") as file:
-        product_data = json.load(file).get(parameter["CODE"], {})
-
-    product_name = product_data.get("product_name", {})
-    XY_XL = product_data.get("XY_XL", {})
-    XY_XH = product_data.get("XY_XH", {})
-    XY_YL = product_data.get("XY_YL", {})
-    XY_YH = product_data.get("XY_YH", {})
-    XY_Waf = product_data.get("XY_Waf", {})
-    XY_Lot0 = product_data.get("XY_Lot0", {})
-    XY_Lot1 = product_data.get("XY_Lot1", {})
-    XY_Lot2 = product_data.get("XY_Lot2", {})
-    XY_Lot3 = product_data.get("XY_Lot3", {})
-    XY_Lot4 = product_data.get("XY_Lot4", {})
-    XY_Lot5 = product_data.get("XY_Lot5", {})
-    XY_Lot6 = product_data.get("XY_Lot6", {})
-    xwafer = product_data.get("xwafer", [0, 200])
-    ywafer = product_data.get("ywafer", [0, 200])
-<<<<<<< Updated upstream
-    
-    parameter["PRODUCT"] = product_name
-
-    base_path=os.path.dirname(parameter['CSV'])
-    
-    # ----------==================================================---------- #
-    # Read extracted file
-    # ----------==================================================---------- #
-=======
-    parameter["PRODUCT"] = product_name
+    XY_XL = get_personalization(parameter, "XY_XL")
+    XY_XH = get_personalization(parameter, "XY_XH")
+    XY_YL = get_personalization(parameter, "XY_YL")
+    XY_YH = get_personalization(parameter, "XY_YH")
+    XY_Waf = get_personalization(parameter, "XY_Waf")
+    XY_Lot0 = get_personalization(parameter, "XY_Lot0")
+    XY_Lot1 = get_personalization(parameter, "XY_Lot1")
+    XY_Lot2 = get_personalization(parameter, "XY_Lot2")
+    XY_Lot3 = get_personalization(parameter, "XY_Lot3")
+    XY_Lot4 = get_personalization(parameter, "XY_Lot4")
+    XY_Lot5 = get_personalization(parameter, "XY_Lot5")
+    XY_Lot6 = get_personalization(parameter, "XY_Lot6")
+    xwafer = get_personalization(parameter, "xwafer")
+    ywafer = get_personalization(parameter, "ywafer")
 
     # Conversione DataFrame Polars
     mir = df_stdf["mir"].clone()
@@ -83,7 +58,6 @@ def rework_stdf(parameter, df_stdf):
     hbr = df_stdf["hbr"].clone()
     sbr = df_stdf["sbr"].clone()
 
->>>>>>> Stashed changes
     test_nums = (
         parameter["TEST_NUM"]
         if isinstance(parameter["TEST_NUM"], list)
@@ -145,108 +119,155 @@ def rework_stdf(parameter, df_stdf):
     # Calcolo coordinate X/Y
     if "EWS" not in str(parameter["FLOW"]).upper():
         try:
-            # Calcolo coordinate X
-            xh = tmpptr.filter(pl.col("TEST_NUM") == XY_XH).select(["PartID", "RESULT"])
-            xl = tmpptr.filter(pl.col("TEST_NUM") == XY_XL).select(["PartID", "RESULT"])
+            # 1. Filter XY test data and immediately cast to enforce types
+            xy_tests = (
+                tmpptr.filter(
+                    pl.col("TEST_NUM").is_in([XY_XH, XY_XL, XY_YH, XY_YL, XY_Waf])
+                )
+                .select([
+                    pl.col("PartID").cast(pl.Int64),  # Ensure 64-bit integer for joins
+                    pl.col("TEST_NUM").cast(pl.Utf8),  # String type for filtering
+                    pl.col("RESULT").cast(pl.Int32)  # 32-bit for bitshift operations
+                ])
+            )
+
+            # 2. Calculate X coordinates
+            # Split XH (high byte) and XL (low byte), rename to avoid post-join ambiguity
+            xh = xy_tests.filter(pl.col("TEST_NUM") == XY_XH).select(
+                ["PartID", "RESULT"]
+            )
+            xl = xy_tests.filter(pl.col("TEST_NUM") == XY_XL).select(
+                ["PartID", "RESULT"]
+            )
+
             combined_X = (
-<<<<<<< Updated upstream
-                tmpptr[tmpptr["TEST_NUM"] == XY_XH]
-                .set_index("PartID")["RESULT"]
-                .astype(int)
-                .apply(lambda x: x << 8)
-            ) + tmpptr[tmpptr["TEST_NUM"] == XY_XL].set_index("PartID")["RESULT"].astype(
-                int
-=======
-                xh.with_columns(pl.col("RESULT").cast(pl.Int32) * 256)
-                .join(xl, on="PartID")
+                xh.with_columns(pl.col("RESULT").alias("RESULT_H"))  # Rename high byte
+                .join(
+                    xl.with_columns(pl.col("RESULT").alias("RESULT_L")), on="PartID"
+                )  # Join with low byte
                 .with_columns(
-                    (pl.col("RESULT") + pl.col("RESULT_right")).alias("X_COORD")
+                    (
+                        pl.col("RESULT_H").cast(pl.Int32) * 256 + pl.col("RESULT_L").cast(pl.Int32)
+                    )  # High << 8 + Low
+                    .cast(pl.Int64)  # Convert to 64-bit for storage
+                    .alias("X_COORD")
                 )
                 .select(["PartID", "X_COORD"])
->>>>>>> Stashed changes
             )
 
-            # Calcolo coordinate Y
-            yh = tmpptr.filter(pl.col("TEST_NUM") == XY_YH).select(["PartID", "RESULT"])
-            yl = tmpptr.filter(pl.col("TEST_NUM") == XY_YL).select(["PartID", "RESULT"])
+            # 3. Calculate Y coordinates (same logic as X)
+            yh = xy_tests.filter(pl.col("TEST_NUM") == XY_YH).select(
+                ["PartID", "RESULT"]
+            )
+            yl = xy_tests.filter(pl.col("TEST_NUM") == XY_YL).select(
+                ["PartID", "RESULT"]
+            )
+
             combined_Y = (
-<<<<<<< Updated upstream
-                tmpptr[tmpptr["TEST_NUM"] == XY_YH]
-                .set_index("PartID")["RESULT"]
-                .astype(int)
-                .apply(lambda x: x << 8)
-            ) + tmpptr[tmpptr["TEST_NUM"] == XY_YL].set_index("PartID")["RESULT"].astype(
-                int
-=======
-                yh.with_columns(pl.col("RESULT").cast(pl.Int32) * 256)
-                .join(yl, on="PartID")
+                yh.with_columns(pl.col("RESULT").alias("RESULT_H"))  # Rename high byte
+                .join(
+                    yl.with_columns(pl.col("RESULT").alias("RESULT_L")), on="PartID"
+                )  # Join with low byte
                 .with_columns(
-                    (pl.col("RESULT") + pl.col("RESULT_right")).alias("Y_COORD")
+                    (
+                        pl.col("RESULT_H").cast(pl.Int32) * 256 + pl.col("RESULT_L").cast(pl.Int32)
+                    )  # High << 8 + Low
+                    .cast(pl.Int64)  # Convert to 64-bit for storage
+                    .alias("Y_COORD")
                 )
                 .select(["PartID", "Y_COORD"])
->>>>>>> Stashed changes
             )
 
-            # Aggiornamento coordinate PRR
-            prr = prr.join(combined_X, on="PartID", how="left")
-            prr = prr.join(combined_Y, on="PartID", how="left")
+            # 4. Join coordinates to PRR dataframe and validate ranges
+            # Ensure PartID type matches (Int64) before joining
+            prr = (
+                prr.with_columns(
+                    pl.col("PartID").cast(pl.Int64)
+                )  # Standardize join key type
+                .join(combined_X, on="PartID", how="left")  # Add X coordinates
+                .join(combined_Y, on="PartID", how="left")  # Add Y coordinates
+                .with_columns(
+                    [
+                        # Validate X coordinate is within wafer bounds, else set to None
+                        pl.when(
+                            pl.col("X_COORD")
+                            .cast(pl.Int64)
+                            .is_between(
+                                pl.lit(xwafer[0], dtype=pl.Int64),  # Min X bound
+                                pl.lit(xwafer[1], dtype=pl.Int64),  # Max X bound
+                            )
+                        )
+                        .then(pl.col("X_COORD"))
+                        .otherwise(None)
+                        .cast(pl.Int64)
+                        .alias("X_COORD"),
+                        # Validate Y coordinate is within wafer bounds, else set to None
+                        pl.when(
+                            pl.col("Y_COORD")
+                            .cast(pl.Int64)
+                            .is_between(
+                                pl.lit(ywafer[0], dtype=pl.Int64),  # Min Y bound
+                                pl.lit(ywafer[1], dtype=pl.Int64),  # Max Y bound
+                            )
+                        )
+                        .then(pl.col("Y_COORD"))
+                        .otherwise(None)
+                        .cast(pl.Int64)
+                        .alias("Y_COORD"),
+                    ]
+                )
+            )
 
-            # Validazione coordinate
-            prr = prr.with_columns(
+            # 5. Extract wafer ID and lot info with explicit type casting
+            lot_tests = [
+                XY_Waf,
+                XY_Lot0,
+                XY_Lot1,
+                XY_Lot2,
+                XY_Lot3,
+                XY_Lot4,
+                XY_Lot5,
+                XY_Lot6,
+            ]
+            lot_data = tmpptr.filter(pl.col("TEST_NUM").is_in(lot_tests)).select(
                 [
-                    pl.when(pl.col("X_COORD").is_between(xwafer[0], xwafer[1]))
-                    .then(pl.col("X_COORD"))
-                    .otherwise(None)
-                    .alias("X_COORD"),
-                    pl.when(pl.col("Y_COORD").is_between(ywafer[0], ywafer[1]))
-                    .then(pl.col("Y_COORD"))
-                    .otherwise(None)
-                    .alias("Y_COORD"),
+                    pl.col("TEST_NUM").cast(pl.Utf8),  # String for filtering
+                    pl.col("RESULT").cast(pl.Float64),  # Float for mode() function
                 ]
             )
 
-            # Estrazione wafer e lotto
+            # Extract most frequent wafer ID
             parameter["EWSWAFER"] = str(
                 int(
-                    tmpptr.filter(pl.col("TEST_NUM") == XY_Waf)
+                    lot_data.filter(pl.col("TEST_NUM") == XY_Waf)
                     .select("RESULT")
                     .to_series()
                     .mode()[0]
                 )
             )
 
-<<<<<<< Updated upstream
-            value = "".join(
-                chr(int(tmpptr[tmpptr["TEST_NUM"] == var]["RESULT"].mode().iloc[0]))
-                for var in [XY_Lot0, XY_Lot1, XY_Lot2, XY_Lot3, XY_Lot4, XY_Lot5, XY_Lot6]
-            )
-            parameter["EWSLOT"] = value + " (FT lot " + parameter["LOT"] + ")"
-        else:
-            parameter["EWSWAFER"] = str(mir.SBLOT_ID[0]).rjust(2, '0') if not pd.isna(mir.SBLOT_ID[0]) else str(parameter["WAFER"]).rjust(2, '0')
-            parameter["EWSLOT"] = str(mir.LOT_ID[0]) if not pd.isna(mir.LOT_ID[0]) else str(parameter["LOT"])
+            # Build lot string from 7 character codes
+            lot_chars = []
+            for test_num in [
+                XY_Lot0,
+                XY_Lot1,
+                XY_Lot2,
+                XY_Lot3,
+                XY_Lot4,
+                XY_Lot5,
+                XY_Lot6,
+            ]:
+                mode_val = (
+                    lot_data.filter(pl.col("TEST_NUM") == test_num)
+                    .select("RESULT")
+                    .to_series()
+                    .mode()[0]
+                )
+                lot_chars.append(
+                    chr(int(mode_val))
+                )  # Convert numeric ASCII to character
 
-=======
-            # Costruzione lotto EWS
-            lot_chars = [
-                tmpptr.filter(pl.col("TEST_NUM") == var)
-                .select("RESULT")
-                .to_series()
-                .mode()[0]
-                for var in [
-                    XY_Lot0,
-                    XY_Lot1,
-                    XY_Lot2,
-                    XY_Lot3,
-                    XY_Lot4,
-                    XY_Lot5,
-                    XY_Lot6,
-                ]
-            ]
-            parameter["EWSLOT"] = (
-                "".join(chr(int(c)) for c in lot_chars)
-                + f" (FT lot {parameter['LOT']})"
-            )
->>>>>>> Stashed changes
+            parameter["EWSLOT"] = "".join(lot_chars) + f" (FT lot {parameter['LOT']})"
 
         except Exception as e:
             print(f"ERROR: UID Test number wrong ({e})")
@@ -262,28 +283,14 @@ def rework_stdf(parameter, df_stdf):
             str(lot_id) if lot_id is not None else str(parameter["LOT"])
         )
 
-<<<<<<< Updated upstream
-    # ----------==================================================---------- #
-
-    # ----------==================================================---------- #
-    # Remove retest
-    # ----------==================================================---------- #
-    if str(parameter["TYPE"]).upper() != "X30":
-        prr = prr.drop_duplicates(subset=["X_COORD", "Y_COORD"], keep="last")
-        # ----------==================================================---------- #
-        if not tmpptr.empty:
-            tmpptr = tmpptr.merge(
-                prr[["PartID", "X_COORD", "Y_COORD", "SOFT_BIN", "HARD_BIN"]],
-                how="inner",
-=======
     # Rimozione retest
     if str(parameter["TYPE"]).upper() != "LOOP":
         prr = prr.unique(subset=["X_COORD", "Y_COORD"], keep="last")
+        prr = prr.with_columns(pl.col("PartID").cast(pl.Utf8))
 
         if not tmpptr.height == 0:
             tmpptr = tmpptr.join(
                 prr.select(["PartID", "X_COORD", "Y_COORD", "SOFT_BIN", "HARD_BIN"]),
->>>>>>> Stashed changes
                 on="PartID",
                 how="inner",
             )
@@ -304,85 +311,9 @@ def rework_stdf(parameter, df_stdf):
             .then(
                 pl.col("PARM_FLG").cast(pl.String).str.to_integer(base=2, strict=False)
             )
-<<<<<<< Updated upstream
-
-            tesnames = tmpptr["TEST_TXT"].unique()
-
-            def custom_res_scal(group):
-                # Combina i valori delle tre colonne in una Serie.
-                combined = pd.concat(
-                    [group["RES_SCAL"], group["LLM_SCAL"], group["HLM_SCAL"]]
-                )
-                combined = combined[combined != 0]
-                valid_values = [2, 3, 6, 9, 12, 15, 18, -6, -9]
-                combined = combined[combined.isin(valid_values)]
-
-                if combined.empty:
-                    return 0
-
-                if all(combined > 0):
-                    return combined.max()
-                elif all(combined < 0):
-                    return combined.min()
-                else:
-                    return 0
-
-            for tesname in tesnames:
-                mask = tmpptr["TEST_TXT"] == tesname
-                tmpptr.loc[mask, "RES_SCAL"] = custom_res_scal(tmpptr[mask])
-
-            # Cast to string before concatenation
-            tmpptr["UNITS"] = tmpptr["UNITS"].astype(str)
-            tmpptr.loc[tmpptr["RES_SCAL"] == 3, "UNITS"] = (
-                "m" + tmpptr.loc[tmpptr["RES_SCAL"] == 3, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == 6, "UNITS"] = (
-                "u" + tmpptr.loc[tmpptr["RES_SCAL"] == 6, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == 9, "UNITS"] = (
-                "n" + tmpptr.loc[tmpptr["RES_SCAL"] == 9, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == 12, "UNITS"] = (
-                "p" + tmpptr.loc[tmpptr["RES_SCAL"] == 12, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == 15, "UNITS"] = (
-                "f" + tmpptr.loc[tmpptr["RES_SCAL"] == 15, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == 18, "UNITS"] = (
-                "a" + tmpptr.loc[tmpptr["RES_SCAL"] == 18, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == -3, "UNITS"] = (
-                "K" + tmpptr.loc[tmpptr["RES_SCAL"] == -3, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == -6, "UNITS"] = (
-                "M" + tmpptr.loc[tmpptr["RES_SCAL"] == -6, "UNITS"]
-            )
-            tmpptr.loc[tmpptr["RES_SCAL"] == -9, "UNITS"] = (
-                "G" + tmpptr.loc[tmpptr["RES_SCAL"] == -9, "UNITS"]
-            )
-
-            tmpptr["RESULT"] = tmpptr["RESULT"].astype(float)
-            tmpptr["RESULT"] = tmpptr["RESULT"] * tmpptr["RES_SCAL"].apply(power_of_10).astype(float)
-
-            tmpptr["HI_LIMIT"] = tmpptr["HI_LIMIT"].astype(float)
-            tmpptr["HI_LIMIT"] = round(
-                tmpptr["HI_LIMIT"] * tmpptr["RES_SCAL"].apply(power_of_10), 3
-            ).astype(float)
-
-            tmpptr["LO_LIMIT"] = tmpptr["LO_LIMIT"].astype(float)
-            tmpptr["LO_LIMIT"] = round(
-                tmpptr["LO_LIMIT"] * tmpptr["RES_SCAL"].apply(power_of_10), 3
-            ).astype(float)
-
-        # ----------==================================================---------- #
-
-        uty.write_log("Split VDD", FILENAME)
-
-=======
             .cast(pl.UInt16)
             .alias("PARM_FLG")
         )
->>>>>>> Stashed changes
         if "TTIME" not in composite:
             res_scal_df = (
                 tmpptr.with_columns(RES_SCAL_int=pl.col("RES_SCAL").cast(pl.Int64))
@@ -556,7 +487,7 @@ def rework_stdf(parameter, df_stdf):
                 ]
             )
 
-            ptr_dict[parameter["CSV"]] = clearptr
+            ptr_dict[parameter["MAIN"]] = clearptr
 
     uty.write_log("END PTR", FILENAME)
 
@@ -614,7 +545,7 @@ def rework_stdf(parameter, df_stdf):
                 }
             ).drop(["LOT_ID", "TARGET", "TestNumber"])
 
-            ftr_dict[parameter["CSV"]] = clearftr
+            ftr_dict[parameter["MAIN"]] = clearftr
 
     uty.write_log("Write csv for jupiter", FILENAME)
 
@@ -622,14 +553,9 @@ def rework_stdf(parameter, df_stdf):
     ptr = pl.concat(ptr_dict.values()) if ptr_dict else pl.DataFrame()
     ftr = pl.concat(ftr_dict.values()) if ftr_dict else pl.DataFrame()
 
-<<<<<<< Updated upstream
-    ptr.to_csv(os.path.abspath("./src/jupiter/tmp/ptr.csv"), index=False)
-    ftr.to_csv(os.path.abspath("./src/jupiter/tmp/ftr.csv"), index=False)
-=======
     os.makedirs("./src/jupiter/tmp", exist_ok=True)
     ptr.write_parquet(os.path.abspath("./src/jupiter/tmp/ptr.parquet"))
     ftr.write_parquet(os.path.abspath("./src/jupiter/tmp/ftr.parquet"))
->>>>>>> Stashed changes
 
     return parameter
 
@@ -657,7 +583,7 @@ def main():
                     "stdf": "example.com",
                     "RUN": "1",
                     "TEST_NUM": ["80003000", "80004000"],
-                    "CSV": "r44exxxz_q443616_04_st44ez-t2kf1_e_ews1_tat2k06_20250301214005.std",
+                    "MAIN": "r44exxxz_q443616_04_st44ez-t2kf1_e_ews1_tat2k06_20250301214005.std",
                 }
             )
     except Exception as e:
@@ -676,6 +602,8 @@ def main():
     }
 
     rework_stdf(parameter, df_stdf)
+    
+    
 
 
 if __name__ == "__main__":

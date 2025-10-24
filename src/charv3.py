@@ -3,6 +3,7 @@ import polars as pl
 import glob
 import json
 import numpy as np
+from jupiter.utility import get_personalization
 from script.htmlgenv2 import gen_menu, gen_composite, gen_ptr, gen_ftr, gen_limits
 
 HEAD = "[CHAR]"
@@ -146,18 +147,6 @@ SCALE_PREFIXES = {
     -9: "G",  # giga
 }
 
-
-def load_personalization_data(code: str) -> dict:
-    """Load personalization data from JSON file."""
-    try:
-        with open("src/jupiter/personalization.json", "r") as file:
-            data = json.load(file)
-        return data.get(code, {})
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"[WARNING] Error loading personalization.json: {e}")
-        return {}
-
-
 def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:
     """Read CSV file using polars with appropriate schema for each file type."""
     if not os.path.exists(file_path):
@@ -273,7 +262,7 @@ def get_remove_testnumber(path):
 
 
 def filter_test_numbers(
-    tsr_df: pl.DataFrame, composite: str, product_data: dict, flow: str, path: str
+    tsr_df: pl.DataFrame, composite: str, parameter: dict, flow: str, path: str
 ) -> list:
     """Filter and extract test numbers based on composite and flow."""
     if tsr_df.is_empty():
@@ -301,8 +290,7 @@ def filter_test_numbers(
             "XY_Lot6",
         ]
         for key in xy_keys:
-            if key in product_data:
-                test_numbers.append(product_data[key])
+            test_numbers.append(get_personalization(parameter, key))
 
     toremove = get_remove_testnumber(path)
 
@@ -314,9 +302,9 @@ def filter_test_numbers(
 def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:
     """Apply result scaling using polars expressions."""
     print(HEAD, f"Result Scaling... ".ljust(150), end="\r", flush=True)
-    ptr_df = ptr_df.with_columns(ptr_df['RESULT'].cast(pl.Float32))
-    ptr_df = ptr_df.with_columns(ptr_df['LO_LIMIT'].cast(pl.Float32))
-    ptr_df = ptr_df.with_columns(ptr_df['HI_LIMIT'].cast(pl.Float32))
+    ptr_df = ptr_df.with_columns(ptr_df["RESULT"].cast(pl.Float32))
+    ptr_df = ptr_df.with_columns(ptr_df["LO_LIMIT"].cast(pl.Float32))
+    ptr_df = ptr_df.with_columns(ptr_df["HI_LIMIT"].cast(pl.Float32))
     return ptr_df.drop(["LLM_SCAL", "HLM_SCAL"])
     return ptr_df.with_columns(
         [
@@ -365,19 +353,21 @@ def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:
 
 
 def process_coordinate_recalculation(
-    ptr_df: pl.DataFrame, prr_df: pl.DataFrame, product_data: dict, flow: str
+    ptr_df: pl.DataFrame, prr_df: pl.DataFrame, flow: str, parameter: dict
 ) -> pl.DataFrame:
     """Recalculate coordinates for each corner/temperature combination."""
     if ptr_df.is_empty() or "EWS" in str(flow).upper():
         return prr_df
 
     xy_keys = ["XY_XL", "XY_XH", "XY_YL", "XY_YH"]
-    if not all(key in product_data for key in xy_keys):
-        return prr_df
+    
+    test_numbers = []
+    for key in xy_keys:
+        test_numbers.append(get_personalization(parameter, key))
 
     # Extract coordinate test results efficiently
     coord_data = ptr_df.filter(
-        pl.col("TEST_NUM").is_in([product_data[key] for key in xy_keys])
+        pl.col("TEST_NUM").is_in(test_numbers)
     ).select(["PartID", "TEST_NUM", "RESULT", "CORNER", "TEMPERATURE"])
 
     if coord_data.is_empty():
@@ -389,10 +379,10 @@ def process_coordinate_recalculation(
     )
 
     # Calculate combined coordinates
-    xh_col = str(product_data["XY_XH"])
-    xl_col = str(product_data["XY_XL"])
-    yh_col = str(product_data["XY_YH"])
-    yl_col = str(product_data["XY_YL"])
+    xh_col = str(get_personalization(parameter,"XY_XH"))
+    xl_col = str(get_personalization(parameter,"XY_XL"))
+    yh_col = str(get_personalization(parameter,"XY_YH"))
+    yl_col = str(get_personalization(parameter,"XY_YL"))
 
     if all(col in coord_pivot.columns for col in [xh_col, xl_col, yh_col, yl_col]):
         coord_pivot = coord_pivot.with_columns(
@@ -407,8 +397,8 @@ def process_coordinate_recalculation(
         )
 
         # Apply range filtering
-        xwafer = product_data.get("xwafer", [0, 200])
-        ywafer = product_data.get("ywafer", [0, 200])
+        xwafer = get_personalization(parameter,"xwafer")
+        ywafer = get_personalization(parameter,"ywafer")
 
         coord_pivot = coord_pivot.with_columns(
             [
@@ -484,7 +474,7 @@ def parse_test_names_regex(
         )
 
     else:
-        SPLIT = "(vio|vbt|v11|v12|v33|FRC|frc)"
+        SPLIT = "(vio|vbt|v11|v12|v33|FRC|frc|suca)"
         # Regex pattern for split cases (with split patterns)
         split_pattern = rf"(.+)_({SPLIT})_([^_]+)_({composite})_([^:]+)(?::(.+))?"
         std_pattern = rf"(.*)_({composite})_([^:]+)(?::(.+))?"
@@ -721,9 +711,7 @@ def parse_test_names_regex(
 
         df = df.drop("TEST_TXT")
         df = df.join(
-            processed_groups.select(
-                ["TEST_NUM", "new_TEST_TXT", "Split", "pltype"]
-            ),
+            processed_groups.select(["TEST_NUM", "new_TEST_TXT", "Split", "pltype"]),
             on=["TEST_NUM"],
             how="left",
         )
@@ -868,14 +856,11 @@ def process_single_corner_file(
             flush=True,
         )
 
-        # Load product data
-        product_data = load_personalization_data(parameter["CODE"])
-
         # Filter test numbers
         test_numbers = filter_test_numbers(
             df_stdf["tsr"],
             parameter["COM"],
-            product_data,
+            parameter,
             parameter["FLOW"],
             parameter["MAIN"],
         )
@@ -917,7 +902,7 @@ def process_single_corner_file(
 
         # Process coordinate recalculation
         df_stdf["prr"] = process_coordinate_recalculation(
-            df_stdf["ptr"], df_stdf["prr"], product_data, parameter["FLOW"]
+            df_stdf["ptr"], df_stdf["prr"], parameter["FLOW"], parameter
         )
 
         # Apply scaling
@@ -1099,9 +1084,9 @@ def run_report(parameter: dict, df_stdf: dict, path: str):
                 gen_ftr(tname, parameter, df_stdf, path)
             except Exception as e:
                 print(f"{HEAD} Error in {tname}: {e}")
-    
+
     gen_limits(stats, parameter, path)
-    
+
     print(
         f"{HEAD} End report {parameter["COM"]}".ljust(150),
     )
@@ -1109,9 +1094,6 @@ def run_report(parameter: dict, df_stdf: dict, path: str):
 
 def run(report_path: str, parameter: dict, composite: str, DEBUG: bool = False):
     """Main processing function."""
-    # Load product data
-    product_data = load_personalization_data(parameter["CODE"])
-    parameter["PRODUCT"] = product_data.get("product_name", parameter.get("CODE", ""))
 
     print(
         f"{HEAD} Start {parameter['CUT']} {composite}".ljust(150), end="\r", flush=True

@@ -130,54 +130,55 @@ def stdf2data_converter(path_fin, path_fout, option=""):
     compression_exts = [".gz", ".7z", ".zip", ".bz2", ".xz", ".tar", ".rar"]
     is_compressed = any(path_fin.lower().endswith(ext) for ext in compression_exts)
 
+    # Crea cartella temporanea
+    temp_dir = "tmp"
+
+    # Se la cartella esiste, rimuovi file manualmente
+    if os.path.exists(temp_dir):
+        remove_directory_recursive(temp_dir)
+    else:
+        os.makedirs(temp_dir)
+
+    # Copia il file in tmp (compresso o meno)
+    temp_file = os.path.join(temp_dir, os.path.basename(path_fin))
+    shutil.copy2(path_fin, temp_file)
+
     if is_compressed:
-        # Crea cartella temporanea
-        temp_dir = "tmp"
-
-        # Se la cartella esiste, rimuovi file manualmente
-        if os.path.exists(temp_dir):
-            remove_directory_recursive(temp_dir)
-        else:
-            os.makedirs(temp_dir)
-
-        temp_compressed = os.path.join(temp_dir, os.path.basename(path_fin))
-        shutil.copy2(path_fin, temp_compressed)
-
         # Estrae il file compresso
         filename = os.path.basename(path_fin).lower()
         try:
             if filename.endswith(".zip"):
-                with zipfile.ZipFile(temp_compressed, "r") as zip_ref:
+                with zipfile.ZipFile(temp_file, "r") as zip_ref:
                     zip_ref.extractall(temp_dir)
             elif filename.endswith(".gz"):
-                with gzip.open(temp_compressed, "rb") as gz_file:
-                    output_filename = os.path.basename(temp_compressed)[:-3]
+                with gzip.open(temp_file, "rb") as gz_file:
+                    output_filename = os.path.basename(temp_file)[:-3]
                     output_path = os.path.join(temp_dir, output_filename)
                     with open(output_path, "wb") as output_file:
                         shutil.copyfileobj(gz_file, output_file)
             elif filename.endswith((".tar", ".tar.gz", ".tar.bz2", ".tar.xz")):
-                with tarfile.open(temp_compressed, "r:*") as tar_ref:
+                with tarfile.open(temp_file, "r:*") as tar_ref:
                     tar_ref.extractall(temp_dir)
             elif filename.endswith(".7z"):
                 if py7zr:
-                    with py7zr.SevenZipFile(temp_compressed, mode="r") as z:
+                    with py7zr.SevenZipFile(temp_file, mode="r") as z:
                         z.extractall(temp_dir)
                 else:
                     subprocess.run(
-                        f'7z x "{temp_compressed}" -o"{temp_dir}"',
+                        f'7z x "{temp_file}" -o"{temp_dir}"',
                         shell=True,
                         stderr=subprocess.DEVNULL,
                     )
             elif filename.endswith(".rar"):
                 subprocess.run(
-                    f'unrar x "{temp_compressed}" "{temp_dir}\\"',
+                    f'unrar x "{temp_file}" "{temp_dir}\\"',
                     shell=True,
                     stderr=subprocess.DEVNULL,
                 )
             elif filename.endswith(".bz2"):
-                subprocess.run(f'bzip2 -dk "{temp_compressed}"', shell=True)
+                subprocess.run(f'bzip2 -dk "{temp_file}"', shell=True)
             elif filename.endswith(".xz"):
-                subprocess.run(f'xz -dk "{temp_compressed}"', shell=True)
+                subprocess.run(f'xz -dk "{temp_file}"', shell=True)
         except Exception as e:
             print(f"Errore durante l'estrazione: {e}")
 
@@ -187,6 +188,26 @@ def stdf2data_converter(path_fin, path_fout, option=""):
             if file.endswith(stdf_extensions):
                 path_fin = os.path.join(temp_dir, file)
                 break
+    else:
+        # Se non compresso, comprimi in .gz
+        original_filename = os.path.basename(path_fin)
+        compressed_filename = original_filename + ".gz"
+        compressed_path = os.path.join(os.path.dirname(path_fin), compressed_filename)
+
+        # Comprimi il file originale
+        with open(path_fin, "rb") as f_in:
+            with gzip.open(compressed_path, "wb") as f_out:
+                shutil.copyfileobj(f_in, f_out)
+
+        # Copia il file compresso in tmp
+        temp_compressed = os.path.join(temp_dir, compressed_filename)
+        shutil.copy2(compressed_path, temp_compressed)
+
+        # Cancella il file originale
+        os.remove(path_fin)
+
+        # Usa il nuovo file compresso come path_fin
+        path_fin = compressed_path
 
     try:
         hex_file = os.path.abspath("src/STDF2CSV.exe")
@@ -262,20 +283,20 @@ def stdf2csv(stdf_folders, csv_folder, option=""):
     return csv_name
 
 
-if __name__ == "__main__":
-    print("\n\n--- REPORT GENERATOR ---")
-    debug = True
-    stdf_folders = [
-        os.path.abspath("./STDF/P6AX86/P6AX86_01/X30"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_02/STD"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_03/X30"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_04/X30"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_05/X30"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_06/X30"),
-        os.path.abspath("./STDF/P6AX86/P6AX86_07/X30"),
-    ]
-    csv_folder = os.path.abspath("./src/csv")
+# if __name__ == "__main__":
+#     print("\n\n--- REPORT GENERATOR ---")
+#     debug = True
+#     stdf_folders = [
+#         os.path.abspath("./STDF/P6AX86/P6AX86_01/X30"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_02/STD"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_03/X30"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_04/X30"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_05/X30"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_06/X30"),
+#         os.path.abspath("./STDF/P6AX86/P6AX86_07/X30"),
+#     ]
+#     csv_folder = os.path.abspath("./src/csv")
 
-    memory = stdf2csv(stdf_folders, csv_folder)
+#     memory = stdf2csv(stdf_folders, csv_folder)
 
-    print("\n|-->END\n")
+#     print("\n|-->END\n")

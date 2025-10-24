@@ -315,8 +315,10 @@ def create_heatmap(td, gradientcolor, xwafer, ywafer):
 
     fig.show()
 
+
 def freedman_diaconis_rule(data):
     import numpy as np
+
     data = data.dropna()  # Rimuove NaN
     data = data[np.isfinite(data)]  # Rimuove inf e -inf
 
@@ -328,10 +330,9 @@ def freedman_diaconis_rule(data):
     bin_width = 2 * iqr / np.cbrt(n)
     data_range = data.max() - data.min()
     return int(np.ceil(data_range / bin_width))
-    
 
 
-def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):
+def create_histogram(td, units, ul, ll, maxvalue, minvalue, STPalette, STred):
     import plotly_express as px
 
     nbins_fd = freedman_diaconis_rule(td["Value"])
@@ -343,7 +344,7 @@ def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred)
         hover_data=td[["Value", "XId", "YId"]],
         barmode="overlay",
         template="plotly_white",
-        color_discrete_sequence=tempSTcolort,
+        color_discrete_sequence=STPalette,
     )
 
     if ul != 0 and ll != 0:
@@ -408,3 +409,41 @@ def create_histogram_with_color(
         )
 
     fig.show()
+
+
+def get_product_image(product):
+    import os
+
+    folder_path = os.path.join(product)
+
+    for filename in os.listdir(folder_path):
+        if filename.lower().endswith(".svg"):
+            svg_path = os.path.join(folder_path, filename)
+            with open(svg_path, "r", encoding="utf-8") as f:
+                content = f.read()
+            return content
+
+    return ""
+
+
+def get_personalization(parameter, name, old=None):
+    import os
+    import json5
+
+    file_path = os.path.join(
+        parameter["MAIN"].split(parameter["CODE"])[0],
+        parameter["CODE"],
+        "ART.jsonc",
+    )
+
+    if not os.path.isfile(file_path):
+        return old
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        dati = json5.load(file)
+
+    if name in dati:
+        dato = dati[name]
+        return dato
+    else:
+        return old

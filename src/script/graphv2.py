@@ -926,6 +926,8 @@ def generate_colored_ftrtable_html(
     }}
     </script>
     """
+    
+    css_styles = ""
 
     return css_styles + html_content + js_script
 
