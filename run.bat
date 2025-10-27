@@ -1,7 +1,8 @@
 
+:loop
 @REM call .\src\venv\Scripts\activate.bat
 python ./main.py
 
+goto loop
 
-echo Script completed. Press any key to close...
 pause >nul
