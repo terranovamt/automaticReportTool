@@ -26,6 +26,7 @@ import core
 import stdf2data
 import shmoo
 import charv3 as char
+from script.usage_analitics import generate_usage
 
 from jupiter.utility import get_personalization
 
@@ -1209,8 +1210,8 @@ class ProcessingWorker:
 
         # Prepare data for new row
         new_data = {
-            "author": author,
-            "path": str(file_path.absolute()),
+            "path": str(file_path.parent.absolute()),  # cartella del file
+            "file": file_path.name,  # solo il nome del file
             "creation_time": creation_time_str,
             "end_time": current_time_str,
             "pruductcut": parameter["CUT"],
@@ -1247,7 +1248,8 @@ class ProcessingWorker:
 
         # Save to Parquet format
         updated_df.write_parquet(history_file)
-        print(f"History saved to {history_file}")
+
+        generate_usage()
 
     def create_title(self, parameter: Dict, composite: str) -> str:
         """Create title based on process type and parameters."""
