@@ -183,39 +183,40 @@ def rework_stdf(parameter, df_stdf):
             prr = (
                 prr.with_columns(
                     pl.col("PartID").cast(pl.Int64)
-                )  # Standardize join key type
+                )
+                .drop("X_COORD", "Y_COORD")# Standardize join key type
                 .join(combined_X, on="PartID", how="left")  # Add X coordinates
                 .join(combined_Y, on="PartID", how="left")  # Add Y coordinates
-                .with_columns(
-                    [
-                        # Validate X coordinate is within wafer bounds, else set to None
-                        pl.when(
-                            pl.col("X_COORD")
-                            .cast(pl.Int64)
-                            .is_between(
-                                pl.lit(xwafer[0], dtype=pl.Int64),  # Min X bound
-                                pl.lit(xwafer[1], dtype=pl.Int64),  # Max X bound
-                            )
-                        )
-                        .then(pl.col("X_COORD"))
-                        .otherwise(None)
-                        .cast(pl.Int64)
-                        .alias("X_COORD"),
-                        # Validate Y coordinate is within wafer bounds, else set to None
-                        pl.when(
-                            pl.col("Y_COORD")
-                            .cast(pl.Int64)
-                            .is_between(
-                                pl.lit(ywafer[0], dtype=pl.Int64),  # Min Y bound
-                                pl.lit(ywafer[1], dtype=pl.Int64),  # Max Y bound
-                            )
-                        )
-                        .then(pl.col("Y_COORD"))
-                        .otherwise(None)
-                        .cast(pl.Int64)
-                        .alias("Y_COORD"),
-                    ]
-                )
+                # .with_columns(
+                #     [
+                #         # Validate X coordinate is within wafer bounds, else set to None
+                #         pl.when(
+                #             pl.col("X_COORD")
+                #             .cast(pl.Int64)
+                #             .is_between(
+                #                 pl.lit(xwafer[0], dtype=pl.Int64),  # Min X bound
+                #                 pl.lit(xwafer[1], dtype=pl.Int64),  # Max X bound
+                #             )
+                #         )
+                #         .then(pl.col("X_COORD"))
+                #         .otherwise(None)
+                #         .cast(pl.Int64)
+                #         .alias("X_COORD"),
+                #         # Validate Y coordinate is within wafer bounds, else set to None
+                #         pl.when(
+                #             pl.col("Y_COORD")
+                #             .cast(pl.Int64)
+                #             .is_between(
+                #                 pl.lit(ywafer[0], dtype=pl.Int64),  # Min Y bound
+                #                 pl.lit(ywafer[1], dtype=pl.Int64),  # Max Y bound
+                #             )
+                #         )
+                #         .then(pl.col("Y_COORD"))
+                #         .otherwise(None)
+                #         .cast(pl.Int64)
+                #         .alias("Y_COORD"),
+                #     ]
+                # )
             )
 
             # 5. Extract wafer ID and lot info with explicit type casting
