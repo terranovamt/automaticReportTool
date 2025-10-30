@@ -3025,7 +3025,7 @@
         "kind": 2,
         "importPath": "src.script.usage_analitics",
         "description": "src.script.usage_analitics",
-        "peekOfCode": "def generate_usage(\n    input_file: str = \"history.parquet\",\n    output_file: str = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\analysis_report.html\",\n    top_n_ids: int = 15,\n    verbose: bool = True,\n) -> Dict[str, str]:\n    \"\"\"\n    Generate a complete resource analysis HTML report from PARQUET data.\n    This is the main function to call - it handles everything from data loading\n    to report generation in a single call.",
+        "peekOfCode": "def generate_usage(\n    input_file: str = \"history.parquet\",\n    output_file: str = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\analysis_report.html\",\n    top_n_ids: int = 15,\n    verbose: bool = False,\n) -> Dict[str, str]:\n    \"\"\"\n    Generate a complete resource analysis HTML report from PARQUET data.\n    This is the main function to call - it handles everything from data loading\n    to report generation in a single call.",
         "detail": "src.script.usage_analitics",
         "documentation": {}
     },
