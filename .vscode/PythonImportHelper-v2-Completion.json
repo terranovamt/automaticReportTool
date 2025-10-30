@@ -9,12 +9,54 @@
         "documentation": {}
     },
     {
-        "label": "os",
+        "label": "polars",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
+        "importPath": "polars",
+        "description": "polars",
+        "detail": "polars",
+        "documentation": {}
+    },
+    {
+        "label": "plotly.graph_objects",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "plotly.graph_objects",
+        "description": "plotly.graph_objects",
+        "detail": "plotly.graph_objects",
+        "documentation": {}
+    },
+    {
+        "label": "make_subplots",
+        "importPath": "plotly.subplots",
+        "description": "plotly.subplots",
+        "isExtraImport": true,
+        "detail": "plotly.subplots",
+        "documentation": {}
+    },
+    {
+        "label": "plotly.offline",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "plotly.offline",
+        "description": "plotly.offline",
+        "detail": "plotly.offline",
+        "documentation": {}
+    },
+    {
+        "label": "plot",
+        "importPath": "plotly.offline",
+        "description": "plotly.offline",
+        "isExtraImport": true,
+        "detail": "plotly.offline",
+        "documentation": {}
+    },
+    {
+        "label": "product",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
         "documentation": {}
     },
     {
@@ -24,6 +66,221 @@
         "importPath": "json",
         "description": "json",
         "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "itables",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "itables",
+        "description": "itables",
+        "detail": "itables",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "json5",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json5",
+        "description": "json5",
+        "detail": "json5",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
+        "label": "kurtosis",
+        "importPath": "scipy.stats",
+        "description": "scipy.stats",
+        "isExtraImport": true,
+        "detail": "scipy.stats",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Set",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "glob",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "glob",
+        "description": "glob",
+        "detail": "glob",
+        "documentation": {}
+    },
+    {
+        "label": "jupiter.utility",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "jupiter.utility",
+        "description": "jupiter.utility",
+        "detail": "jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization",
+        "importPath": "jupiter.utility",
+        "description": "jupiter.utility",
+        "isExtraImport": true,
+        "detail": "jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization",
+        "importPath": "jupiter.utility",
+        "description": "jupiter.utility",
+        "isExtraImport": true,
+        "detail": "jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization",
+        "importPath": "jupiter.utility",
+        "description": "jupiter.utility",
+        "isExtraImport": true,
+        "detail": "jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "gen_menu",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_composite",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_ptr",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_ftr",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_limits",
+        "importPath": "script.htmlgenv2",
+        "description": "script.htmlgenv2",
+        "isExtraImport": true,
+        "detail": "script.htmlgenv2",
         "documentation": {}
     },
     {
@@ -79,24 +336,6 @@
         "documentation": {}
     },
     {
-        "label": "datetime",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "datetime",
-        "description": "datetime",
-        "detail": "datetime",
-        "documentation": {}
-    },
-    {
-        "label": "jupiter.utility",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "jupiter.utility",
-        "description": "jupiter.utility",
-        "detail": "jupiter.utility",
-        "documentation": {}
-    },
-    {
         "label": "rework_stdf",
         "importPath": "rework_stdf",
         "description": "rework_stdf",
@@ -110,24 +349,6 @@
         "description": "condition",
         "isExtraImport": true,
         "detail": "condition",
-        "documentation": {}
-    },
-    {
-        "label": "copy",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "copy",
-        "description": "copy",
-        "detail": "copy",
-        "documentation": {}
-    },
-    {
-        "label": "logging",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "logging",
-        "description": "logging",
-        "detail": "logging",
         "documentation": {}
     },
     {
@@ -149,6 +370,33 @@
         "documentation": {}
     },
     {
+        "label": "copy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "copy",
+        "description": "copy",
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "getpass",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "getpass",
+        "description": "getpass",
+        "detail": "getpass",
+        "documentation": {}
+    },
+    {
         "label": "Enum",
         "importPath": "enum",
         "description": "enum",
@@ -157,43 +405,35 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "dataclass",
         "importPath": "dataclasses",
         "description": "dataclasses",
         "isExtraImport": true,
         "detail": "dataclasses",
-        "documentation": {}
-    },
-    {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Set",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Tuple",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
         "documentation": {}
     },
     {
@@ -206,12 +446,12 @@
         "documentation": {}
     },
     {
-        "label": "stdf2csv",
+        "label": "stdf2data",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "stdf2csv",
-        "description": "stdf2csv",
-        "detail": "stdf2csv",
+        "importPath": "stdf2data",
+        "description": "stdf2data",
+        "detail": "stdf2data",
         "documentation": {}
     },
     {
@@ -221,6 +461,23 @@
         "importPath": "shmoo",
         "description": "shmoo",
         "detail": "shmoo",
+        "documentation": {}
+    },
+    {
+        "label": "charv3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "charv3",
+        "description": "charv3",
+        "detail": "charv3",
+        "documentation": {}
+    },
+    {
+        "label": "generate_usage",
+        "importPath": "script.usage_analitics",
+        "description": "script.usage_analitics",
+        "isExtraImport": true,
+        "detail": "script.usage_analitics",
         "documentation": {}
     },
     {
@@ -259,23 +516,6 @@
         "documentation": {}
     },
     {
-        "label": "plotly.graph_objects",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "plotly.graph_objects",
-        "description": "plotly.graph_objects",
-        "detail": "plotly.graph_objects",
-        "documentation": {}
-    },
-    {
-        "label": "Path",
-        "importPath": "pathlib",
-        "description": "pathlib",
-        "isExtraImport": true,
-        "detail": "pathlib",
-        "documentation": {}
-    },
-    {
         "label": "argparse",
         "kind": 6,
         "isExtraImport": true,
@@ -293,11 +533,47 @@
         "documentation": {}
     },
     {
-        "label": "read_csv_with_fallback",
+        "label": "gzip",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "gzip",
+        "description": "gzip",
+        "detail": "gzip",
+        "documentation": {}
+    },
+    {
+        "label": "py7zr",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "py7zr",
+        "description": "py7zr",
+        "detail": "py7zr",
+        "documentation": {}
+    },
+    {
+        "label": "zipfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "zipfile",
+        "description": "zipfile",
+        "detail": "zipfile",
+        "documentation": {}
+    },
+    {
+        "label": "tarfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tarfile",
+        "description": "tarfile",
+        "detail": "tarfile",
+        "documentation": {}
+    },
+    {
+        "label": "read_with_fallback",
         "kind": 2,
         "importPath": "src.jupiter.utility",
         "description": "src.jupiter.utility",
-        "peekOfCode": "def read_csv_with_fallback(path):\n    import pandas as pd\n    from pandas.errors import EmptyDataError, ParserError\n    import os\n    try:\n        # print (os.path.abspath(path))\n        return pd.read_csv(os.path.abspath(path))\n    except (EmptyDataError, FileNotFoundError, ParserError) as e:\n        # print(\"ERROR:\", e)\n        return pd.DataFrame()",
+        "peekOfCode": "def read_with_fallback(path):\n    import polars as pl\n    from pandas.errors import EmptyDataError, ParserError\n    import os\n    try:\n        return pl.read_parquet(path)\n    except (EmptyDataError, FileNotFoundError, ParserError) as e:\n        # print(\"ERROR:\", e)\n        return pl.DataFrame()\n# Customize cell colors",
         "detail": "src.jupiter.utility",
         "documentation": {}
     },
@@ -405,7 +681,7 @@
         "kind": 2,
         "importPath": "src.jupiter.utility",
         "description": "src.jupiter.utility",
-        "peekOfCode": "def create_heatmap(td, gradientcolor, xwafer, ywafer):\n    import numpy as np\n    import pandas as pd\n    import plotly.graph_objects as go\n    std_dev = np.std(td[\"Value\"])\n    step = std_dev / 10\n    if step < 1e-5:\n        step = std_dev\n    additional_data = pd.DataFrame(\n        {",
+        "peekOfCode": "def create_heatmap(td, gradientcolor, xwafer, ywafer):\n    import numpy as np\n    import pandas as pd\n    import plotly.graph_objects as go\n    std_dev = np.std(td[\"Value\"])\n    step = std_dev / 10\n    if step < 1e-5:\n        step = std_dev\n    fig = go.Figure(\n        data=go.Heatmap(",
         "detail": "src.jupiter.utility",
         "documentation": {}
     },
@@ -423,7 +699,7 @@
         "kind": 2,
         "importPath": "src.jupiter.utility",
         "description": "src.jupiter.utility",
-        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred):\n    import plotly_express as px\n    nbins_fd = freedman_diaconis_rule(td[\"Value\"])\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        nbins=nbins_fd,\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],\n        barmode=\"overlay\",",
+        "peekOfCode": "def create_histogram(td, units, ul, ll, maxvalue, minvalue, STPalette, STred):\n    import plotly_express as px\n    nbins_fd = freedman_diaconis_rule(td[\"Value\"])\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\"]],\n        x=\"Value\",\n        nbins=nbins_fd,\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],\n        barmode=\"overlay\",",
         "detail": "src.jupiter.utility",
         "documentation": {}
     },
@@ -434,6 +710,843 @@
         "description": "src.jupiter.utility",
         "peekOfCode": "def create_histogram_with_color(\n    td, units, ul, ll, maxvalue, minvalue, tempSTcolort, STred\n):\n    import plotly_express as px\n    fig = px.histogram(\n        td[[\"Value\", \"XId\", \"YId\", \"Volt\"]],\n        x=\"Value\",\n        color=\"Volt\",\n        marginal=\"box\",\n        hover_data=td[[\"Value\", \"XId\", \"YId\"]],",
         "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "get_product_image",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def get_product_image(product):\n    import os\n    folder_path = os.path.join(product)\n    for filename in os.listdir(folder_path):\n        if filename.lower().endswith(\".svg\"):\n            svg_path = os.path.join(folder_path, filename)\n            with open(svg_path, \"r\", encoding=\"utf-8\") as f:\n                content = f.read()\n            return content\n    return \"\"",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization",
+        "kind": 2,
+        "importPath": "src.jupiter.utility",
+        "description": "src.jupiter.utility",
+        "peekOfCode": "def get_personalization(parameter, name, old=None):\n    import os\n    import json5\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0],\n        parameter[\"CODE\"],\n        \"ART.jsonc\",\n    )\n    if not os.path.isfile(file_path):\n        return old",
+        "detail": "src.jupiter.utility",
+        "documentation": {}
+    },
+    {
+        "label": "freedman_diaconis_rule",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"\n    if isinstance(data, pl.Series):\n        # Remove nulls and infinite values\n        clean_data = data.drop_nulls().filter(pl.col(\"\").is_finite())\n    else:\n        # If it's a DataFrame column",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "std_hist",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def std_hist(td, ll, ul, units, STPalette, limit_color=\"#E6007E\"):\n    # Convert to numpy for histogram calculation if needed\n    nbins_fd = freedman_diaconis_rule(td.select(\"Value\").to_series())\n    corners = td.select(\"Corner\").unique().sort(\"Corner\").to_series().to_list()\n    # Calculate global limits for X axis\n    global_min = td.select(\"Value\").min().item()\n    global_max = td.select(\"Value\").max().item()\n    # Create initial empty figure\n    fig = go.Figure()\n    # Get all unique temperatures",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "combined_hist_heatmap",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def combined_hist_heatmap(\n    td,\n    ll,\n    ul,\n    units,\n    STPalette,\n    xwafer,\n    ywafer,\n    gradientcolor=[\"#03234B\", \"#3CB4E6\", \"#FFD200\", \"#E6007E\"],\n    limit_color=\"#E6007E\",",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "boxploth",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def boxploth(\n    td,\n    ll,\n    ul,\n    units,\n    STPalette,\n    limit_color=\"#E6007E\",\n):\n    # Initial parameters - sort temperatures numerically\n    all_temps = td.select(\"°C\").unique().sort(\"°C\").to_series().to_list()",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "scatter",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def scatter(\n    td,\n    STPalette,\n):\n    # Calculate total tests for each Split/°C/Corner combination\n    total_counts = (\n        td.group_by([\"Split\", \"°C\", \"Corner\"])\n        .agg(pl.count(\"RESULT\").alias(\"Total\"))\n        .sort([\"Split\", \"°C\", \"Corner\"])\n    )",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "color_cpk",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def color_cpk(val):\n    \"\"\"Color function for Cpk values\"\"\"\n    if val == \"-\":\n        return\n    try:\n        val = float(val)\n    except (ValueError, TypeError):\n        return \"\"\n    if val < 1.2:\n        return \"#F23202\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "color_yield",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def color_yield(val):\n    \"\"\"Color function for Yield values with 20 color gradients from 99 to 50\"\"\"\n    if val == \"-\":\n        return None\n    try:\n        # Handle both percentage strings and numeric values\n        if isinstance(val, str) and val.strip().endswith(\"%\"):\n            val = float(val.strip().rstrip(\"%\"))\n        else:\n            val = float(val)",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_colored_ptrtable_html",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_colored_ptrtable_html(\n    df: pl.DataFrame,\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella PTR con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Ordinamento multi-colonna (prima per temperatura, poi alfabetico)\n    - Colorazione specifica per Cpk, Yield, Cp\n    - Pulsante per esportare in CSV",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_colored_ftrtable_html",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_colored_ftrtable_html(\n    df: pl.DataFrame,\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Filtri checkbox per le prime 4 colonne\n    - Pulsante per esportare in CSV\n    \"\"\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_limits",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_limits(tname, df, STPalette, limit_color=\"#E6007E\"):\n    STtemplate = go.layout.Template()\n    STtemplate.layout = go.Layout(\n        plot_bgcolor=\"white\",\n        xaxis=dict(gridcolor=\"#ebf0f8\", zerolinecolor=\"#dee3ea\"),\n        yaxis=dict(gridcolor=\"#ebf0f8\", zerolinecolor=\"#dee3ea\"),\n    )\n    fig = go.Figure()\n    # Collect all limit values to determine x-axis range\n    all_limits = []",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "generate_colored_limittable_html",
+        "kind": 2,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "def generate_colored_limittable_html(\n    df: pl.DataFrame, tname : str\n):\n    \"\"\"\n    Versione migliorata che restituisce l'HTML della tabella con:\n    - Nasconde la colonna indice\n    - Mostra sempre tutti i dati\n    - Filtri checkbox per le prime 4 colonne\n    - Pulsante per esportare in CSV\n    \"\"\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STblue",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STblue = \"#03234B\"\nSTcyan = \"#3CB4E6\"\nSTred = \"#E6007E\"\nSTyellow = \"#FFD200\"\nSTgreen = \"#49B170\"\nSTViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STcyan",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STcyan = \"#3CB4E6\"\nSTred = \"#E6007E\"\nSTyellow = \"#FFD200\"\nSTgreen = \"#49B170\"\nSTViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STred",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STred = \"#E6007E\"\nSTyellow = \"#FFD200\"\nSTgreen = \"#49B170\"\nSTViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STyellow",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STyellow = \"#FFD200\"\nSTgreen = \"#49B170\"\nSTViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STgreen",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STgreen = \"#49B170\"\nSTViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STViolet",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STViolet = \"#8C0078\"\nSTdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"\n    if isinstance(data, pl.Series):",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "STdarkgreen",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "STdarkgreen = \"#04572F\"\ncolor_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"\n    if isinstance(data, pl.Series):\n        # Remove nulls and infinite values",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "color_light",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "color_light = \"#FFFFFF\"\ncolor_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"\n    if isinstance(data, pl.Series):\n        # Remove nulls and infinite values\n        clean_data = data.drop_nulls().filter(pl.col(\"\").is_finite())",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "color_dark",
+        "kind": 5,
+        "importPath": "src.script.graphv2",
+        "description": "src.script.graphv2",
+        "peekOfCode": "color_dark = \"#EEEFF1\"\ndef freedman_diaconis_rule(data):\n    \"\"\"\n    Calculate optimal number of bins using Freedman-Diaconis rule\n    Input: Polars Series or expression\n    \"\"\"\n    if isinstance(data, pl.Series):\n        # Remove nulls and infinite values\n        clean_data = data.drop_nulls().filter(pl.col(\"\").is_finite())\n    else:",
+        "detail": "src.script.graphv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_personalization",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_personalization(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):\n        return {}\n    with open(file_path, \"r\", encoding=\"utf-8\") as file:\n        dati = json5.load(file)\n    if name in dati:\n        dato = dati[name]",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_clamp_threshold",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def calculate_clamp_threshold(value, threshold_type, adjustment_percent=0.01):\n    \"\"\"\n    Calculate clamp threshold values with percentage-based adjustment.\n    Args:\n        value: Current extreme value (min or max)\n        threshold_type: 'min' or 'max'\n        adjustment_percent: Percentage to adjust the threshold (default 0.01 = 1%)\n    Returns:\n        Calculated threshold value\n    \"\"\"",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "detect_clamps",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def detect_clamps(\n    subset, limits, std_multiplier=1.9, adjustment_percent=0.01, sigma_threshold=5\n):\n    \"\"\"\n    Detect clamp values using improved distance-based algorithm with 6-sigma outlier removal.\n    Algorithm:\n    1. Calculate 6-sigma bounds\n    2. Find min and max values and calculate extreme thresholds\n    3. Compare sigma bounds vs extreme thresholds and choose most stringent\n    4. Filter once with most stringent thresholds",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_process_capability",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def calculate_process_capability(data, limits, std_val, mean_val):\n    \"\"\"\n    Calculate Cp and Cpk process capability indices.\n    Args:\n        data: Polars DataFrame with values\n        limits: Dict with 'low' and 'high' limits\n        std_val: Standard deviation\n        mean_val: Mean value\n    Returns:\n        Dict with Cp, Cpk values or \"-\" if no limits",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_yield_metrics",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def calculate_yield_metrics(data, limits):\n    \"\"\"\n    Calculate yield and failure metrics.\n    Args:\n        data: Polars DataFrame with values grouped by temperature and corner\n        limits: Dict with 'low' and 'high' limits\n    Returns:\n        Dict with yield metrics or \"-\" if no limits\n    \"\"\"\n    if limits[\"low\"] == 0 and limits[\"high\"] == 0:",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "process_ptr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def process_ptr(td):\n    \"\"\"\n    Main function to process test data and calculate statistics with improved clamp detection.\n    Args:\n        td: Input Polars DataFrame with test data\n    Returns:\n        Polars DataFrame with statistical summary and conditional clamp information\n    \"\"\"\n    print(HEAD, f\"Starting test data processing...\".ljust(150), end=\"\\r\", flush=True)\n    if td.is_empty():",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_yield",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def calculate_yield(x):\n    \"\"\"Calcola la resa in percentuale con formato ottimizzato.\"\"\"\n    pass_count = (x == 1).sum()\n    total = len(x)\n    return f\"{pass_count / total * 100:.2f} %\" if total > 0 else \"0.00 %\"\ndef get_metric_order():\n    \"\"\"Definisce l'ordine delle metriche per il sorting.\"\"\"\n    return {\"PASS\": 1, \"FAIL\": 2, \"Gross\": 3, \"Yield\": 4}\ndef process_ftr(td):\n    \"\"\"",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_metric_order",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_metric_order():\n    \"\"\"Definisce l'ordine delle metriche per il sorting.\"\"\"\n    return {\"PASS\": 1, \"FAIL\": 2, \"Gross\": 3, \"Yield\": 4}\ndef process_ftr(td):\n    \"\"\"\n    Main function to process test data and calculate statistics with improved clamp detection.\n    Args:\n        td: Input Polars DataFrame with test data\n    Returns:\n        Polars DataFrame with statistical summary and conditional clamp information",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "process_ftr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def process_ftr(td):\n    \"\"\"\n    Main function to process test data and calculate statistics with improved clamp detection.\n    Args:\n        td: Input Polars DataFrame with test data\n    Returns:\n        Polars DataFrame with statistical summary and conditional clamp information\n    \"\"\"\n    print(HEAD, f\"Starting test data processing...\".ljust(150), end=\"\\r\", flush=True)\n    if td.is_empty():",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_web_content",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_web_content(filename):\n    \"\"\"\n    Reads the content of the given file and returns it as a string.\n    :param filename: Path to the file to read.\n    :return: String content of the file.\n    \"\"\"\n    with open(f\".\\\\src\\\\web\\\\{filename}\", \"r\", encoding=\"utf-8\") as f:\n        content = f.read()\n    return content\ndef get_product_image(product):",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_product_image",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_product_image(product):\n    folder_path = os.path.join(MAIN_PATH, product)\n    for filename in os.listdir(folder_path):\n        if filename.lower().endswith(\".svg\"):\n            svg_path = os.path.join(folder_path, filename)\n            with open(svg_path, \"r\", encoding=\"utf-8\") as f:\n                content = f.read()\n            return content\n    return None\ndef gen_menu(parameter, destinationfolder):",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_menu",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_menu(parameter, destinationfolder):\n    print(HEAD, f\"Generate main menu... \".ljust(150), end=\"\\r\", flush=True)\n    # Full path for the index.html file\n    destinationfolder = (\n        destinationfolder.split(parameter[\"FLOW\"])[0] + parameter[\"FLOW\"] + \"\\\\Report\"\n    )\n    # Ensure the destination folder exists; create it if it doesn't\n    os.makedirs(destinationfolder, exist_ok=True)\n    file_path = os.path.join(destinationfolder, \"index.html\")\n    composite_list = [",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "get_limit_data",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def get_limit_data(key, value):\n    try :\n        # Prendi i valori unici dalla colonna \"°C\" e convertili in interi\n        temp_values = value.select(\"°C\").unique().to_series().to_list()\n        temp_values_int = [int(temp) for temp in temp_values if temp is not None]\n        # Trova temperatura minima e massima\n        temp_min = min(temp_values_int)\n        temp_max = max(temp_values_int)\n        temp_mid = 30\n        # Definisci le temperature target",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_limits",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_limits(stats, parameter, report_path):\n    file_path = os.path.join(report_path, parameter[\"COM\"], \"limits.html\")\n    html_main = \"\"\n    STPaletteChar = get_personalization(parameter, \"STPaletteChar\")\n    grouped_stats = {}\n    for key, value in stats.items():\n        # Estrai il prefisso (parte prima dei \":\")\n        prefix = key.split(':')[0] if ':' in key else key\n        value = value.select([col for col in value.columns if \"clamp\" not in col.lower()])\n        if value.width == 0 : ",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_ptr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_ptr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(\":\",\"_\")}.html\"\n    )\n    td = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return pl.DataFrame()\n    stats, td, ftrflag = process_ptr(td)\n    if ftrflag:\n        df_stdf[\"ftr\"] = df_stdf[\"ptr\"].filter(pl.col(\"TestName\") == tname)",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_ftr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_ftr(tname, parameter, df_stdf, report_path):\n    file_path = os.path.join(\n        report_path, parameter[\"COM\"], f\"{tname.replace(':','_')}.html\"\n    )\n    td = df_stdf[\"ftr\"].filter(pl.col(\"TestName\") == tname)\n    if td.is_empty():\n        return\n    stats, td = process_ftr(td)\n    print(\n        HEAD,",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "gen_composite",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def gen_composite(parameter, df_stdf, destinationfolder):\n    print(HEAD, f\"Generate Composite test list... \".ljust(150), end=\"\\r\", flush=True)\n    file_path = os.path.join(destinationfolder, parameter[\"COM\"])\n    os.makedirs(file_path, exist_ok=True)\n    file_path = os.path.join(destinationfolder, parameter[\"COM\"], \"index.html\")\n    mir = df_stdf[\"mir\"]\n    # Sample HTML content for the file\n    html_content = f\"\"\"\n    <!DOCTYPE html>\n    <html lang=\"en\">",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "main_graph",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def main_graph(DEBUG):\n    td = pl.read_csv(\"./src/td.csv\")\n    stats, td = process_ptr(td)\n    print(HEAD, f\"Generate graph... \".ljust(150), end=\"\\r\", flush=True)\n    STPaletteChar = {\n        \"-40\": \"#03234B\",\n        \"-10\": \"#3CB4E6\",\n        \"30\": \"#49B170\",\n        \"60\": \"#A4C238\",\n        \"90\": \"#FFD200\",",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "main_ftr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def main_ftr():\n    parameter = {\n        \"TITLE\": \"PMU EWSCHAR char\",\n        \"COM\": \"STDF\",\n        \"FLOW\": \"EWSCHAR\",\n        \"TYPE\": \"CHAR\",\n        \"PRODUCT\": \"\",\n        \"CODE\": \"44E\",\n        \"LOT\": \"Q445172\",\n        \"WAFER\": \"05\",",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "main_ptr",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def main_ptr():\n    parameter = {\n        \"TITLE\": \"PMU EWSCHAR char\",\n        \"COM\": \"STDF\",\n        \"FLOW\": \"EWSCHAR\",\n        \"TYPE\": \"CHAR\",\n        \"PRODUCT\": \"\",\n        \"CODE\": \"44E\",\n        \"LOT\": \"Q445172\",\n        \"WAFER\": \"05\",",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "main_genlimits",
+        "kind": 2,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "def main_genlimits():\n    key = \"IMIN_HSE:ph1\"\n    stats = pl.read_csv(\"LSE.csv\")\n    get_limit_data(key, stats)\nif __name__ == \"__main__\":\n    DEBUG = True\n    main_genlimits()\n    # main_ptr()\n    # main_ftr()\n    # main_graph(DEBUG)",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "MAIN_PATH",
+        "kind": 5,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "MAIN_PATH = \".\\\\STDF\"\nHEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalization(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "HEAD",
+        "kind": 5,
+        "importPath": "src.script.htmlgenv2",
+        "description": "src.script.htmlgenv2",
+        "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalization(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):",
+        "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "Colors",
+        "kind": 6,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "class Colors:\n    \"\"\"Color palette for consistent visualization styling.\"\"\"\n    PRIMARY = \"#03234b\"  # Dark blue - main UI color\n    YELLOW = \"#ffd200\"  # Bright yellow - accent color\n    CYAN = \"#3cb4e6\"  # Light blue - secondary accent\n    MAGENTA = \"#e6007e\"  # Pink - tertiary accent\n    GREEN = \"#49b170\"  # Green - quaternary accent\n    WHITE = \"#ffffff\"  # White - background\n    GREY = \"#eeeff1\"  # Light grey - subtle background\n# Multi-chart color palette",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "parse_datetime",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def parse_datetime(dt_str: str) -> datetime:\n    \"\"\"\n    Parse custom datetime string format to datetime object.\n    Expected format: \"HH:MM:SS:mmm DD-MM-YYYY\"\n    Args:\n        dt_str: Datetime string in custom format\n    Returns:\n        datetime: Parsed datetime object\n    \"\"\"\n    parts = dt_str.strip().split(\" \")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "load_and_preprocess_data",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def load_and_preprocess_data(filepath: str) -> pl.DataFrame:\n    \"\"\"\n    Load PARQUET data and preprocess it for analysis.\n    This function:\n    1. Reads the PARQUET file\n    2. Parses datetime columns\n    3. Calculates execution duration in hours\n    4. Filters out zero-duration executions\n    5. Removes duplicate paths\n    Args:",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_product_usage_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_product_usage_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing execution count by product.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    product_counts = (\n        df.group_by(\"pruductcut\").agg(pl.len().alias(\"count\")).sort(\"pruductcut\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_flow_distribution_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_flow_distribution_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create pie chart showing distribution across flows.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    flow_counts = df.group_by(\"flow\").agg(pl.len().alias(\"count\")).sort(\"flow\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_type_usage_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_type_usage_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing execution count by type.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    type_counts = df.group_by(\"type\").agg(pl.len().alias(\"count\")).sort(\"type\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_product_flow_heatmap",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_product_flow_heatmap(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create heatmap showing execution count matrix of Product x Flow.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    products = sorted(df[\"pruductcut\"].unique().to_list())\n    flows = sorted(df[\"flow\"].unique().to_list())",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_duration_boxplot",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_duration_boxplot(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create box plot showing duration distribution by product.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    products = sorted(df[\"pruductcut\"].unique().to_list())\n    fig = go.Figure()",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_avg_duration_by_flow_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_avg_duration_by_flow_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing average execution duration by flow.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    flow_avg = (\n        df.group_by(\"flow\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_avg_duration_by_type_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_avg_duration_by_type_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing average execution duration by type.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    type_avg = (\n        df.group_by(\"type\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_timeline_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_timeline_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create scatter plot showing execution timeline over time.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    df_sorted = df.sort(\"start_date\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_top_ids_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:\n    \"\"\"\n    Create bar chart showing top IDs by average execution duration.\n    Args:\n        df: Preprocessed dataframe\n        top_n: Number of top IDs to display\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    id_avg = (",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_statistics",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def calculate_statistics(df: pl.DataFrame) -> Dict[str, str]:\n    \"\"\"\n    Calculate summary statistics from the dataframe.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        dict: Dictionary containing summary statistics\n    \"\"\"\n    return {\n        \"total_executions\": str(len(df)),",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "generate_html_report",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:\n    \"\"\"\n    Generate the complete HTML report with embedded charts.\n    Args:\n        stats: Dictionary of summary statistics\n        scripts: List of JavaScript code snippets for charts\n    Returns:\n        str: Complete HTML document as string\n    \"\"\"\n    html_template = \"\"\"",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "generate_usage",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def generate_usage(\n    input_file: str = \"history.paquet\",\n    output_file: str = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\analysis_report.html\",\n    top_n_ids: int = 15,\n    verbose: bool = True,\n) -> Dict[str, str]:\n    \"\"\"\n    Generate a complete resource analysis HTML report from PARQUET data.\n    This is the main function to call - it handles everything from data loading\n    to report generation in a single call.",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function for command-line usage.\"\"\"\n    generate_usage()\nif __name__ == \"__main__\":\n    main()",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "COLOR_PALETTE",
+        "kind": 5,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "COLOR_PALETTE = [\n    Colors.CYAN,\n    Colors.MAGENTA,\n    Colors.YELLOW,\n    Colors.GREEN,\n    Colors.PRIMARY,\n]\ndef parse_datetime(dt_str: str) -> datetime:\n    \"\"\"\n    Parse custom datetime string format to datetime object.",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "df = pl.read_parquet('src/mbist.parquet')\n# Visualizza le prime righe\nprint(\"DataFrame originale:\")\nprint(df.head())\n# Trasforma la colonna PARM_FLG in RESULT (1 se 192, altrimenti 0)\n# df = df.with_columns(\n#     pl.when(pl.col(\"PARM_FLG\") == 0)\n#     .then(1)\n#     .otherwise(0)\n#     .alias(\"PARM_FLG\")",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "groups_with_bist_bend_pass",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "groups_with_bist_bend_pass = df.filter(\n    (pl.col(\"TEST_TXT\") == \"ALLRAM_PLL:bist_bend\") & \n    (pl.col(\"PARM_FLG\") == 192)\n).select([\"CORNER\", \"TEMPERATURE\", \"Split\", \"PartID\"]).unique()\nprint(f\"\\nGruppi con ALLRAM_PLL:bist_bend RESULT=1: {groups_with_bist_bend_pass.shape[0]}\")\n# Aggiungi una flag per identificare questi gruppi\ndf_updated = df.join(\n    groups_with_bist_bend_pass.with_columns(pl.lit(True).alias(\"bist_bend_pass\")),\n    on=[\"CORNER\", \"TEMPERATURE\", \"Split\", \"PartID\"],\n    how=\"left\"",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "df_updated",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "df_updated = df.join(\n    groups_with_bist_bend_pass.with_columns(pl.lit(True).alias(\"bist_bend_pass\")),\n    on=[\"CORNER\", \"TEMPERATURE\", \"Split\", \"PartID\"],\n    how=\"left\"\n)\n# Aggiorna RESULT dove la flag è True\ndf_updated = df_updated.with_columns(\n    pl.when(pl.col(\"bist_bend_pass\") == True)\n    .then(192)\n    .otherwise(0)",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "df_updated",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "df_updated = df_updated.with_columns(\n    pl.when(pl.col(\"bist_bend_pass\") == True)\n    .then(192)\n    .otherwise(0)\n    .alias(\"PARM_FLG\")\n).drop(\"bist_bend_pass\")\nprint(\"\\n\" + \"=\"*80)\nprint(\"DataFrame dopo propagazione RESULT per gruppi:\")\nprint(df_updated.head(20))\n# Verifica: confronta prima e dopo",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "comparison",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "comparison = pl.DataFrame({\n    \"original_PARM_FLG\": df[\"PARM_FLG\"],\n    \"updated_PARM_FLG\": df_updated[\"PARM_FLG\"],\n    \"TEST_TXT\": df[\"TEST_TXT\"],\n    \"PartID\": df[\"PartID\"],\n    \"CORNER\": df[\"CORNER\"],\n    \"TEMPERATURE\": df[\"TEMPERATURE\"],\n    \"Split\": df[\"Split\"]\n})\nchanged = comparison.filter(pl.col(\"original_PARM_FLG\") != pl.col(\"updated_PARM_FLG\"))",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "changed",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "changed = comparison.filter(pl.col(\"original_PARM_FLG\") != pl.col(\"updated_PARM_FLG\"))\nprint(changed)\nprint(f\"\\nRighe modificate: {changed.shape[0]}\")\n# Statistiche finali\nprint(\"\\n\" + \"=\"*80)\nprint(\"Statistiche RESULT originale vs aggiornato:\")\nprint(f\"RESULT=1 originale: {df.filter(pl.col('PARM_FLG') == 1).shape[0]} righe\")\nprint(f\"RESULT=1 aggiornato: {df_updated.filter(pl.col('PARM_FLG') == 1).shape[0]} righe\")\n# Rinomina le colonne\ndf_updated = df_updated.rename({",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "df_updated",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "df_updated = df_updated.rename({\n    \"RESULT\": \"Value\",\n        \"LO_LIMIT\": \"Low Limit\",\n        \"HI_LIMIT\": \"High Limit\",\n        \"UNITS\": \"Unit\",\n        \"TEMPERATURE\": \"°C\",\n        \"TEST_NUM\": \"TestNumber\",\n        \"CORNER\": \"Corner\",\n        \"TEST_TXT\": \"TestName\",\n})",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "df_filtered",
+        "kind": 5,
+        "importPath": "src.tmp.test",
+        "description": "src.tmp.test",
+        "peekOfCode": "df_filtered = df_updated.filter(pl.col(\"TestName\") == \"ALLRAM_PLL:bist_global_bbad\")\n# Salva il risultato (opzionale)\ndf_filtered.write_csv('src/mbist_updated.csv')",
+        "detail": "src.tmp.test",
+        "documentation": {}
+    },
+    {
+        "label": "read_csv_file_polars",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def read_csv_file_polars(file_path: str, columns=None, file_type=None) -> pl.DataFrame:\n    \"\"\"Read CSV file using polars with appropriate schema for each file type.\"\"\"\n    if not os.path.exists(file_path):\n        # print(f\"[WARNING] File not found: {file_path}\")\n        return pl.DataFrame()\n    try:\n        # Usa lo schema appropriato per il tipo di file\n        schema_overrides = DTYPE_CONFIGS.get(file_type, {})\n        df = pl.read_parquet(file_path, columns=columns)\n        # Forza tutte le colonne a essere stringhe",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "read_stdf_files",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def read_stdf_files(csv_path: str) -> dict:\n    \"\"\"Read all STDF CSV files and return dictionary of DataFrames.\"\"\"\n    print(HEAD, f\"Processing {os.path.basename(csv_path)}\", end=\"\\r\", flush=True)\n    file_configs = {\n        \"ptr\": {\n            \"columns\": [0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15],\n        },\n        \"ftr\": {\n            \"columns\": [0, 1, 4, 23],\n        },",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "extract_temperature",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def extract_temperature(mir_df: pl.DataFrame) -> int:\n    \"\"\"Extract and round temperature from MIR dataframe.\"\"\"\n    if mir_df.is_empty():\n        return 30\n    temp_value = float(mir_df.select(\"TST_TEMP\").to_numpy().flatten()[0])\n    if np.isnan(temp_value):\n        return 30\n    return int(round(float(temp_value) / 5.0) * 5.0)\ndef get_remove_testnumber(path):\n    file_path = os.path.join(path, \"ART.json\")",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "get_remove_testnumber",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def get_remove_testnumber(path):\n    file_path = os.path.join(path, \"ART.json\")\n    if not os.path.isfile(file_path):\n        return []\n    with open(file_path, \"r\", encoding=\"utf-8\") as file:\n        dati = json.load(file)\n    if \"remove_TestNumber\" in dati:\n        toremove = dati[\"remove_TestNumber\"]\n        return toremove\n    else:",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "filter_test_numbers",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def filter_test_numbers(\n    tsr_df: pl.DataFrame, composite: str, parameter: dict, flow: str, path: str\n) -> list:\n    \"\"\"Filter and extract test numbers based on composite and flow.\"\"\"\n    if tsr_df.is_empty():\n        return []\n    # Use polars string operations for better performance\n    pattern = f\".*_{composite}_.*:.*|.*_{composite}_..$|.*_{composite}_.*_DELTA_.*\"\n    filtered_df = tsr_df.filter(pl.col(\"TEST_NAM\").str.contains(pattern))\n    test_numbers = filtered_df.select(\"TEST_NUM\").unique().to_series().to_list()",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "apply_result_scaling",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def apply_result_scaling(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply result scaling using polars expressions.\"\"\"\n    print(HEAD, f\"Result Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    ptr_df = ptr_df.with_columns(ptr_df[\"RESULT\"].cast(pl.Float32))\n    ptr_df = ptr_df.with_columns(ptr_df[\"LO_LIMIT\"].cast(pl.Float32))\n    ptr_df = ptr_df.with_columns(ptr_df[\"HI_LIMIT\"].cast(pl.Float32))\n    return ptr_df.drop([\"LLM_SCAL\", \"HLM_SCAL\"])\n    return ptr_df.with_columns(\n        [\n            pl.when(pl.col(\"RES_SCAL\").is_not_null())",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "apply_unit_prefixes",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def apply_unit_prefixes(ptr_df: pl.DataFrame) -> pl.DataFrame:\n    \"\"\"Apply unit prefixes based on scale values.\"\"\"\n    # Convert UNITS to string first\n    print(HEAD, f\"Unit Scaling... \".ljust(150), end=\"\\r\", flush=True)\n    df = ptr_df.with_columns(pl.col(\"UNITS\").cast(pl.Utf8))\n    return df.drop([\"RES_SCAL\"])\n    mapping_df = pl.DataFrame(\n        {\n            \"RES_SCAL\": list(SCALE_PREFIXES.keys()),\n            \"PREFIX\": list(SCALE_PREFIXES.values()),",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "process_coordinate_recalculation",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def process_coordinate_recalculation(\n    ptr_df: pl.DataFrame, prr_df: pl.DataFrame, flow: str, parameter: dict\n) -> pl.DataFrame:\n    \"\"\"Recalculate coordinates for each corner/temperature combination.\"\"\"\n    if ptr_df.is_empty() or \"EWS\" in str(flow).upper():\n        return prr_df\n    xy_keys = [\"XY_XL\", \"XY_XH\", \"XY_YL\", \"XY_YH\"]\n    test_numbers = []\n    for key in xy_keys:\n        test_numbers.append(get_personalization(parameter, key))",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "remove_retests",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def remove_retests(prr_df: pl.DataFrame, test_type: str) -> pl.DataFrame:\n    \"\"\"Remove retests keeping the last occurrence.\"\"\"\n    if test_type.upper() == \"LOOP\":\n        return prr_df\n    return prr_df.unique(\n        subset=[\"X_COORD\", \"Y_COORD\", \"CORNER\", \"TEMPERATURE\"], keep=\"last\"\n    )\ndef parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "parse_test_names_regex",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def parse_test_names_regex(\n    df: pl.DataFrame, composite: str, is_ttime: bool = False\n) -> pl.DataFrame:\n    \"\"\"Parse test names using regex patterns optimized for polars with categorical TEST_TXT.\"\"\"\n    if is_ttime:\n        # TTIME handling - convert to string temporarily for regex operations\n        regex_ttime = rf\"(?P<COM>{composite})__(?P<TestName>.*)::(?P<TARGET>.*)\"\n        df = df.with_columns(\n            [\n                pl.col(\"TEST_TXT\")",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "process_ptr_data",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def process_ptr_data(ptr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process PTR data with all transformations.\"\"\"\n    if ptr_df.is_empty():\n        return ptr_df\n    print(HEAD, f\"Name extract... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    is_ttime = \"TTIME\" in composite\n    ptr_df = parse_test_names_regex(ptr_df, composite, is_ttime)\n    # Process chart type and target\n    print(HEAD, f\"PTR Cleaning... \".ljust(150), end=\"\\r\", flush=True)",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "process_ftr_data",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def process_ftr_data(ftr_df: pl.DataFrame, composite: str) -> pl.DataFrame:\n    \"\"\"Process FTR data with all transformations.\"\"\"\n    if ftr_df.is_empty():\n        return ftr_df\n    print(HEAD, f\"FTR Processing... \".ljust(150), end=\"\\r\", flush=True)\n    # Parse test names\n    ftr_df = parse_test_names_regex(ftr_df, composite, False)\n    column_renames = {\n        \"TEMPERATURE\": \"°C\",\n        \"TEST_NUM\": \"TestNumber\",",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "process_single_corner_file",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def process_single_corner_file(\n    csv_file: str, corner_name: str, parameter: dict\n) -> dict:\n    \"\"\"Process a single corner CSV file and return processed dataframes.\"\"\"\n    try:\n        # Read all STDF files\n        df_stdf = read_stdf_files(csv_file)\n        # Extract temperature\n        temperature = extract_temperature(df_stdf[\"mir\"])\n        print(",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "consolidate_corner_data",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def consolidate_corner_data(corner_results: list) -> dict:\n    \"\"\"Consolidate data from all corners into single dataframes with memory optimization.\"\"\"\n    all_data = {key: [] for key in [\"ptr\", \"ftr\", \"mir\", \"prr\"]}\n    for result in corner_results:\n        if result is None:\n            continue\n        for key in all_data:\n            if key in result[\"data\"] and not result[\"data\"][key].is_empty():\n                all_data[key].append(result[\"data\"][key])\n    # Concatenate all dataframes with optimization",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "rework_stdf_multiple",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:\n    \"\"\"Process multiple corner folders containing CSV files.\"\"\"\n    composite = parameter[\"COM\"]\n    corner_results = []\n    # Process each corner folder\n    for corner_folder in corner_folders:\n        corner_name = os.path.basename(corner_folder).split(\"_\")[-1]\n        # Find all STD files in the corner folder\n        std_files = glob.glob(os.path.join(corner_folder, \"*.std\"))\n        for std_file in std_files:",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "get_ordered_corner_folders",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def get_ordered_corner_folders(main_folder: str) -> list:\n    \"\"\"Get corner folders in predefined order.\"\"\"\n    order_list = [\n        \"SSTT\",\n        \"SSXX\",\n        \"S1TT\",\n        \"SFTT\",\n        \"TTTT\",\n        \"FSTT\",\n        \"F1TT\",",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "run_report",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def run_report(parameter: dict, df_stdf: dict, path: str):\n    \"\"\"Generate reports from processed data.\"\"\"\n    ptrtname, ftrtname = gen_composite(parameter, df_stdf, path)\n    stats = {}\n    ptrtname = sorted(ptrtname)\n    ftrtname = sorted(ftrtname)\n    if ptrtname:\n        for tname in ptrtname:\n            try:\n                stats[tname] = gen_ptr(tname, parameter, df_stdf, path)",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "run",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def run(report_path: str, parameter: dict, composite: str, DEBUG: bool = False):\n    \"\"\"Main processing function.\"\"\"\n    print(\n        f\"{HEAD} Start {parameter['CUT']} {composite}\".ljust(150), end=\"\\r\", flush=True\n    )\n    main_folder = report_path.split(\"CHAR\")[0] + \"CHAR\"\n    if not os.path.exists(main_folder):\n        print(f\"Main folder {main_folder} does not exist\")\n        return\n    # Get ordered corner folders",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "gen_mainmenu",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def gen_mainmenu(parameter: dict, path: str):\n    \"\"\"Generate main menu.\"\"\"\n    gen_menu(parameter=parameter, destinationfolder=path)\ndef main(DEBUG: bool):\n    \"\"\"Example usage.\"\"\"\n    path = \".\\\\STDF\\\\44E\\\\44EZ\\\\EWSCHAR\\\\\"\n    parameter = {\n        \"TITLE\": \"PMU EWSCHAR char\",\n        \"COM\": \"PMU\",\n        \"FLOW\": \"EWSCHAR\",",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "def main(DEBUG: bool):\n    \"\"\"Example usage.\"\"\"\n    path = \".\\\\STDF\\\\44E\\\\44EZ\\\\EWSCHAR\\\\\"\n    parameter = {\n        \"TITLE\": \"PMU EWSCHAR char\",\n        \"COM\": \"PMU\",\n        \"FLOW\": \"EWSCHAR\",\n        \"TYPE\": \"CHAR\",\n        \"PRODUCT\": \"\",\n        \"CODE\": \"44E\",",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "HEAD",
+        "kind": 5,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "HEAD = \"[CHAR]\"\n# Configuration constants\n# Configurazioni DTYPE specifiche per ogni tipo di file STDF\nDTYPE_CONFIGS = {\n    \"ptr\": {\n        \"PartID\": pl.UInt16,\n        \"TEST_NUM\": pl.UInt32,\n        \"PARM_FLG\": pl.UInt32,\n        \"RESULT\": pl.Float64,\n        \"TEST_TXT\": pl.Utf8,",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "DTYPE_CONFIGS",
+        "kind": 5,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "DTYPE_CONFIGS = {\n    \"ptr\": {\n        \"PartID\": pl.UInt16,\n        \"TEST_NUM\": pl.UInt32,\n        \"PARM_FLG\": pl.UInt32,\n        \"RESULT\": pl.Float64,\n        \"TEST_TXT\": pl.Utf8,\n        \"RES_SCAL\": pl.Int8,\n        \"LLM_SCAL\": pl.Int8,\n        \"HLM_SCAL\": pl.Int8,",
+        "detail": "src.charv3",
+        "documentation": {}
+    },
+    {
+        "label": "SCALE_PREFIXES",
+        "kind": 5,
+        "importPath": "src.charv3",
+        "description": "src.charv3",
+        "peekOfCode": "SCALE_PREFIXES = {\n    18: \"a\",  # atto\n    12: \"p\",  # pico\n    9: \"n\",  # nano\n    6: \"u\",  # micro\n    3: \"m\",  # milli\n    -3: \"K\",  # kilo\n    -6: \"M\",  # mega\n    -9: \"G\",  # giga\n}",
+        "detail": "src.charv3",
         "documentation": {}
     },
     {
@@ -504,7 +1617,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_composite(parameter, csv_name,df_stdf):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))\n        if str(parameter[\"COM\"]).upper() == \"TTIME\":",
+        "peekOfCode": "def process_composite(parameter, data_name, df_stdf):\n    \"\"\"\n    Process the composite data from a MAIN file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): MAIN file name to process.\n    \"\"\"\n    try:\n        tsr = pl.read_parquet(os.path.abspath(f\"{data_name}.tsr.parquet\"))\n        if str(parameter[\"COM\"]).upper() == \"TTIME\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -513,7 +1626,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_condition(parameter, stdf_folder,df_stdf):\n    \"\"\"\n    Process a FAKE composite for condition report and execute generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    uty.write_log(f\"Converting ANAFLOW by COM\", FILENAME)",
+        "peekOfCode": "def process_condition(parameter, stdf_folder, df_stdf):\n    \"\"\"\n    Process a FAKE composite for condition report and execute generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): MAIN file name to process.\n    \"\"\"\n    uty.write_log(f\"Converting ANAFLOW by COM\", FILENAME)",
         "detail": "src.core",
         "documentation": {}
     },
@@ -522,7 +1635,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
+        "peekOfCode": "def process_yield(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for yeald analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): MAIN file name to process.\n    \"\"\"\n    if parameter[\"TYPE\"].upper() == \"X30\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -531,7 +1644,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_ttime(parameter, tsr, composite, csv_file,df_stdf):\n    \"\"\"\n    Process a FAKE composite for test time analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"\n    match_group = tsr[\"TEST_NAM\"].str.extract(r\"(log_ttime.*)\".format(composite))",
+        "peekOfCode": "def process_ttime(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a FAKE composite for test time analysis and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): MAIN file name to process.\n    \"\"\"\n    # Create regex pattern for matching test names",
         "detail": "src.core",
         "documentation": {}
     },
@@ -540,7 +1653,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def process_single_composite(\n    parameter, tsr, composite, csv_file,df_stdf):\n    \"\"\"\n    Process a single composite and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (DataFrame): DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): CSV file name to process.\n    \"\"\"",
+        "peekOfCode": "def process_single_composite(parameter, tsr, composite, csv_file, df_stdf):\n    \"\"\"\n    Process a single composite and execute the report generation using Polars.\n    Args:\n        parameter (dict): Parameters for processing.\n        tsr (pl.DataFrame): Polars DataFrame containing test results.\n        composite (str): Composite name to process.\n        csv_file (str): MAIN file name to process.\n        df_stdf (pl.DataFrame): Polars DataFrame for STDF data.\n    \"\"\"",
         "detail": "src.core",
         "documentation": {}
     },
@@ -558,7 +1671,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def convert_notebook_to_html(parameter):\n    \"\"\"\n    Convert the Jupyter notebook to HTML format.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    uty.write_log(\"Start Jupyter conversion\", FILENAME)\n    timestartsub = datetime.datetime.now()\n    str_output = (\n        parameter[\"TITLE\"]",
+        "peekOfCode": "def convert_notebook_to_html(parameter):\n    \"\"\"\n    Convert the Jupyter notebook to HTML format.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    uty.write_log(\"Start Jupyter conversion\", FILENAME)\n    timestartsub = datetime.datetime.now()\n    str_output = parameter[\"TITLE\"]\n    if parameter[\"TYPE\"] == \"YIELD\" or parameter[\"TYPE\"] == \"TTIME\":",
         "detail": "src.core",
         "documentation": {}
     },
@@ -572,11 +1685,11 @@
         "documentation": {}
     },
     {
-        "label": "exec",
+        "label": "generate_report",
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def exec(parameter,df_stdf):\n    \"\"\"\n    Execute the report generation steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    try:\n        if (\n            str(parameter[\"COM\"].upper()) == \"YIELD\"\n            or str(parameter[\"TYPE\"]).upper() == \"CONDITION\"",
+        "peekOfCode": "def generate_report(parameter, df_stdf):\n    \"\"\"\n    Execute the report generation steps.\n    Args:\n        parameter (dict): Parameters for processing.\n    \"\"\"\n    try:\n        if (\n            str(parameter[\"COM\"].upper()) == \"YIELD\"\n            or str(parameter[\"TYPE\"]).upper() == \"CONDITION\"",
         "detail": "src.core",
         "documentation": {}
     },
@@ -594,7 +1707,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def resetpost(file_path):\n    print(\"Reset post.json\")\n    with open(file_path, \"r\") as file:\n        data = json.load(file)\n    for item in data[\"data\"]:\n        item[\"Run\"] = \"0\"\n    with open(file_path, \"w\") as file:\n        json.dump(data, file, indent=4)\ndef get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]",
+        "peekOfCode": "def resetpost(file_path):\n    print(\"Reset post.json\")\n    with open(file_path, \"r\") as file:\n        data = json.load(file)\n    for item in data[\"data\"]:\n        item[\"Run\"] = \"0\"\n    with open(file_path, \"w\") as file:\n        json.dump(data, file, indent=4)\ndef get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(",
         "detail": "src.core",
         "documentation": {}
     },
@@ -603,7 +1716,7 @@
         "kind": 2,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "def get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"\\\\\",10)[4:]\n    # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"/\")[3:]\n    lot_pkg, waf_badge, corner = (waf_badge + \"_TTTT\").split(\"_\", 2)\n    parameter = {\n        \"TITLE\": \"\",\n        \"COM\": \"\",\n        \"FLOW\": flow.upper(),\n        \"TYPE\": mytype.upper(),\n        \"PRODUCT\": \"\",",
+        "peekOfCode": "def get_parameter(path):\n    product, productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\n        \"\\\\\", 10\n    )[4:]\n    # product,productcut, flow, lot_pkg, waf_badge, mytype, stdname = path.split(\"/\")[3:]\n    lot_pkg, waf_badge, corner = (waf_badge + \"_TTTT\").split(\"_\", 2)\n    parameter = {\n        \"TITLE\": \"\",\n        \"COM\": \"\",\n        \"FLOW\": flow.upper(),",
         "detail": "src.core",
         "documentation": {}
     },
@@ -612,7 +1725,7 @@
         "kind": 5,
         "importPath": "src.core",
         "description": "src.core",
-        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef process_composite(parameter, csv_name,df_stdf):\n    \"\"\"\n    Process the composite data from a CSV file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): CSV file name to process.\n    \"\"\"\n    try:\n        tsr = pd.read_csv(os.path.abspath(f\"{csv_name}.tsr.csv\"))",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef process_composite(parameter, data_name, df_stdf):\n    \"\"\"\n    Process the composite data from a MAIN file and execute the report generation.\n    Args:\n        parameter (dict): Parameters for processing.\n        csv_name (str): MAIN file name to process.\n    \"\"\"\n    try:\n        tsr = pl.read_parquet(os.path.abspath(f\"{data_name}.tsr.parquet\"))",
         "detail": "src.core",
         "documentation": {}
     },
@@ -621,16 +1734,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class ProcessType(Enum):\n    \"\"\"Enumeration for different processing types.\"\"\"\n    STDF2CSV = \"stdf2csv\"\n    CSV2REPORT = \"csv2report\"\n    CONDITION2REPORT = \"condition2report\"\n    SHMOO = \"shmoo\"\nclass FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"",
-        "detail": "src.polling",
-        "documentation": {}
-    },
-    {
-        "label": "FileType",
-        "kind": 6,
-        "importPath": "src.polling",
-        "description": "src.polling",
-        "peekOfCode": "class FileType(Enum):\n    \"\"\"Enumeration for file types.\"\"\"\n    STDF = \"stdf\"\n    CSV = \"csv\"\n    CONDITION = \"condition\"\n    SHMOO = \"shmoo\"\n@dataclass\nclass ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}",
+        "peekOfCode": "class ProcessType(Enum):\n    \"\"\"Enumeration for different processing types.\"\"\"\n    STDF2DATA = \"stdf2data\"\n    DATA2REPORT = \"data2report\"\n    CONDITION2REPORT = \"condition2report\"\n    SHMOO = \"shmoo\"\n    CHAR = \"char\"\n@dataclass\nclass ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -639,7 +1743,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\"EWS1\", \"EWS2\", \"EWS3\", \"EWSDIE\", \"FT\", \"FT1\", \"FT2\", \"FIAB\", \"QC\", \"FA\"}\n    allowed_package = {\"QFP\", \"QFN\", \"DIP\", \"WLCSP\", \"CSP\"}\n    product_regex = re.compile(r\"^[A-F0-9]{3}$\")\n    max_lines_per_log = 1000\n    backup_count = 1\n# ==================================================\n# Logging Configuration\n# ==================================================",
+        "peekOfCode": "class ProcessingConfig:\n    \"\"\"Configuration for processing operations.\"\"\"\n    allowed_flow = {\n        \"EWS1\",\n        \"EWS2\",\n        \"EWS3\",\n        \"EWSDIE\",\n        \"FT\",\n        \"FT1\",\n        \"FT2\",",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -684,7 +1788,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class DirectoryPoller:\n    \"\"\"Handles directory polling for new files.\"\"\"\n    def __init__(self, config: ProcessingConfig):\n        self.config = config\n    def check_condition_files(self, folder_path: str, condition_list: List[str]) -> bool:\n        \"\"\"\n        Check if folder contains a CONDITION subdirectory with anaflow files and add them to condition list.\n        Args:\n            folder_path: Path to flow folder (e.g., EWS1, EWS2, FT, etc.)\n            condition_list: List to append found file paths",
+        "peekOfCode": "class DirectoryPoller:\n    \"\"\"Handles directory polling for new files.\"\"\"\n    def __init__(self, config: ProcessingConfig):\n        self.config = config\n    def check_condition_files(\n        self, folder_path: str, condition_list: List[str]\n    ) -> bool:\n        \"\"\"\n        Check if folder contains a CONDITION subdirectory with anaflow files and add them to condition list.\n        Args:",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -693,7 +1797,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class ProcessingWorker:\n    \"\"\"Base class for processing workers.\"\"\"\n    def __init__(self, process_type: ProcessType):\n        self.process_type = process_type\n    def create_title(self, parameter: Dict, composite: str) -> str:\n        \"\"\"Create title based on process type and parameters.\"\"\"\n        if self.process_type == ProcessType.CONDITION2REPORT:\n            return f\"{composite.upper().replace('_', ' ')} {parameter['FLOW'].upper()} condition\"\n        else:\n            return f\"{composite.upper().replace('_', ' ')} {parameter['FLOW'].upper()} {parameter['TYPE'].lower()}\"",
+        "peekOfCode": "class ProcessingWorker:\n    \"\"\"Base class for processing workers.\"\"\"\n    def __init__(self, process_type: ProcessType):\n        self.process_type = process_type\n    def save_history(self, path: str, parameter: dict):\n        \"\"\"\n        Save history with file metadata and parameters in Parquet format.\n        Creates history.parquet file if it doesn't exist.\n        Args:\n            path: File path to extract metadata from",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -702,7 +1806,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class ReportWorker(ProcessingWorker):\n    \"\"\"Worker for report generation (CSV2REPORT and CONDITION2REPORT).\"\"\"\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Main processing function for condition report generation.\n        Updated to handle CONDITION subdirectory structure.\n        Args:\n            path: Path to condition file to process\n            logger: Logger instance\n        \"\"\"",
+        "peekOfCode": "class ReportWorker(ProcessingWorker):\n    \"\"\"Worker for report generation (DATA2REPORT and CONDITION2REPORT).\"\"\"\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Main processing function for condition report generation.\n        Updated to handle CONDITION subdirectory structure.\n        Args:\n            path: Path to condition file to process\n            logger: Logger instance\n        \"\"\"",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -711,7 +1815,7 @@
         "kind": 6,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "class STDFWorker(ProcessingWorker):\n    \"\"\"Worker for STDF to CSV conversion.\"\"\"\n    def __init__(self):\n        super().__init__(ProcessType.STDF2CSV)\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Convert STDF file to CSV format.\n        Args:\n            path: Path to STDF file\n            logger: Logger instance",
+        "peekOfCode": "class STDFWorker(ProcessingWorker):\n    \"\"\"Worker for STDF to DATA conversion.\"\"\"\n    def __init__(self):\n        super().__init__(ProcessType.STDF2DATA)\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Convert STDF file to DATA format.\n        Args:\n            path: Path to STDF file\n            logger: Logger instance",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -721,6 +1825,15 @@
         "importPath": "src.polling",
         "description": "src.polling",
         "peekOfCode": "class ShmooWorker(ProcessingWorker):\n    \"\"\"Worker for SHMOO processing.\"\"\"\n    def __init__(self):\n        super().__init__(ProcessType.SHMOO)\n    def process_file(self, directory_path: str, logger: logging.Logger):\n        \"\"\"\n        Process SHMOO directory.\n        Args:\n            directory_path: Path to SHMOO directory\n            logger: Logger instance",
+        "detail": "src.polling",
+        "documentation": {}
+    },
+    {
+        "label": "CharWorker",
+        "kind": 6,
+        "importPath": "src.polling",
+        "description": "src.polling",
+        "peekOfCode": "class CharWorker(ProcessingWorker):\n    def process_file(self, path: str, logger: logging.Logger):\n        \"\"\"\n        Main processing function for condition report generation.\n        Updated to handle CONDITION subdirectory structure.\n        Args:\n            path: Path to condition file to process\n            logger: Logger instance\n        \"\"\"\n        parameter = ParameterExtractor.get_parameter(path)",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -747,7 +1860,7 @@
         "kind": 2,
         "importPath": "src.polling",
         "description": "src.polling",
-        "peekOfCode": "def main():\n    \"\"\"Main execution function.\"\"\"\n    # Set watch path\n    watch_path = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\"\n    # Alternative path for Unix systems: watch_path = \"/prj/ENGI_MCD_STDF\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:",
+        "peekOfCode": "def main(watch_path=r\".\\STDF\"):\n    \"\"\"Main execution function.\"\"\"\n    # Create and run the processing system\n    processing_system = STDFProcessingSystem(watch_path)\n    try:\n        processing_system.run_continuous()\n    except Exception as e:\n        print(f\"[MAIN] Fatal error: {e}\")\n        return 1\n    return 0",
         "detail": "src.polling",
         "documentation": {}
     },
@@ -756,7 +1869,7 @@
         "kind": 2,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "def power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")",
+        "peekOfCode": "def power_of_10(value):\n    return 10**value if value >= 0 else 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        return 0.1 if calc_type == \"min\" else -0.1\n    elif value < 0:\n        adjustment = value * 0.1\n        return value - adjustment if calc_type == \"min\" else value + adjustment\n    else:\n        adjustment = value * 0.1",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -765,7 +1878,7 @@
         "kind": 2,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "def find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1\n            # print(f\"Valore attuale: {value} Minimo: {min_value}\")\n            return 0.1\n        elif calc_type == \"max\":\n            max_value = 0.1\n            # print(f\"Valore attuale: {value} Massimo: {max_value}\")\n            return -0.1",
+        "peekOfCode": "def find_value(value, calc_type):\n    if value == 0:\n        return 0.1 if calc_type == \"min\" else -0.1\n    elif value < 0:\n        adjustment = value * 0.1\n        return value - adjustment if calc_type == \"min\" else value + adjustment\n    else:\n        adjustment = value * 0.1\n        return value + adjustment if calc_type == \"min\" else value - adjustment\ndef rework_stdf(parameter, df_stdf):",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -774,7 +1887,7 @@
         "kind": 2,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "def rework_stdf(parameter,df_stdf):\n    # print(parameter)\n    composite = parameter[\"COM\"]\n    flwtp = parameter[\"TYPE\"]\n    groosgood30 = 0\n    p = os.listdir()\n    ptr = pd.DataFrame()\n    ftr = pd.DataFrame()\n    population = pd.DataFrame()\n    ptr_dict = {}",
+        "peekOfCode": "def rework_stdf(parameter, df_stdf):\n    composite = parameter[\"COM\"]\n    flwtp = parameter[\"TYPE\"]\n    ptr_dict = {}\n    ftr_dict = {}\n    uty.write_log(\"Rework STDF START\", FILENAME)\n    XY_XL = get_personalization(parameter, \"XY_XL\")\n    XY_XH = get_personalization(parameter, \"XY_XH\")\n    XY_YL = get_personalization(parameter, \"XY_YL\")\n    XY_YH = get_personalization(parameter, \"XY_YH\")",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -783,7 +1896,7 @@
         "kind": 2,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "def main():\n    import json\n    parameter = {\n        \"TITLE\": \"MBIST\",\n        \"COM\": \"mbist\",\n        \"FLOW\": \"EWS\",\n        \"TYPE\": \"STD\",\n        \"PRODUCT\": \"Mosquito\",\n        \"CODE\": \"44E\",\n        \"LOT\": \"P6AX86\",",
+        "peekOfCode": "def main():\n    try:\n        with open(\"src/jupiter/cfg.json\", \"r\") as file:\n            content = file.read()\n            parameter = (\n                json.loads(content)\n                if content.strip()\n                else {\n                    \"TITLE\": \"MBIST\",\n                    \"COM\": \"mbist\",",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -792,7 +1905,7 @@
         "kind": 5,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "debug = False\nFILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":",
+        "peekOfCode": "debug = False\nFILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    return 10**value if value >= 0 else 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        return 0.1 if calc_type == \"min\" else -0.1\n    elif value < 0:\n        adjustment = value * 0.1\n        return value - adjustment if calc_type == \"min\" else value + adjustment",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -801,7 +1914,7 @@
         "kind": 5,
         "importPath": "src.rework_stdf",
         "description": "src.rework_stdf",
-        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    if value >= 0:\n        return 10**value\n    else:\n        return 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        if calc_type == \"min\":\n            min_value = -0.1",
+        "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef power_of_10(value):\n    return 10**value if value >= 0 else 1 / (10 ** abs(value))\ndef find_value(value, calc_type):\n    if value == 0:\n        return 0.1 if calc_type == \"min\" else -0.1\n    elif value < 0:\n        adjustment = value * 0.1\n        return value - adjustment if calc_type == \"min\" else value + adjustment\n    else:",
         "detail": "src.rework_stdf",
         "documentation": {}
     },
@@ -826,82 +1939,109 @@
     {
         "label": "rename_files",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
         "peekOfCode": "def rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):\n            base = os.path.splitext(filename)[0]\n            new_name = f\"{base}{new_ext}\"",
-        "detail": "src.stdf2csv",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "convert_files",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
         "peekOfCode": "def convert_files(folder, hex_file, option):\n    uty.write_log(f\"Extract .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return\n    for filename in os.listdir(folder):\n        if filename.endswith(\".std\"):\n            cmd = f'\"{hex_file}\" \"{os.path.join(folder, filename)}\" {option}'\n            debug and print(cmd)\n            subprocess.run(cmd, shell=True)",
-        "detail": "src.stdf2csv",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "move_csv_files",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
-        "peekOfCode": "def move_csv_files(src_folder, dest_folder):\n    uty.write_log(f\"Move .csv\", FILENAME)\n    if not os.path.exists(src_folder):\n        print(f\"Error: The source folder {src_folder} does not exist.\")\n        return []\n    if not os.path.exists(dest_folder):\n        os.makedirs(dest_folder)\n    csv_name = \"\"\n    for filename in os.listdir(src_folder):\n        if filename.endswith(\".csv\"):",
-        "detail": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
+        "peekOfCode": "def move_csv_files(src_folder, dest_folder):\n    uty.write_log(f\"Convert .csv to Parquet (Polars) and move\", FILENAME)\n    if not os.path.exists(src_folder):\n        print(f\"Error: The source folder {src_folder} does not exist.\")\n        return []\n    if not os.path.exists(dest_folder):\n        os.makedirs(dest_folder)\n    converted_files = []\n    for filename in os.listdir(src_folder):\n        if filename.lower().endswith(\".csv\"):",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "get_folder_size",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
         "peekOfCode": "def get_folder_size(folder):\n    total_size = 0\n    for dirpath, dirnames, filenames in os.walk(folder):\n        for f in filenames:\n            fp = os.path.join(dirpath, f)\n            total_size += os.path.getsize(fp)\n    return total_size\ndef delete_related_files(csv_folder, std_file_prefix):\n    uty.write_log(f\"MAX CAHCHE remove old .csv\", FILENAME)\n    related_files = [f for f in os.listdir(csv_folder) if f.startswith(std_file_prefix)]",
-        "detail": "src.stdf2csv",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "delete_related_files",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
-        "peekOfCode": "def delete_related_files(csv_folder, std_file_prefix):\n    uty.write_log(f\"MAX CAHCHE remove old .csv\", FILENAME)\n    related_files = [f for f in os.listdir(csv_folder) if f.startswith(std_file_prefix)]\n    for f in related_files:\n        os.remove(os.path.join(csv_folder, f))\ndef stdf2csv_converter(path_fin, path_fout, option=\"\"):\n    hex_file = os.path.abspath(\"src/STDF2CSV.exe\")\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" -t'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)",
-        "detail": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
+        "peekOfCode": "def delete_related_files(csv_folder, std_file_prefix):\n    uty.write_log(f\"MAX CAHCHE remove old .csv\", FILENAME)\n    related_files = [f for f in os.listdir(csv_folder) if f.startswith(std_file_prefix)]\n    for f in related_files:\n        os.remove(os.path.join(csv_folder, f))\ndef remove_directory_recursive(directory):\n    \"\"\"Rimuove ricorsivamente una directory usando solo os\"\"\"\n    if not os.path.exists(directory):\n        return\n    for root, dirs, files in os.walk(directory, topdown=False):",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
-        "label": "stdf2csv_converter",
+        "label": "remove_directory_recursive",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
-        "peekOfCode": "def stdf2csv_converter(path_fin, path_fout, option=\"\"):\n    hex_file = os.path.abspath(\"src/STDF2CSV.exe\")\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" -t'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)\n    cmd = f'\"{hex_file}\" \"{os.path.join(path_fin)}\" {option}'\n    debug and print(cmd)\n    subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)\n    move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))\ndef stdf2csv(stdf_folders, csv_folder, option=\"\"):",
-        "detail": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
+        "peekOfCode": "def remove_directory_recursive(directory):\n    \"\"\"Rimuove ricorsivamente una directory usando solo os\"\"\"\n    if not os.path.exists(directory):\n        return\n    for root, dirs, files in os.walk(directory, topdown=False):\n        # Rimuovi tutti i file\n        for name in files:\n            try:\n                os.remove(os.path.join(root, name))\n            except:",
+        "detail": "src.stdf2data",
+        "documentation": {}
+    },
+    {
+        "label": "stdf2data_converter",
+        "kind": 2,
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
+        "peekOfCode": "def stdf2data_converter(path_fin, path_fout, option=\"\"):\n    temp_dir = None\n    # Verifica se il file è compresso\n    compression_exts = [\".gz\", \".7z\", \".zip\", \".bz2\", \".xz\", \".tar\", \".rar\"]\n    is_compressed = any(path_fin.lower().endswith(ext) for ext in compression_exts)\n    # Crea cartella temporanea\n    temp_dir = \"tmp\"\n    # Se la cartella esiste, rimuovi file manualmente\n    if os.path.exists(temp_dir):\n        remove_directory_recursive(temp_dir)",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "stdf2csv",
         "kind": 2,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
-        "peekOfCode": "def stdf2csv(stdf_folders, csv_folder, option=\"\"):\n    # if  os.path.exists(csv_folder):\n    #     shutil.rmtree(csv_folder)\n    if not os.path.exists(csv_folder):\n        os.makedirs(csv_folder)\n    csv_name = []\n    for stdf_folder in stdf_folders:\n        rename_files(stdf_folder, \".stdf\", \".std\")\n        std_files = [f for f in os.listdir(stdf_folder) if f.endswith('.std')]\n        existing_csv_files = list(set(f[:-8] for f in os.listdir(csv_folder) if f.endswith('.csv')))",
-        "detail": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
+        "peekOfCode": "def stdf2csv(stdf_folders, csv_folder, option=\"\"):\n    # if  os.path.exists(csv_folder):\n    #     shutil.rmtree(csv_folder)\n    if not os.path.exists(csv_folder):\n        os.makedirs(csv_folder)\n    csv_name = []\n    for stdf_folder in stdf_folders:\n        rename_files(stdf_folder, \".stdf\", \".std\")\n        std_files = [f for f in os.listdir(stdf_folder) if f.endswith(\".std\")]\n        existing_csv_files = list(",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "debug",
         "kind": 5,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
         "peekOfCode": "debug = False\nFILENAME = os.path.abspath(\"src/run.log\")\ndef rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):",
-        "detail": "src.stdf2csv",
+        "detail": "src.stdf2data",
         "documentation": {}
     },
     {
         "label": "FILENAME",
         "kind": 5,
-        "importPath": "src.stdf2csv",
-        "description": "src.stdf2csv",
+        "importPath": "src.stdf2data",
+        "description": "src.stdf2data",
         "peekOfCode": "FILENAME = os.path.abspath(\"src/run.log\")\ndef rename_files(folder, old_ext, new_ext):\n    uty.write_log(f\"Rename .csv\", FILENAME)\n    if not os.path.exists(folder):\n        print(f\"Error: The folder {folder} does not exist.\")\n        return []\n    renamed_files = []\n    for filename in os.listdir(folder):\n        if filename.endswith(old_ext):\n            base = os.path.splitext(filename)[0]",
-        "detail": "src.stdf2csv",
+        "detail": "src.stdf2data",
+        "documentation": {}
+    },
+    {
+        "label": "comprimi_file_std",
+        "kind": 2,
+        "importPath": "STDF.44E.44EZ.stdtogz",
+        "description": "STDF.44E.44EZ.stdtogz",
+        "peekOfCode": "def comprimi_file_std(cartella_input):\n    \"\"\"\n    Cerca ricorsivamente tutti i file .std nella cartella specificata\n    e li comprime in formato .gz\n    \"\"\"\n    cartella = Path(cartella_input)\n    if not cartella.exists():\n        print(f\"Errore: La cartella '{cartella_input}' non esiste\")\n        return None\n    if not cartella.is_dir():",
+        "detail": "STDF.44E.44EZ.stdtogz",
+        "documentation": {}
+    },
+    {
+        "label": "crea_archivio_tar",
+        "kind": 2,
+        "importPath": "STDF.44E.44EZ.stdtogz",
+        "description": "STDF.44E.44EZ.stdtogz",
+        "peekOfCode": "def crea_archivio_tar(cartella_input, file_compressi):\n    \"\"\"\n    Crea un archivio tar.gz contenente tutti i file .gz e la struttura delle cartelle\n    \"\"\"\n    cartella = Path(cartella_input)\n    timestamp = datetime.now().strftime(\"%Y%m%d_%H%M%S\")\n    nome_archivio = f\"{cartella.name}_compressed_{timestamp}.tar.gz\"\n    # Percorso dell'archivio (nella directory padre della cartella input)\n    percorso_archivio = cartella.parent / nome_archivio\n    print(f\"Creazione archivio tar.gz: {nome_archivio}\")",
+        "detail": "STDF.44E.44EZ.stdtogz",
         "documentation": {}
     }
 ]

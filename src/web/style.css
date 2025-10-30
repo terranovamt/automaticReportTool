@@ -1,0 +1,368 @@
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ui-font-color0);
+}
+h1,
+h2 {
+  font-style: normal;
+}
+.contentconteiner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+}
+.btn {
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  flex: 1;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  padding: 10px 15px;
+  border-radius: 12px 0;
+  height: auto;
+  background: var(--ui-font-color1);
+  max-width: auto;
+  color: var(--ui-font-color0);
+  font-weight: bold;
+  justify-content: center;
+}
+
+.btn:hover {
+  text-decoration: none;
+  background: var(--ui-font-color0);
+  color: var(--ui-font-color1);
+}
+
+.container-top {
+  --offset: 100px;
+  --fade: 80px;
+  display: flex;
+  align-items: flex-end;
+  width: 60px;
+  justify-self: end;
+  justify-content: flex-end;
+}
+#progress {
+  position: fixed;
+  bottom: 20px;
+  right: 10px;
+  height: 70px;
+  width: 70px;
+  display: none;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1;
+}
+#progress-value {
+  display: block;
+  height: calc(100% - 15px);
+  width: calc(100% - 15px);
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 35px;
+  color: var(--ui-font-color0);
+}
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+:root {
+  --ui-font-color0: #03234b;
+  --ui-font-color1: #ffd200;
+  --ui-font-color2: #3cb4e6;
+  --ui-font-color3: #e6007e;
+  --ui-font-color4: #49b170;
+  --layout-color0: #ffffff;
+  --md-grey-100: #eeeff1;
+  --color_light: #ffffff;
+  --color_dark: #eeeff1;
+  --ui-font-size1: 13px;
+  --content-font-family: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', helvetica, arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border: none;
+  color: var(--ui-font-color0);
+  font-family: var(--content-font-family);
+  font-size: var(--ui-font-size1);
+  table-layout: fixed;
+  margin: 10px;
+}
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  unicode-bidi: isolate;
+  border-color: inherit;
+}
+tbody tr:nth-child(odd) {
+  background: var(--layout-color0);
+}
+tbody tr:nth-child(even) {
+  background: var(--md-grey-100);
+}
+
+td,
+th,
+tr {
+  vertical-align: middle;
+  padding: 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+
+main {
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0px 0px 12px 1px rgba(87, 87, 87, 0.2);
+}
+
+.filter-container {
+  margin: 2px 0;
+  padding: 2px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  text-align: end;
+}
+
+.btncsv {
+  padding: 5px 10px;
+  margin: 0px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btncsv:hover {
+  opacity: 0.8;
+}
+
+#colored-table {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin: 0px;
+}
+
+.table-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  width: 100%;
+  max-height: 1000px;
+  overflow: auto;
+  position: relative;
+}
+#colored-table thead th {
+  text-align: center !important;
+}
+#colored-table thead tr {
+  background-color: var(--ui-font-color1);
+  color: var(--ui-font-color0);
+  font-weight: bold;
+  text-align: center;
+  font-size: 12px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  z-index: 3;
+  position: sticky;
+  top: 0;
+}
+
+/* Colorazione per le colonne indice (°C, Corner, Split, index) */
+#colored-table tbody tr td:nth-child(1) {
+  background-color: #ffd200;
+  color: #03234b;
+  font-weight: bold;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 40px;
+  text-align: center;
+}
+
+#colored-table thead tr th:nth-child(1) {
+  background-color: #ffd200;
+  color: #03234b;
+  font-weight: bold;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 4;
+  width: 40px;
+  text-align: center;
+}
+
+#colored-table tbody thead tr th:nth-child(1) {
+  background-color: #ffd200;
+  color: #03234b;
+  font-weight: bold;
+  z-index: 4;
+  position: sticky;
+}
+
+/* Colorazione alternata per le altre colonne */
+#colored-table tbody tr:nth-child(even) td:nth-child(n + 2) {
+  background-color: var(--color_light);
+}
+
+#colored-table tbody tr:nth-child(odd) td:nth-child(n + 2) {
+  background-color: var(--color_dark);
+}
+
+#colored-table tbody tr td {
+  text-align: center;
+  font-size: 11px;
+  height: 30px;
+  vertical-align: middle;
+  padding: 8px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.hidden-row {
+  display: none !important;
+}
+
+/* Classi per colorazione specifica delle celle */
+.cpk-red {
+  background-color: #f23202 !important;
+  color: white;
+}
+.cpk-orange-dark {
+  background-color: #e85d04 !important;
+  color: white;
+}
+.cpk-orange {
+  background-color: #f48c06 !important;
+  color: white;
+}
+.cpk-yellow-dark {
+  background-color: #faa307 !important;
+  color: black;
+}
+.cpk-yellow {
+  background-color: #ffba08 !important;
+  color: black;
+}
+
+.yield-1 {
+  background-color: #ffeb93 !important;
+  color: black;
+}
+.yield-2 {
+  background-color: #ffe678 !important;
+  color: black;
+}
+.yield-3 {
+  background-color: #ffe15d !important;
+  color: black;
+}
+.yield-4 {
+  background-color: #ffdf50 !important;
+  color: black;
+}
+.yield-5 {
+  background-color: #ffdc42 !important;
+  color: black;
+}
+.yield-6 {
+  background-color: #ffd626 !important;
+  color: black;
+}
+.yield-7 {
+  background-color: #ffba08 !important;
+  color: black;
+}
+.yield-8 {
+  background-color: #fcb007 !important;
+  color: black;
+}
+.yield-9 {
+  background-color: #fba607 !important;
+  color: black;
+}
+.yield-10 {
+  background-color: #fb9c07 !important;
+  color: black;
+}
+.yield-11 {
+  background-color: #faa307 !important;
+  color: black;
+}
+.yield-12 {
+  background-color: #f99806 !important;
+  color: black;
+}
+.yield-13 {
+  background-color: #f78e06 !important;
+  color: black;
+}
+.yield-14 {
+  background-color: #f68406 !important;
+  color: black;
+}
+.yield-15 {
+  background-color: #f48c06 !important;
+  color: white;
+}
+.yield-16 {
+  background-color: #f17505 !important;
+  color: white;
+}
+.yield-17 {
+  background-color: #ee6905 !important;
+  color: white;
+}
+.yield-18 {
+  background-color: #ea6104 !important;
+  color: white;
+}
+.yield-19 {
+  background-color: #e85d04 !important;
+  color: white;
+}
+.yield-critical {
+  background-color: #f23202 !important;
+  color: white;
+}
