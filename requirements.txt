@@ -1,0 +1,28 @@
+# ART.stdf - Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core Data Processing
+polars>=0.19.0              # Fast DataFrame library for data processing
+pandas>=1.5.0               # Additional DataFrame support
+numpy>=1.23.0               # Numerical computing
+
+# Visualization
+plotly>=5.17.0              # Interactive plotting library
+itables>=1.5.0              # Interactive HTML tables
+
+# File Processing
+py7zr>=0.20.0               # 7-zip archive support
+
+# HTML/Web Processing
+beautifulsoup4>=4.12.0      # HTML parsing for condition files
+lxml>=4.9.0                 # XML/HTML parser (used by BeautifulSoup)
+
+# Scientific Computing
+scipy>=1.11.0               # Statistical functions (kurtosis, etc.)
+
+# Configuration Files
+json5>=0.9.0                # JSON with comments support
+
+# Optional: Excel export support
+# openpyxl>=3.1.0           # Excel file support (uncomment if needed)
+# xlsxwriter>=3.1.0         # Alternative Excel writer (uncomment if needed)

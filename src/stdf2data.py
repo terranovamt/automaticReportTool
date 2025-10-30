@@ -1,3 +1,27 @@
+"""
+ART.stdf - STDF to Data Conversion Module
+
+This module handles the conversion of binary STDF (Standard Test Data Format) files
+into efficient columnar Parquet format using Polars DataFrames. It supports various
+compression formats and decompression methods.
+
+Key Features:
+    - Automatic decompression of .gz, .7z, .zip, .bz2, .xz, .tar, .rar formats
+    - Conversion to Apache Parquet columnar storage
+    - Support for large files through streaming
+    - Efficient memory usage with Polars
+
+Supported File Formats:
+    Input:  .std, .std.gz, .std.7z, .std.zip, .std.bz2, .std.xz, .std.tar, .std.rar
+    Output: .parquet files (one per STDF record type)
+
+Main Function:
+    stdf2data_converter(): Convert STDF file to multiple Parquet files
+
+Author: Matteo Terranova (matteo.terranova@st.com)
+Organization: STMicroelectronics - MDRF GPAM
+"""
+
 import os
 import shutil
 import subprocess
@@ -8,12 +32,13 @@ import tarfile
 import polars as pl
 from pathlib import Path
 
-
 import jupiter.utility as uty
-from pystdf.Importer import STDF2DataFrame
+from pystdf.Importer import STDF2DataFrame, STDF2DataFrameOptimized, STDF2ParquetFiles
 
-
+# Debug mode flag (set to True for verbose output)
 debug = False
+
+# Log file for conversion operations
 FILENAME = os.path.abspath("src/run.log")
 
 
@@ -281,9 +306,15 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         # debug and print(cmd)
         # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
         # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
-        
-        df_stdf = STDF2DataFrame(path_fin)
-        df_to_parquet(df_stdf,path_fin,path_fout)
+
+        # USA VERSIONE SUPER OTTIMIZZATA - salva direttamente a Parquet con Polars
+        # Formato: nomefile.std.tabellanome.parquet (tutto minuscolo)
+        created_files = STDF2ParquetFiles(
+            path_fin,
+            path_fout,
+            use_polars=True,  # Usa Polars per massime performance
+            compression='lz4'  # Compressione veloce
+        )
     finally:
         # Pulisce la cartella temporanea
         if temp_dir and os.path.exists(temp_dir):
