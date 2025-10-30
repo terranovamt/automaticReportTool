@@ -715,7 +715,7 @@ def generate_usage(
     input_file: str = "history.parquet",
     output_file: str = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF\analysis_report.html",
     top_n_ids: int = 15,
-    verbose: bool = True,
+    verbose: bool = False,
 ) -> Dict[str, str]:
     """
     Generate a complete resource analysis HTML report from PARQUET data.

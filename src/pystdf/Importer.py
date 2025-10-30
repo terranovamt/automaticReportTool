@@ -28,18 +28,24 @@ from pystdf.IO import Parser
 from pystdf.Writers import TextWriter
 from collections import defaultdict
 
+
 class MemoryWriter:
     def __init__(self):
         self.data = []
+
     def after_send(self, dataSource, data):
         self.data.append(data)
-    def write(self,line):
+
+    def write(self, line):
         self.data.append(line)
+
     def flush(self):
-        pass # Do nothing
+        pass  # Do nothing
+
 
 class OptimizedMemoryWriter:
     """Versione ottimizzata che usa defaultdict per accumulo più veloce"""
+
     def __init__(self):
         # Usa defaultdict di liste per accumulo più efficiente
         self.data_dict = defaultdict(lambda: defaultdict(list))
@@ -55,14 +61,13 @@ class OptimizedMemoryWriter:
 
         self.record_count += 1
 
-        # Feedback periodico ogni 10000 record
-        if self.record_count % 10000 == 0:
-            print(f"Processed {self.record_count} records\r", end='', flush=True)
-
     def to_dataframes_polars(self):
         """Converte a Polars DataFrame - molto più veloce di Pandas"""
         result = {}
-        print(f"\nConverting {len(self.data_dict)} record types to Polars DataFrames...", flush=True)
+        print(
+            f"\nConverting {len(self.data_dict)} record types to Polars DataFrames...",
+            flush=True,
+        )
 
         for rec_type, fields_dict in self.data_dict.items():
             try:
@@ -82,41 +87,43 @@ class OptimizedMemoryWriter:
             result[rec_type] = pd.DataFrame(fields_dict)
         return result
 
+
 def ImportSTDF(fname):
-    with open(fname,'rb') as fin:
+    with open(fname, "rb") as fin:
         p = Parser(inp=fin)
         storage = MemoryWriter()
         p.addSink(storage)
         p.parse()
     return storage.data
 
-def STDF2Text(fname,delimiter='|'):
-    """ Convert STDF to a list of text representation
-    """
-    with open(fname,'rb') as fin:
+
+def STDF2Text(fname, delimiter="|"):
+    """Convert STDF to a list of text representation"""
+    with open(fname, "rb") as fin:
         p = Parser(inp=fin)
         storage = MemoryWriter()
-        p.addSink(TextWriter(storage,delimiter=delimiter))
+        p.addSink(TextWriter(storage, delimiter=delimiter))
         p.parse()
         return storage.data
     return None
 
+
 def STDF2Dict(fname):
-    """ Convert STDF to a list of dictionary objects
-    """
+    """Convert STDF to a list of dictionary objects"""
     data = ImportSTDF(fname)
     data_out = []
     for datum in data:
         datum_out = {}
         RecType = datum[0].__class__.__name__.upper()
-        datum_out['RecType'] = RecType
-        for k,v in zip(datum[0].fieldMap,datum[1]):
+        datum_out["RecType"] = RecType
+        for k, v in zip(datum[0].fieldMap, datum[1]):
             datum_out[k[0]] = v
         data_out.append(datum_out)
     return data_out
 
+
 def STDF2DataFrame(fname, use_polars=True, optimized=True):
-    """ Convert STDF to a dictionary of DataFrame objects
+    """Convert STDF to a dictionary of DataFrame objects
 
     Args:
         fname: Path to STDF file
@@ -128,7 +135,7 @@ def STDF2DataFrame(fname, use_polars=True, optimized=True):
     """
     if optimized:
         # VERSIONE OTTIMIZZATA - Accumulo diretto senza conversioni intermedie
-        with open(fname, 'rb') as fin:
+        with open(fname, "rb") as fin:
             p = Parser(inp=fin)
             storage = OptimizedMemoryWriter()
             p.addSink(storage)
@@ -143,31 +150,33 @@ def STDF2DataFrame(fname, use_polars=True, optimized=True):
         # VERSIONE ORIGINALE - Mantiene compatibilità
         data = ImportSTDF(fname)
         BigTable = {}
-        print(f"Create Dataframe\r", end='', flush=True)
+        print(f"Create Dataframe\r", end="", flush=True)
         for datum in data:
             RecType = datum[0].__class__.__name__.upper()
             if RecType not in BigTable.keys():
                 BigTable[RecType] = {}
             Rec = BigTable[RecType]
-            for k,v in zip(datum[0].fieldMap,datum[1]):
+            for k, v in zip(datum[0].fieldMap, datum[1]):
                 if k[0] not in Rec.keys():
                     Rec[k[0]] = []
                 Rec[k[0]].append(v)
-        print(f"Return Dataframe\r", end='', flush=True)
+        print(f"Return Dataframe\r", end="", flush=True)
 
         if use_polars:
             # Converti a Polars
-            for k,v in BigTable.items():
+            for k, v in BigTable.items():
                 BigTable[k] = pl.DataFrame(v)
         else:
             # Usa Pandas (originale)
-            for k,v in BigTable.items():
+            for k, v in BigTable.items():
                 BigTable[k] = pd.DataFrame(v)
         return BigTable
+
 
 def STDF2DataFrameFast(fname):
     """Alias per la versione più veloce con Polars ottimizzato"""
     return STDF2DataFrame(fname, use_polars=True, optimized=True)
+
 
 def open_stdf_file(fname):
     """Apre un file STDF (anche se compresso con gzip) in modo ottimizzato
@@ -179,12 +188,13 @@ def open_stdf_file(fname):
         File handle aperto in modalità binaria con buffering ottimizzato
     """
     # Controlla se è un file gzip
-    if fname.lower().endswith('.gz'):
+    if fname.lower().endswith(".gz"):
         # Per file gzip, usa decompressione ottimizzata
-        return gzip.open(fname, 'rb')
+        return gzip.open(fname, "rb")
     else:
         # Per file non compressi, apri con buffering ottimizzato
-        return open(fname, 'rb', buffering=2*1024*1024)  # 2MB buffer
+        return open(fname, "rb", buffering=2 * 1024 * 1024)  # 2MB buffer
+
 
 def STDF2DataFrameOptimized(fname, use_polars=True):
     """Versione completamente ottimizzata con gestione automatica compressione
@@ -209,7 +219,8 @@ def STDF2DataFrameOptimized(fname, use_polars=True):
     else:
         return storage.to_dataframes_pandas()
 
-def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
+
+def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression="lz4"):
     """Salva ogni tabella STDF come file Parquet separato
 
     Questa è la versione OTTIMIZZATA che salva direttamente a Parquet.
@@ -236,18 +247,18 @@ def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
     # Estrai il nome base del file (senza estensioni .gz, .std, etc.)
     base_name = os.path.basename(path_fin)
     # Rimuovi .gz se presente
-    if base_name.lower().endswith('.gz'):
+    if base_name.lower().endswith(".gz"):
         base_name = base_name[:-3]
     # Mantieni il nome fino a .std/.stdf
-    if '.std' in base_name.lower():
+    if ".std" in base_name.lower():
         # Trova l'indice di .std o .stdf
-        for ext in ['.stdf', '.STDF', '.std', '.STD']:
+        for ext in [".stdf", ".STDF", ".std", ".STD"]:
             if ext in base_name:
                 idx = base_name.index(ext)
-                base_name = base_name[:idx + len(ext)]
+                base_name = base_name[: idx + len(ext)]
                 break
 
-    print(f"[STDF2Parquet] Parsing {os.path.basename(path_fin)}...")
+    # print(f"[STDF2Parquet] Parsing {os.path.basename(path_fin)}...")
 
     # Parsing ottimizzato
     with open_stdf_file(path_fin) as fin:
@@ -256,7 +267,7 @@ def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
         p.addSink(storage)
         p.parse()
 
-    print(f"\n[STDF2Parquet] Saving {len(storage.data_dict)} tables to Parquet...")
+    # print(f"\n[STDF2Parquet] Saving {len(storage.data_dict)} tables to Parquet...")
 
     created_files = []
 
@@ -273,23 +284,16 @@ def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
                 df.write_parquet(
                     output_path,
                     compression=compression,
-                    statistics=False  # Più veloce senza statistiche
+                    statistics=False,  # Più veloce senza statistiche
                 )
             else:
                 # Usa Pandas per compatibilità
                 df = pd.DataFrame(fields_dict)
-                df.to_parquet(
-                    output_path,
-                    compression=compression,
-                    index=False
-                )
+                df.to_parquet(output_path, compression=compression, index=False)
 
             created_files.append(output_path)
-            print(f"   ✅ Saved: {output_filename} ({len(df):,} records)", end='\r', flush=True)
 
         except Exception as e:
-            print(f"\n   ⚠️  Warning: Could not save {table_name}: {e}")
-
-    print(f"\n[STDF2Parquet] ✅ Completed! Created {len(created_files)} Parquet files")
+            print(f"Warning: Could not save {table_name}: {e}")
 
     return created_files

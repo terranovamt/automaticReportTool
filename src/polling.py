@@ -1492,8 +1492,7 @@ class STDFWorker(ProcessingWorker):
         base_path = os.path.dirname(path)
         data_folder = os.path.join(base_path, "parquet")
         os.makedirs(data_folder, exist_ok=True)
-        data_path = os.path.join(data_folder, os.path.basename(path))
-        stdf2data.stdf2data_converter(path, data_path)
+        stdf2data.stdf2data_converter(path, data_folder)
 
 
 class ShmooWorker(ProcessingWorker):
@@ -1822,5 +1821,5 @@ if __name__ == "__main__":
     # Alternative path for Unix systems:
     # watch_path = "/prj/ENGI_MCD_STDF"
     # Local path
-    watch_path = r".\STDF"
+    # watch_path = r".\STDF"
     exit(main(watch_path))
