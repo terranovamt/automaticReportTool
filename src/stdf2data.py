@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 import jupiter.utility as uty
-from pystdf.Importer import STDF2DataFrame
+from pystdf.Importer import STDF2DataFrame, STDF2DataFrameOptimized
 
 
 debug = False
@@ -281,8 +281,11 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         # debug and print(cmd)
         # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
         # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
-        
-        df_stdf = STDF2DataFrame(path_fin)
+
+        # USA VERSIONE OTTIMIZZATA per massime performance
+        print(f"[STDF2DATA] Parsing STDF file with optimized parser...")
+        df_stdf = STDF2DataFrameOptimized(path_fin, use_polars=False)  # usa pandas per compatibilità con df_to_parquet
+        print(f"[STDF2DATA] Converting to Parquet format...")
         df_to_parquet(df_stdf,path_fin,path_fout)
     finally:
         # Pulisce la cartella temporanea
