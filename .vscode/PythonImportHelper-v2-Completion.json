@@ -121,6 +121,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
@@ -135,6 +143,62 @@
         "description": "scipy.stats",
         "isExtraImport": true,
         "detail": "scipy.stats",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Dict",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Set",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Tuple",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -373,38 +437,6 @@
         "documentation": {}
     },
     {
-        "label": "List",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Dict",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Set",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
-        "label": "Tuple",
-        "importPath": "typing",
-        "description": "typing",
-        "isExtraImport": true,
-        "detail": "typing",
-        "documentation": {}
-    },
-    {
         "label": "core",
         "kind": 6,
         "isExtraImport": true,
@@ -438,6 +470,14 @@
         "importPath": "charv3",
         "description": "charv3",
         "detail": "charv3",
+        "documentation": {}
+    },
+    {
+        "label": "generate_usage",
+        "importPath": "script.usage_analitics",
+        "description": "script.usage_analitics",
+        "isExtraImport": true,
+        "detail": "script.usage_analitics",
         "documentation": {}
     },
     {
@@ -1075,6 +1115,159 @@
         "description": "src.script.htmlgenv2",
         "peekOfCode": "HEAD = \"[CHAR]\"\ntry:\n    import script.graphv2 as graph\nexcept ModuleNotFoundError:\n    import graphv2 as graph\ndef get_personalization(parameter, name):\n    file_path = os.path.join(\n        parameter[\"MAIN\"].split(parameter[\"CODE\"])[0], parameter[\"CODE\"], \"ART.jsonc\"\n    )\n    if not os.path.isfile(file_path):",
         "detail": "src.script.htmlgenv2",
+        "documentation": {}
+    },
+    {
+        "label": "Colors",
+        "kind": 6,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "class Colors:\n    \"\"\"Color palette for consistent visualization styling.\"\"\"\n    PRIMARY = \"#03234b\"  # Dark blue - main UI color\n    YELLOW = \"#ffd200\"  # Bright yellow - accent color\n    CYAN = \"#3cb4e6\"  # Light blue - secondary accent\n    MAGENTA = \"#e6007e\"  # Pink - tertiary accent\n    GREEN = \"#49b170\"  # Green - quaternary accent\n    WHITE = \"#ffffff\"  # White - background\n    GREY = \"#eeeff1\"  # Light grey - subtle background\n# Multi-chart color palette",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "parse_datetime",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def parse_datetime(dt_str: str) -> datetime:\n    \"\"\"\n    Parse custom datetime string format to datetime object.\n    Expected format: \"HH:MM:SS:mmm DD-MM-YYYY\"\n    Args:\n        dt_str: Datetime string in custom format\n    Returns:\n        datetime: Parsed datetime object\n    \"\"\"\n    parts = dt_str.strip().split(\" \")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "load_and_preprocess_data",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def load_and_preprocess_data(filepath: str) -> pl.DataFrame:\n    \"\"\"\n    Load PARQUET data and preprocess it for analysis.\n    This function:\n    1. Reads the PARQUET file\n    2. Parses datetime columns\n    3. Calculates execution duration in hours\n    4. Filters out zero-duration executions\n    5. Removes duplicate paths\n    Args:",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_product_usage_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_product_usage_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing execution count by product.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    product_counts = (\n        df.group_by(\"pruductcut\").agg(pl.len().alias(\"count\")).sort(\"pruductcut\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_flow_distribution_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_flow_distribution_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create pie chart showing distribution across flows.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    flow_counts = df.group_by(\"flow\").agg(pl.len().alias(\"count\")).sort(\"flow\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_type_usage_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_type_usage_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing execution count by type.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    type_counts = df.group_by(\"type\").agg(pl.len().alias(\"count\")).sort(\"type\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_product_flow_heatmap",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_product_flow_heatmap(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create heatmap showing execution count matrix of Product x Flow.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    products = sorted(df[\"pruductcut\"].unique().to_list())\n    flows = sorted(df[\"flow\"].unique().to_list())",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_duration_boxplot",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_duration_boxplot(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create box plot showing duration distribution by product.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    products = sorted(df[\"pruductcut\"].unique().to_list())\n    fig = go.Figure()",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_avg_duration_by_flow_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_avg_duration_by_flow_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing average execution duration by flow.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    flow_avg = (\n        df.group_by(\"flow\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_avg_duration_by_type_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_avg_duration_by_type_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create bar chart showing average execution duration by type.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    type_avg = (\n        df.group_by(\"type\")",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_timeline_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_timeline_chart(df: pl.DataFrame) -> str:\n    \"\"\"\n    Create scatter plot showing execution timeline over time.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    df_sorted = df.sort(\"start_date\")\n    fig = go.Figure(",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "create_top_ids_chart",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:\n    \"\"\"\n    Create bar chart showing top IDs by average execution duration.\n    Args:\n        df: Preprocessed dataframe\n        top_n: Number of top IDs to display\n    Returns:\n        str: JavaScript code to render the chart\n    \"\"\"\n    id_avg = (",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "calculate_statistics",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def calculate_statistics(df: pl.DataFrame) -> Dict[str, str]:\n    \"\"\"\n    Calculate summary statistics from the dataframe.\n    Args:\n        df: Preprocessed dataframe\n    Returns:\n        dict: Dictionary containing summary statistics\n    \"\"\"\n    return {\n        \"total_executions\": str(len(df)),",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "generate_html_report",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:\n    \"\"\"\n    Generate the complete HTML report with embedded charts.\n    Args:\n        stats: Dictionary of summary statistics\n        scripts: List of JavaScript code snippets for charts\n    Returns:\n        str: Complete HTML document as string\n    \"\"\"\n    html_template = \"\"\"",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "generate_usage",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def generate_usage(\n    input_file: str = \"history.paquet\",\n    output_file: str = r\"\\\\gpm-pe-data.gnb.st.com\\ENGI_MCD_STDF\\analysis_report.html\",\n    top_n_ids: int = 15,\n    verbose: bool = True,\n) -> Dict[str, str]:\n    \"\"\"\n    Generate a complete resource analysis HTML report from PARQUET data.\n    This is the main function to call - it handles everything from data loading\n    to report generation in a single call.",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "def main():\n    \"\"\"Main execution function for command-line usage.\"\"\"\n    generate_usage()\nif __name__ == \"__main__\":\n    main()",
+        "detail": "src.script.usage_analitics",
+        "documentation": {}
+    },
+    {
+        "label": "COLOR_PALETTE",
+        "kind": 5,
+        "importPath": "src.script.usage_analitics",
+        "description": "src.script.usage_analitics",
+        "peekOfCode": "COLOR_PALETTE = [\n    Colors.CYAN,\n    Colors.MAGENTA,\n    Colors.YELLOW,\n    Colors.GREEN,\n    Colors.PRIMARY,\n]\ndef parse_datetime(dt_str: str) -> datetime:\n    \"\"\"\n    Parse custom datetime string format to datetime object.",
+        "detail": "src.script.usage_analitics",
         "documentation": {}
     },
     {
