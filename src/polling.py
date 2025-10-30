@@ -1210,8 +1210,8 @@ class ProcessingWorker:
 
         # Prepare data for new row
         new_data = {
-            "path": str(file_path.parent.absolute()),  # cartella del file
-            "file": file_path.name,  # solo il nome del file
+            "path": str(file_path.parent.absolute()),  
+            "file": file_path.name, 
             "creation_time": creation_time_str,
             "end_time": current_time_str,
             "pruductcut": parameter["CUT"],
@@ -1248,8 +1248,6 @@ class ProcessingWorker:
 
         # Save to Parquet format
         updated_df.write_parquet(history_file)
-
-        generate_usage()
 
     def create_title(self, parameter: Dict, composite: str) -> str:
         """Create title based on process type and parameters."""
@@ -1771,6 +1769,9 @@ class STDFProcessingSystem:
                 total_processed = (
                     stdf_count + data_count + condition_count + shmoo_count + char_count
                 )
+                
+                generate_usage()
+                
                 if total_processed > 0:
                     print(
                         f"[SYSTEM] Cycle {cycle_count} completed: "
