@@ -13,7 +13,7 @@ Usage:
 
     # Custom input/output files
     generate_usage(
-        input_file="my_data.paquet",
+        input_file="my_data.parquet",
         output_file="my_report.html"
     )
 
@@ -124,7 +124,7 @@ def load_and_preprocess_data(filepath: str) -> pl.DataFrame:
     )
 
     # Filter and deduplicate
-    df = df.filter(pl.col("duration_hours") > 0)
+    # df = df.filter(pl.col("duration_hours") > 0)
     df = df.unique(subset=["path"])
 
     return df
@@ -141,13 +141,13 @@ def create_product_usage_chart(df: pl.DataFrame) -> str:
         str: JavaScript code to render the chart
     """
     product_counts = (
-        df.group_by("pruductcut").agg(pl.len().alias("count")).sort("pruductcut")
+        df.group_by("productcut").agg(pl.len().alias("count")).sort("productcut")
     )
 
     fig = go.Figure(
         data=[
             go.Bar(
-                x=product_counts["pruductcut"].to_list(),
+                x=product_counts["productcut"].to_list(),
                 y=product_counts["count"].to_list(),
                 marker_color=Colors.PRIMARY,
                 text=product_counts["count"].to_list(),
@@ -238,7 +238,7 @@ def create_product_flow_heatmap(df: pl.DataFrame) -> str:
     Returns:
         str: JavaScript code to render the chart
     """
-    products = sorted(df["pruductcut"].unique().to_list())
+    products = sorted(df["productcut"].unique().to_list())
     flows = sorted(df["flow"].unique().to_list())
 
     # Build matrix
@@ -247,7 +247,7 @@ def create_product_flow_heatmap(df: pl.DataFrame) -> str:
         row = []
         for product in products:
             count = df.filter(
-                (pl.col("pruductcut") == product) & (pl.col("flow") == flow)
+                (pl.col("productcut") == product) & (pl.col("flow") == flow)
             ).height
             row.append(count)
         matrix.append(row)
@@ -288,11 +288,11 @@ def create_duration_boxplot(df: pl.DataFrame) -> str:
     Returns:
         str: JavaScript code to render the chart
     """
-    products = sorted(df["pruductcut"].unique().to_list())
+    products = sorted(df["productcut"].unique().to_list())
 
     fig = go.Figure()
     for i, product in enumerate(products):
-        product_data = df.filter(pl.col("pruductcut") == product)
+        product_data = df.filter(pl.col("productcut") == product)
         fig.add_trace(
             go.Box(
                 y=product_data["duration_hours"].to_list(),
@@ -423,7 +423,7 @@ def create_timeline_chart(df: pl.DataFrame) -> str:
                 ),
                 line=dict(color=Colors.CYAN, width=1),
                 text=[
-                    f"{row['pruductcut']} - {row['flow']}<br>"
+                    f"{row['productcut']} - {row['flow']}<br>"
                     f"Duration: {row['duration_hours']:.2f}h"
                     for row in df_sorted.iter_rows(named=True)
                 ],
@@ -445,6 +445,7 @@ def create_timeline_chart(df: pl.DataFrame) -> str:
 def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:
     """
     Create bar chart showing top IDs by average execution duration.
+    Uses combined key: product|cut|flow_type
 
     Args:
         df: Preprocessed dataframe
@@ -453,8 +454,15 @@ def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:
     Returns:
         str: JavaScript code to render the chart
     """
+    # Create combined ID from product, cut, flow, type
+    df_with_id = df.with_columns(
+        pl.concat_str(
+            [pl.col("productcut"), pl.col("flow"), pl.col("type")], separator="|"
+        ).alias("combined_id")
+    )
+
     id_avg = (
-        df.group_by("file")
+        df_with_id.group_by("combined_id")
         .agg(
             [
                 pl.col("duration_hours").mean().alias("avg_duration"),
@@ -468,7 +476,7 @@ def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:
     fig = go.Figure(
         data=[
             go.Bar(
-                x=id_avg["file"].to_list(),
+                x=id_avg["combined_id"].to_list(),
                 y=id_avg["avg_duration"].to_list(),
                 marker=dict(
                     color=id_avg["avg_duration"].to_list(),
@@ -488,7 +496,7 @@ def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:
     )
 
     fig.update_layout(
-        xaxis_title="FILE",
+        xaxis_title="Product|Cut|Flow_Type",
         yaxis_title="Average Duration (hours)",
         height=500,
         plot_bgcolor="white",
@@ -510,7 +518,7 @@ def calculate_statistics(df: pl.DataFrame) -> Dict[str, str]:
     """
     return {
         "total_executions": str(len(df)),
-        "unique_products": str(df["pruductcut"].n_unique()),
+        "unique_products": str(df["productcut"].n_unique()),
         "unique_flows": str(df["flow"].n_unique()),
         "total_hours": f"{df['duration_hours'].sum():.1f}",
     }
@@ -704,7 +712,7 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
 
 
 def generate_usage(
-    input_file: str = "history.paquet",
+    input_file: str = "history.parquet",
     output_file: str = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF\analysis_report.html",
     top_n_ids: int = 15,
     verbose: bool = True,
@@ -716,7 +724,7 @@ def generate_usage(
     to report generation in a single call.
 
     Args:
-        input_file: Path to the input PARQUET file (default: "history.paquet")
+        input_file: Path to the input PARQUET file (default: "history.parquet")
         output_file: Path where the HTML report will be saved
                     (default: "resource_analysis_report.html")
         top_n_ids: Number of top IDs to display in the IDs chart (default: 15)
@@ -735,7 +743,7 @@ def generate_usage(
 
         >>> # Custom files and settings
         >>> stats = generate_usage(
-        ...     input_file="my_data.paquet",
+        ...     input_file="my_data.parquet",
         ...     output_file="my_report.html",
         ...     top_n_ids=20,
         ...     verbose=False

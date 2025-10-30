@@ -269,8 +269,8 @@ class ParameterExtractor:
             productcut=productcut,
             flow=flow,
             mytype="CONDITION",
-            lot_pkg="CONDITION",
-            waf_badge="CONDITION",
+            lot_pkg=productcut,
+            waf_badge=flow,
             corner="CONDITION",
             stdname=filename,
             path=path,
@@ -1210,11 +1210,11 @@ class ProcessingWorker:
 
         # Prepare data for new row
         new_data = {
-            "path": str(file_path.parent.absolute()),  
-            "file": file_path.name, 
+            "path": str(file_path.parent.absolute()),
+            "file": file_path.name,
             "creation_time": creation_time_str,
             "end_time": current_time_str,
-            "pruductcut": parameter["CUT"],
+            "productcut": parameter["CUT"],
             "flow": parameter["FLOW"],
             "ID": parameter["LOT"] + "_" + parameter["WAFER"],
             "type": parameter["TYPE"],
@@ -1769,9 +1769,9 @@ class STDFProcessingSystem:
                 total_processed = (
                     stdf_count + data_count + condition_count + shmoo_count + char_count
                 )
-                
+
                 generate_usage()
-                
+
                 if total_processed > 0:
                     print(
                         f"[SYSTEM] Cycle {cycle_count} completed: "
