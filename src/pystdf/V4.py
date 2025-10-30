@@ -1186,7 +1186,8 @@ class Pir(RecordType, metaclass=StdfRecordMeta):
   sub = 10
   fieldMap = (
     ('HEAD_NUM','U1'),
-    ('SITE_NUM','U1')
+    ('SITE_NUM','U1'),
+    ('PART_ID','U4')  # Auto-generated sequential part ID
   )
 
 class Prr(RecordType, metaclass=StdfRecordMeta):
@@ -1318,7 +1319,8 @@ class Prr(RecordType, metaclass=StdfRecordMeta):
     ('TEST_T','U4'),
     ('PART_ID','Cn'),
     ('PART_TXT','Cn'),
-    ('PART_FIX','Bn')
+    ('PART_FIX','Bn'),
+    ('PartID','U4')  # Auto-generated sequential part ID (different from PART_ID string field)
   )
 
 class Tsr(RecordType, metaclass=StdfRecordMeta):
@@ -1675,7 +1677,7 @@ class Ptr(RecordType, metaclass=StdfRecordMeta):
     ('C_HLMFMT','Cn'),
     ('LO_SPEC','R4'),
     ('HI_SPEC','R4'),
-    ('PART_ID','Cn')
+    ('PART_ID','U4')  # Auto-generated sequential part ID
   )
 
 class Mpr(RecordType, metaclass=StdfRecordMeta):
@@ -1946,7 +1948,7 @@ class Mpr(RecordType, metaclass=StdfRecordMeta):
     ('C_HLMFMT','Cn'),
     ('LO_SPEC','R4'),
     ('HI_SPEC','R4'),
-    ('PART_ID','Cn')
+    ('PART_ID','U4')  # Auto-generated sequential part ID
   )
 
 class Ftr(RecordType, metaclass=StdfRecordMeta):
@@ -2228,7 +2230,7 @@ class Ftr(RecordType, metaclass=StdfRecordMeta):
     ('RSLT_TXT','Cn'),
     ('PATG_NUM','U1'),
     ('SPIN_MAP','Dn'),
-    ('PART_ID','Cn')
+    ('PART_ID','U4')  # Auto-generated sequential part ID
   )
 
 class Bps(RecordType, metaclass=StdfRecordMeta):

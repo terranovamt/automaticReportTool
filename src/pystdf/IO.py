@@ -213,18 +213,21 @@ class Parser(DataSource):
         self._pir_count_in_part = 0
         self._expected_sites = None
 
-        # Cache per performance
+        # Cache for performance
         recordMap = self.recordMap
         recordParsers = self.recordParsers
         send = self.send
         inp = self.inp
 
-        # Pre-identifica i record types
+        # Pre-identify record types that need PART_ID
         pir_keys = set()
+        prr_keys = set()
         test_keys = set()
         for key, recType in recordMap.items():
             if isinstance(recType, V4.Pir):
                 pir_keys.add(key)
+            elif isinstance(recType, V4.Prr):
+                prr_keys.add(key)
             elif isinstance(recType, (V4.Ptr, V4.Mpr, V4.Ftr)):
                 test_keys.add(key)
 
@@ -234,7 +237,7 @@ class Parser(DataSource):
                 self.header(header)
                 key = (header.typ, header.sub)
 
-                # Usa try/except invece di 'in' per performance
+                # Use try/except instead of 'in' check for better performance
                 try:
                     recType = recordMap[key]
                     recParser = recordParsers[key]
@@ -243,7 +246,7 @@ class Parser(DataSource):
                     if key in pir_keys:
                         site_num = fields[1] if len(fields) > 1 else 0
 
-                        # Rilevamento nuovo pezzo
+                        # Detect new part
                         is_new_part = site_num in self._seen_sites_in_part or (
                             self._expected_sites
                             and len(self._seen_sites_in_part) >= self._expected_sites
@@ -271,7 +274,16 @@ class Parser(DataSource):
 
                         fields.append(self._part_id_counter)
 
+                    elif key in prr_keys:
+                        # Add PART_ID to PRR records
+                        site_num = fields[2] if len(fields) > 2 else 0
+                        part_id = self._site_to_part_id.get(
+                            site_num, self._part_id_counter
+                        )
+                        fields.append(part_id)
+
                     elif key in test_keys:
+                        # Add PART_ID to PTR, FTR, MPR records
                         site_num = fields[1] if len(fields) > 1 else 0
                         part_id = self._site_to_part_id.get(
                             site_num, self._part_id_counter

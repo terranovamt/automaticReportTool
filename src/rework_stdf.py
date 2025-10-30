@@ -51,7 +51,7 @@ def rework_stdf(parameter, df_stdf):
     xwafer = get_personalization(parameter, "xwafer")
     ywafer = get_personalization(parameter, "ywafer")
 
-    # Conversione DataFrame Polars
+    # Convert Polars DataFrames
     mir = df_stdf["mir"].clone()
     prr = df_stdf["prr"].clone()
     pcr = df_stdf["pcr"].clone()
@@ -64,17 +64,24 @@ def rework_stdf(parameter, df_stdf):
         else [parameter["TEST_NUM"]]
     )
 
-    # Filtraggio PTR e FTR
-    tmpptr = df_stdf["ptr"].filter(pl.col("TEST_NUM").is_in(test_nums))
-    tmpftr = df_stdf["ftr"].filter(pl.col("TEST_NUM").is_in(test_nums))
+    # Filter PTR and FTR (check if dataframes exist and are not empty)
+    if not df_stdf["ptr"].is_empty():
+        tmpptr = df_stdf["ptr"].filter(pl.col("TEST_NUM").is_in(test_nums))
+    else:
+        tmpptr = pl.DataFrame()
 
-    # Calcolo temperatura
+    if not df_stdf["ftr"].is_empty():
+        tmpftr = df_stdf["ftr"].filter(pl.col("TEST_NUM").is_in(test_nums))
+    else:
+        tmpftr = pl.DataFrame()
+
+    # Calculate temperature
     temp_val = mir.select("TST_TEMP").to_series()[0]
 
-    # Calcola la temperatura arrotondata o usa 30 se null
+    # Calculate rounded temperature or use 30 if null
     temperature = 30 if temp_val is None else int(round(float(temp_val) / 5.0) * 5.0)
 
-    # Aggiunta colonne comuni
+    # Add common columns
     tmpptr = tmpptr.with_columns(
         [
             pl.lit(temperature).alias("TEMPERATURE"),
@@ -91,7 +98,7 @@ def rework_stdf(parameter, df_stdf):
         ]
     )
 
-    # Calcolo statistiche popolazione
+    # Calculate population statistics
     gross = (
         pcr.filter(pl.col("HEAD_NUM").cast(pl.Int32) == 255)
         .select("PART_CNT")
@@ -116,7 +123,7 @@ def rework_stdf(parameter, df_stdf):
         }
     )
 
-    # Calcolo coordinate X/Y
+    # Calculate X/Y coordinates
     if "EWS" not in str(parameter["FLOW"]).upper():
         try:
             # 1. Filter XY test data and immediately cast to enforce types
@@ -284,7 +291,7 @@ def rework_stdf(parameter, df_stdf):
             str(lot_id) if lot_id is not None else str(parameter["LOT"])
         )
 
-    # Rimozione retest
+    # Remove retests
     if str(parameter["TYPE"]).upper() != "LOOP":
         prr = prr.unique(subset=["X_COORD", "Y_COORD"], keep="last")
         prr = prr.with_columns(pl.col("PartID").cast(pl.Utf8))
@@ -301,21 +308,22 @@ def rework_stdf(parameter, df_stdf):
                 prr.select(["PartID", "X_COORD", "Y_COORD"]), on="PartID", how="inner"
             )
 
-    # Elaborazione PTR
+    # Process PTR
     if not tmpptr.height == 0:
-        # Rework RESULT SCALE
+        # Process RESULT SCALE
         uty.write_log("Result Scale", FILENAME)
 
-        # Conversione PARM_FLG e calcolo RES_SCAL
-        tmpptr = tmpptr.with_columns(
-            pl.when(pl.col("PARM_FLG").is_not_null())
-            .then(
-                pl.col("PARM_FLG").cast(pl.String).str.to_integer(base=2, strict=False)
+        # Convert PARM_FLG and calculate RES_SCAL
+        if tmpptr.height > 0:
+            tmpptr = tmpptr.with_columns(
+                pl.when(pl.col("PARM_FLG").is_not_null())
+                .then(
+                    pl.col("PARM_FLG").cast(pl.String).str.to_integer(base=2, strict=False)
+                )
+                .cast(pl.UInt16)
+                .alias("PARM_FLG")
             )
-            .cast(pl.UInt16)
-            .alias("PARM_FLG")
-        )
-        if "TTIME" not in composite:
+        if tmpptr.height > 0 and "TTIME" not in composite:
             res_scal_df = (
                 tmpptr.with_columns(RES_SCAL_int=pl.col("RES_SCAL").cast(pl.Int64))
                 .filter(
@@ -340,7 +348,7 @@ def rework_stdf(parameter, df_stdf):
                 )
             )
 
-            # Unione con il DataFrame originale (rimane invariata)
+            # Join with original DataFrame
             tmpptr = (
                 tmpptr.join(res_scal_df, on="TEST_TXT", how="left")
                 .with_columns(
@@ -351,7 +359,7 @@ def rework_stdf(parameter, df_stdf):
                 .drop("NEW_RES_SCAL")
             )
 
-            # Aggiornamento unità di misura
+            # Update units of measurement
             unit_mapping = {
                 3: "m",
                 6: "u",
@@ -372,7 +380,7 @@ def rework_stdf(parameter, df_stdf):
                     .alias("UNITS")
                 )
 
-            # Applicazione scaling
+            # Apply scaling
             tmpptr = tmpptr.with_columns(
                 [
                     (
@@ -412,7 +420,7 @@ def rework_stdf(parameter, df_stdf):
 
             tmpptr = tmpptr.filter(~pl.col("TEST_TXT").str.contains(vdd_regex))
 
-            # Regex per test standard
+            # Regex for standard tests
             std_regex = f"(?P<TestName>.*)_(?P<COM>{composite})_(?P<TARGET>.*)"
             test = (
                 tmpptr.filter(pl.col("TEST_TXT").str.contains(std_regex))
@@ -426,7 +434,7 @@ def rework_stdf(parameter, df_stdf):
             split_series = test.get_column("Split")
             test = test.drop("Split")
         else:
-            # Regex per test TTIME
+            # Regex for TTIME tests
             ttime_regex = f"(?P<COM>log_ttime)__(?P<TestName>.*)::(?P<TARGET>.*)"
             test = (
                 tmpptr.filter(pl.col("TEST_TXT").str.contains(ttime_regex))
@@ -442,7 +450,7 @@ def rework_stdf(parameter, df_stdf):
 
         uty.write_log("PTR Split done", FILENAME)
 
-        # Combinazione e pulizia dati
+        # Combine and clean data
         if test.height == 0:
             test = pl.DataFrame(schema=testvdd.schema)
         elif testvdd.height == 0:
@@ -451,7 +459,7 @@ def rework_stdf(parameter, df_stdf):
         clearptr = pl.concat([test, testvdd], how="align")
 
         if not clearptr.height == 0:
-            # Estrazione tipo test
+            # Extract test type
             clearptr = clearptr.with_columns(
                 pl.when(pl.col("TARGET").str.contains("Trim"))
                 .then(pl.lit("TRIM"))
@@ -466,7 +474,7 @@ def rework_stdf(parameter, df_stdf):
                     + pl.col("TARGET").str.split(":").list.get(-1)
                 ).alias("TestName")
             )
-            # Rinomina colonne
+            # Rename columns
             clearptr = clearptr.rename(
                 {
                     "RESULT": "Value",
@@ -492,9 +500,9 @@ def rework_stdf(parameter, df_stdf):
 
     uty.write_log("END PTR", FILENAME)
 
-    # Elaborazione FTR
+    # Process FTR
     if not tmpftr.height == 0:
-        # Regex per test VDD
+        # Regex for VDD tests
         SPLIT = "vio|vbt|v11|v12|v33|FRC|frc"
         vdd_regex = rf"(?P<TestName>.+)_(?P<SplitName>{SPLIT})_(?P<Split>[^_]+)_(?P<COM>{composite})_(?P<tmpfunc>[^:]+)(?::(?P<TARGET>.+))?"
         testvdd = (
@@ -508,7 +516,7 @@ def rework_stdf(parameter, df_stdf):
 
         tmpftr = tmpftr.filter(~pl.col("TEST_TXT").str.contains(vdd_regex))
 
-        # Regex per test standard
+        # Regex for standard tests
         std_regex = f"(?P<TestName>.*)_(?P<COM>{composite})_(?P<TARGET>.*)"
         test = (
             tmpftr.filter(pl.col("TEST_TXT").str.contains(std_regex))
@@ -522,11 +530,11 @@ def rework_stdf(parameter, df_stdf):
         split_series = test.get_column("Split")
         test = test.drop("Split")
 
-        # Combinazione e pulizia dati
+        # Combine and clean data
         clearftr = pl.concat([test, testvdd], how="align")
 
         if not clearftr.height == 0:
-            # Conversione flag test
+            # Convert test flag
             clearftr = clearftr.with_columns(
                 pl.when(pl.col("TEST_FLG") == "00000000")
                 .then(1)
@@ -537,7 +545,7 @@ def rework_stdf(parameter, df_stdf):
                 .alias("RESULT")
             ).drop("TEST_FLG")
 
-            # Rinomina colonne
+            # Rename columns
             clearftr = clearftr.rename(
                 {
                     "TEMPERATURE": "°C",
@@ -550,7 +558,7 @@ def rework_stdf(parameter, df_stdf):
 
     uty.write_log("Write csv for jupiter", FILENAME)
 
-    # Combinazione risultati e salvataggio
+    # Combine results and save
     ptr = pl.concat(ptr_dict.values()) if ptr_dict else pl.DataFrame()
     ftr = pl.concat(ftr_dict.values()) if ftr_dict else pl.DataFrame()
 

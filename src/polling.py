@@ -1492,8 +1492,8 @@ class STDFWorker(ProcessingWorker):
         base_path = os.path.dirname(path)
         data_folder = os.path.join(base_path, "parquet")
         os.makedirs(data_folder, exist_ok=True)
-        data_path = os.path.join(data_folder, os.path.basename(path))
-        stdf2data.stdf2data_converter(path, data_path)
+        # Pass only the output directory, not including the filename
+        stdf2data.stdf2data_converter(path, data_folder)
 
 
 class ShmooWorker(ProcessingWorker):

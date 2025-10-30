@@ -12,7 +12,7 @@ HEAD = "[CHAR]"
 # Configurazioni DTYPE specifiche per ogni tipo di file STDF
 DTYPE_CONFIGS = {
     "ptr": {
-        "PartID": pl.UInt16,
+        "PART_ID": pl.UInt32,
         "TEST_NUM": pl.UInt32,
         "PARM_FLG": pl.UInt32,
         "RESULT": pl.Float64,
@@ -30,7 +30,7 @@ DTYPE_CONFIGS = {
         "HARD_BIN": pl.UInt16,
     },
     "ftr": {
-        "PartID": pl.UInt16,
+        "PART_ID": pl.UInt32,
         "TEST_NUM": pl.UInt32,
         "TEST_FLG": pl.Utf8,
         "TEST_TXT": pl.Utf8,
@@ -77,7 +77,7 @@ DTYPE_CONFIGS = {
         "SUPR_NAM": pl.Utf8,
     },
     "prr": {
-        "PartID": pl.UInt16,
+        "PartID": pl.UInt32,  # Sequential part ID (note: different from PART_ID string field in STDF)
         "HEAD_NUM": pl.UInt8,
         "SITE_NUM": pl.UInt8,
         "PART_FLG": pl.UInt8,
@@ -368,14 +368,14 @@ def process_coordinate_recalculation(
     # Extract coordinate test results efficiently
     coord_data = ptr_df.filter(
         pl.col("TEST_NUM").is_in(test_numbers)
-    ).select(["PartID", "TEST_NUM", "RESULT", "CORNER", "TEMPERATURE"])
+    ).select(["PART_ID", "TEST_NUM", "RESULT", "CORNER", "TEMPERATURE"])
 
     if coord_data.is_empty():
         return prr_df
 
     # Pivot to get X and Y coordinates
     coord_pivot = coord_data.pivot(
-        values="RESULT", index=["PartID", "CORNER", "TEMPERATURE"], columns="TEST_NUM"
+        values="RESULT", index=["PART_ID", "CORNER", "TEMPERATURE"], columns="TEST_NUM"
     )
 
     # Calculate combined coordinates
@@ -419,10 +419,10 @@ def process_coordinate_recalculation(
             ]
         )
 
-        # Join back to PRR
+        # Join back to PRR (rename PART_ID to PartID for PRR join)
         coord_update = coord_pivot.select(
-            ["PartID", "CORNER", "TEMPERATURE", "X_COORD_NEW", "Y_COORD_NEW"]
-        )
+            ["PART_ID", "CORNER", "TEMPERATURE", "X_COORD_NEW", "Y_COORD_NEW"]
+        ).rename({"PART_ID": "PartID"})
         prr_df = prr_df.join(
             coord_update, on=["PartID", "CORNER", "TEMPERATURE"], how="left"
         )
@@ -1014,9 +1014,9 @@ def rework_stdf_multiple(parameter: dict, corner_folders: list) -> tuple:
     if not consolidated_data["ftr"].is_empty():
         ftr_coords = consolidated_data["prr"].select(
             ["PartID", "X_COORD", "Y_COORD", "CORNER", "TEMPERATURE"]
-        )
+        ).rename({"PartID": "PART_ID"})  # FTR uses PART_ID, PRR uses PartID
         consolidated_data["ftr"] = consolidated_data["ftr"].join(
-            ftr_coords, on=["PartID", "CORNER", "TEMPERATURE"], how="inner"
+            ftr_coords, on=["PART_ID", "CORNER", "TEMPERATURE"], how="inner"
         )
 
         # Remove FTR retests
