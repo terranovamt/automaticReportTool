@@ -1,3 +1,28 @@
+"""
+ART.stdf - Core Report Generation Module
+
+This module contains the main report generation logic for all report types.
+It processes STDF data stored in Parquet format and generates interactive
+HTML reports with Plotly visualizations.
+
+Report Types Supported:
+    - Single Composite Reports: Parametric and functional test analysis
+    - Test Time Reports (TTIME): Test duration analysis and optimization
+    - Yield Reports: Hardware/Software bin analysis
+    - Condition Reports: Test condition analysis from anaflow files
+
+Key Functions:
+    - process_composite(): Main entry point for composite processing
+    - generate_report(): Core report generation with HTML and charts
+    - process_single_composite(): Individual composite analysis
+    - process_ttime(): Test time analysis
+    - process_yield(): Yield analysis
+    - process_condition(): Condition report generation
+
+Author: Matteo Terranova (matteo.terranova@st.com)
+Organization: STMicroelectronics - MDRF GPAM
+"""
+
 import os
 import json
 import warnings
@@ -8,8 +33,10 @@ import jupiter.utility as uty
 from rework_stdf import rework_stdf
 from condition import condition_rework
 
+# Suppress runtime warnings from data processing
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
+# Log file for core processing operations
 FILENAME = os.path.abspath("src/run.log")
 
 
@@ -62,13 +89,17 @@ def process_condition(parameter, stdf_folder, df_stdf):
 
 def process_yield(parameter, tsr, composite, csv_file, df_stdf):
     """
-    Process a FAKE composite for yeald analysis and execute the report generation.
+    Process a FAKE composite for yield analysis and execute the report generation.
+
+    Analyzes hardware and software bin distributions to determine production yield.
+    Skips processing for X30 (stability) test types.
 
     Args:
-        parameter (dict): Parameters for processing.
-        tsr (DataFrame): DataFrame containing test results.
-        composite (str): Composite name to process.
-        csv_file (str): MAIN file name to process.
+        parameter (dict): Processing parameters including type, flow, product info
+        tsr (DataFrame): Polars DataFrame containing test sequence results
+        composite (str): Composite name (should be "YIELD")
+        csv_file (str): Path to the main data file
+        df_stdf (dict): Dictionary of DataFrames with STDF records
     """
     if parameter["TYPE"].upper() == "X30":
         return
