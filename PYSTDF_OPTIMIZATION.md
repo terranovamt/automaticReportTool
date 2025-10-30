@@ -123,22 +123,58 @@ def open_stdf_file(fname):
 
 ## 🎯 Come Usare le Ottimizzazioni
 
-### Metodo 1: **Uso Automatico (RACCOMANDATO)**
+### Metodo 1: **Salvataggio Diretto a Parquet (RACCOMANDATO ⚡)**
 
-Il file `stdf2data.py` è già aggiornato per usare la versione ottimizzata:
+**Questa è la versione PIÙ VELOCE e OTTIMIZZATA!**
+
+Salva ogni tabella STDF come file Parquet separato con formato:
+`nomefile.std.tabellanome.parquet` (tutto minuscolo)
+
+```python
+from pystdf.Importer import STDF2ParquetFiles
+
+# Uso base - SUPER VELOCE!
+created_files = STDF2ParquetFiles(
+    path_fin='myfile.std.gz',      # File STDF input
+    path_fout='output/directory'   # Directory output
+)
+
+# Risultato:
+# output/directory/myfile.std.ptr.parquet
+# output/directory/myfile.std.prr.parquet
+# output/directory/myfile.std.tsr.parquet
+# ... etc.
+```
+
+**Con opzioni personalizzate:**
+```python
+created_files = STDF2ParquetFiles(
+    path_fin='bigfile.std.gz',
+    path_fout='output',
+    use_polars=True,        # Usa Polars (raccomandato)
+    compression='lz4'       # lz4, snappy, gzip, zstd
+)
+```
+
+### Metodo 2: **Uso Automatico in stdf2data_converter**
+
+Il file `stdf2data.py` è già aggiornato per usare `STDF2ParquetFiles`:
 
 ```python
 # Nessun cambio necessario - già ottimizzato!
 from stdf2data import stdf2data_converter
 stdf2data_converter(input_path, output_path)
+# Salva automaticamente file Parquet ottimizzati!
 ```
 
-### Metodo 2: **Uso Diretto nelle Tue Applicazioni**
+### Metodo 3: **Ottieni DataFrame in Memoria**
+
+Se hai bisogno dei DataFrame in memoria invece che su file:
 
 ```python
 from pystdf.Importer import STDF2DataFrameOptimized
 
-# Versione più veloce - USA QUESTA!
+# Versione ottimizzata che ritorna dict di DataFrame
 df_dict = STDF2DataFrameOptimized('file.std.gz')
 
 # Con Polars (raccomandato per max performance)
@@ -148,7 +184,7 @@ df_dict = STDF2DataFrameOptimized('file.std.gz', use_polars=True)
 df_dict = STDF2DataFrameOptimized('file.std.gz', use_polars=False)
 ```
 
-### Metodo 3: **Controllo Completo**
+### Metodo 4: **Controllo Completo**
 
 ```python
 from pystdf.Importer import STDF2DataFrame
@@ -264,8 +300,49 @@ df_dict = STDF2DataFrameOptimized('file.std', use_polars=False)
 ✅ **Polars invece di Pandas** (5-10x più veloce)
 ✅ **Gestione automatica compressione** per file .gz
 ✅ **Feedback progressivo** per monitorare avanzamento
+✅ **STDF2ParquetFiles()** - Salvataggio diretto a Parquet ottimizzato
 
 **Speedup totale atteso: 4-6x** a seconda delle dimensioni del file!
+
+---
+
+## 🆕 Novità: Salvataggio Diretto a Parquet
+
+### Nuova funzione `STDF2ParquetFiles()`
+
+**La funzione più veloce e ottimizzata disponibile!**
+
+```python
+from pystdf.Importer import STDF2ParquetFiles
+
+created_files = STDF2ParquetFiles(
+    path_fin='myfile.std.gz',
+    path_fout='output/dir'
+)
+```
+
+**Vantaggi:**
+- 🚀 **Zero copie in memoria** - salva direttamente a Parquet
+- 💾 **Uso memoria minimo** - streaming diretto a disco
+- 📦 **Formato ottimizzato** - file Parquet compressi con LZ4
+- 📁 **Naming consistente** - `nomefile.std.tabellanome.parquet` (minuscolo)
+- ⚡ **Massime performance** - usa Polars di default
+
+**Formato file output:**
+```
+input:  myfile.std.gz
+output: myfile.std.ptr.parquet    <- Parametric Test Records
+        myfile.std.prr.parquet    <- Part Result Records
+        myfile.std.tsr.parquet    <- Test Synopsis Records
+        myfile.std.mir.parquet    <- Master Information Record
+        ... etc.
+```
+
+**Opzioni compressione disponibili:**
+- `lz4` (default) - Velocissimo, buona compressione
+- `snappy` - Molto veloce, compressione media
+- `gzip` - Lento ma alta compressione
+- `zstd` - Ottima compressione, velocità media
 
 ---
 

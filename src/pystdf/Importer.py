@@ -208,3 +208,88 @@ def STDF2DataFrameOptimized(fname, use_polars=True):
         return storage.to_dataframes_polars()
     else:
         return storage.to_dataframes_pandas()
+
+def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
+    """Salva ogni tabella STDF come file Parquet separato
+
+    Questa è la versione OTTIMIZZATA che salva direttamente a Parquet.
+
+    Args:
+        path_fin: Path al file STDF di input (gestisce .gz automaticamente)
+        path_fout: Directory di output dove salvare i file Parquet
+        use_polars: Usa Polars per performance massime (default: True)
+        compression: Tipo di compressione ('lz4', 'snappy', 'gzip', 'zstd'). Default: 'lz4'
+
+    Returns:
+        List di file Parquet creati
+
+    Example:
+        >>> created_files = STDF2ParquetFiles('myfile.std.gz', '/output/dir/')
+        >>> # Crea: myfile.std.ptr.parquet, myfile.std.prr.parquet, etc.
+    """
+    import os
+    from pathlib import Path
+
+    # Crea directory di output se non esiste
+    os.makedirs(path_fout, exist_ok=True)
+
+    # Estrai il nome base del file (senza estensioni .gz, .std, etc.)
+    base_name = os.path.basename(path_fin)
+    # Rimuovi .gz se presente
+    if base_name.lower().endswith('.gz'):
+        base_name = base_name[:-3]
+    # Mantieni il nome fino a .std/.stdf
+    if '.std' in base_name.lower():
+        # Trova l'indice di .std o .stdf
+        for ext in ['.stdf', '.STDF', '.std', '.STD']:
+            if ext in base_name:
+                idx = base_name.index(ext)
+                base_name = base_name[:idx + len(ext)]
+                break
+
+    print(f"[STDF2Parquet] Parsing {os.path.basename(path_fin)}...")
+
+    # Parsing ottimizzato
+    with open_stdf_file(path_fin) as fin:
+        p = Parser(inp=fin)
+        storage = OptimizedMemoryWriter()
+        p.addSink(storage)
+        p.parse()
+
+    print(f"\n[STDF2Parquet] Saving {len(storage.data_dict)} tables to Parquet...")
+
+    created_files = []
+
+    for rec_type, fields_dict in storage.data_dict.items():
+        # Nome file: nomefile.std.tabellanome.parquet (tutto minuscolo)
+        table_name = rec_type.lower()
+        output_filename = f"{base_name}.{table_name}.parquet"
+        output_path = os.path.join(path_fout, output_filename)
+
+        try:
+            if use_polars:
+                # Usa Polars - molto più veloce
+                df = pl.DataFrame(fields_dict)
+                df.write_parquet(
+                    output_path,
+                    compression=compression,
+                    statistics=False  # Più veloce senza statistiche
+                )
+            else:
+                # Usa Pandas per compatibilità
+                df = pd.DataFrame(fields_dict)
+                df.to_parquet(
+                    output_path,
+                    compression=compression,
+                    index=False
+                )
+
+            created_files.append(output_path)
+            print(f"   ✅ Saved: {output_filename} ({len(df):,} records)", end='\r', flush=True)
+
+        except Exception as e:
+            print(f"\n   ⚠️  Warning: Could not save {table_name}: {e}")
+
+    print(f"\n[STDF2Parquet] ✅ Completed! Created {len(created_files)} Parquet files")
+
+    return created_files
