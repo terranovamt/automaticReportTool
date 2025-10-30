@@ -5,7 +5,7 @@
 *.code-workspace
 Report/**
 STDF/**
-**test**
+**test_**
 **/post.json
 **/cfg.json
 tmp/**

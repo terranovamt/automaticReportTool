@@ -5,8 +5,13 @@ import gzip
 import py7zr
 import zipfile
 import tarfile
-import jupiter.utility as uty
 import polars as pl
+from pathlib import Path
+
+
+import jupiter.utility as uty
+from pystdf.Importer import STDF2DataFrame
+
 
 debug = False
 FILENAME = os.path.abspath("src/run.log")
@@ -123,6 +128,56 @@ def remove_directory_recursive(directory):
                 pass
 
 
+def df_to_parquet(df, path_fin, path_fout):
+    """
+    Save each column of a DataFrame to a separate Parquet file.
+
+    Parameters:
+    -----------
+    df : pd.DataFrame
+        Main DataFrame containing columns to save
+    path_fin : str
+        Input file path (used to extract base filename)
+    path_fout : str
+        Output directory where Parquet files will be saved
+
+    Returns:
+    --------
+    list : List of created file paths
+    """
+    # Extract filename without extension
+    file_name = Path(path_fin).stem
+
+    # Create output directory if it doesn't exist
+    Path(path_fout).mkdir(parents=True, exist_ok=True)
+
+    created_files = []
+
+    # Iterate through each column
+    for column in df.columns:
+        # Create filename: filename.columnname.parquet
+        column_lower = str(column).lower()
+        output_name = f"{file_name}.{column_lower}.parquet"
+        full_path = Path(path_fout) / output_name
+
+        # Extract column data
+        # If column contains DataFrames, save directly
+        # Otherwise create DataFrame from column
+        if isinstance(df[column].iloc[0], pd.DataFrame):
+            # If column contains DataFrames, save the first one
+            df_to_save = df[column].iloc[0]
+        else:
+            # Otherwise create DataFrame from column
+            df_to_save = pd.DataFrame(df[column])
+
+        # Save as Parquet
+        df_to_save.to_parquet(full_path, index=False)
+        created_files.append(str(full_path))
+        print(f"Saved: {full_path}")
+
+    return created_files
+
+
 def stdf2data_converter(path_fin, path_fout, option=""):
     temp_dir = None
 
@@ -210,14 +265,25 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         path_fin = compressed_path
 
     try:
-        hex_file = os.path.abspath("src/STDF2CSV.exe")
-        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
-        debug and print(cmd)
-        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
-        debug and print(cmd)
-        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
+        # hex_file = os.path.abspath("src/STDF2CSV.exe")
+        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
+        # debug and print(cmd)
+        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
+        # debug and print(cmd)
+        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
+        # hex_file = os.path.abspath("src/STDF2CSV.exe")
+        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
+        # debug and print(cmd)
+        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
+        # debug and print(cmd)
+        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
+        
+        df_stdf = STDF2DataFrame(path_fin)
+        df_to_parquet(df_stdf,path_fin,path_fout)
     finally:
         # Pulisce la cartella temporanea
         if temp_dir and os.path.exists(temp_dir):
