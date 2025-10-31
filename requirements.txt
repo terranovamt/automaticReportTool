@@ -1,28 +1,101 @@
-# ART.stdf - Python Dependencies
-# Install with: pip install -r requirements.txt
+# ============================================================================
+# ART.stdf - Automatic Report Tool
+# Python Dependencies
+# ============================================================================
+# Install all dependencies: pip install -r requirements.txt
+# Install for development: pip install -r requirements.txt -r requirements-dev.txt
+# ============================================================================
 
+# ----------------------------------------------------------------------------
 # Core Data Processing
-polars>=0.19.0              # Fast DataFrame library for data processing
-pandas>=1.5.0               # Additional DataFrame support
-numpy>=1.23.0               # Numerical computing
+# ----------------------------------------------------------------------------
+polars>=0.19.0,<1.0.0          # Ultra-fast DataFrame library (55-75% faster than pandas)
+numpy>=1.24.0,<2.0.0           # Numerical computing and array operations
+pandas>=1.5.0,<3.0.0           # Additional DataFrame support for legacy compatibility
 
-# Visualization
-plotly>=5.17.0              # Interactive plotting library
-itables>=1.5.0              # Interactive HTML tables
+# ----------------------------------------------------------------------------
+# Visualization and Reporting
+# ----------------------------------------------------------------------------
+plotly>=5.17.0,<6.0.0          # Interactive charts and graphs
+itables>=1.5.0,<2.0.0          # Interactive HTML tables in reports
 
-# File Processing
-py7zr>=0.20.0               # 7-zip archive support
+# ----------------------------------------------------------------------------
+# File Compression and Archiving
+# ----------------------------------------------------------------------------
+py7zr>=0.20.0,<1.0.0           # 7-zip archive support for compressed STDF files
 
-# HTML/Web Processing
-beautifulsoup4>=4.12.0      # HTML parsing for condition files
-lxml>=4.9.0                 # XML/HTML parser (used by BeautifulSoup)
+# ----------------------------------------------------------------------------
+# Statistical Analysis
+# ----------------------------------------------------------------------------
+scipy>=1.11.0,<2.0.0           # Statistical functions (kurtosis, distributions)
 
-# Scientific Computing
-scipy>=1.11.0               # Statistical functions (kurtosis, etc.)
+# ----------------------------------------------------------------------------
+# Configuration and Data Formats
+# ----------------------------------------------------------------------------
+json5>=0.9.0,<1.0.0            # JSON with comments support (for ART.jsonc files)
 
-# Configuration Files
-json5>=0.9.0                # JSON with comments support
+# ============================================================================
+# Optional Dependencies
+# ============================================================================
+# Uncomment these if you need additional functionality:
 
-# Optional: Excel export support
-# openpyxl>=3.1.0           # Excel file support (uncomment if needed)
-# xlsxwriter>=3.1.0         # Alternative Excel writer (uncomment if needed)
+# Excel Export Support
+# openpyxl>=3.1.0              # Read/write Excel files (.xlsx)
+# xlsxwriter>=3.1.0            # Alternative Excel writer with better formatting
+
+# Advanced Data Validation
+# pydantic>=2.0.0              # Data validation using Python type hints
+
+# Database Support
+# sqlalchemy>=2.0.0            # SQL database toolkit
+# psycopg2-binary>=2.9.0       # PostgreSQL adapter
+
+# Web Dashboard (Future Enhancement)
+# flask>=3.0.0                 # Lightweight web framework
+# dash>=2.14.0                 # Interactive web applications
+
+# ============================================================================
+# System Requirements
+# ============================================================================
+# Python: 3.8 or higher
+# OS: Windows, Linux, macOS
+# Memory: 4GB minimum, 8GB recommended
+# Storage: 100GB+ for STDF and Parquet files
+# CPU: 4+ cores recommended for parallel processing
+# ============================================================================
+
+# ============================================================================
+# Installation Notes
+# ============================================================================
+# 1. Create virtual environment (recommended):
+#    python -m venv venv
+#    source venv/bin/activate  # On Windows: venv\Scripts\activate
+#
+# 2. Install dependencies:
+#    pip install -r requirements.txt
+#
+# 3. Verify installation:
+#    python -c "import polars, plotly, numpy; print('All dependencies installed!')"
+#
+# 4. For production deployment:
+#    pip install -r requirements.txt --no-cache-dir
+# ============================================================================
+
+# ============================================================================
+# Troubleshooting
+# ============================================================================
+# If you encounter issues:
+#
+# 1. Upgrade pip:
+#    python -m pip install --upgrade pip
+#
+# 2. Install specific versions:
+#    pip install polars==0.19.12
+#
+# 3. Clear pip cache:
+#    pip cache purge
+#
+# 4. Install from scratch:
+#    pip uninstall -r requirements.txt -y
+#    pip install -r requirements.txt
+# ============================================================================
