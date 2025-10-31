@@ -62,23 +62,46 @@ python main.py "path/to/your/STDF/directory"
 
 ```
 automaticReportTool/
-├── main.py                 # Entry point
-├── src/
-│   ├── polling.py         # Main processing system
-│   ├── core.py            # Report generation core
-│   ├── stdf2data.py       # STDF conversion utilities
-│   ├── charv3.py          # Characterization reports
-│   ├── shmoo.py           # Shmoo plot processing
-│   ├── condition.py       # Condition report logic
-│   ├── pystdf/            # STDF parsing library
-│   ├── jupiter/           # Customization utilities
-│   ├── script/            # HTML generation and analytics
-│   └── web/               # Web templates
-├── doc/                   # Documentation
-│   ├── ART.html          # User guide (current)
-│   ├── USER_GUIDE.html   # Enhanced user guide (NEW)
-│   └── DEVELOPER_GUIDE.html  # Developer documentation (NEW)
-└── README.md              # This file
+├── main.py                      # Entry point
+├── config/                      # Configuration files
+├── docs/                        # Comprehensive documentation
+│   ├── API.md                  # API reference
+│   ├── ARCHITECTURE.md         # System architecture
+│   ├── CONFIGURATION.md        # Configuration guide
+│   ├── DEVELOPER_GUIDE.md      # Developer documentation
+│   ├── MODULAR_ARCHITECTURE_GUIDE.md  # Architecture patterns
+│   └── PERFORMANCE_OPTIMIZATIONS.md   # Performance guide
+├── src/                         # Source code
+│   ├── system/                  # Main system orchestration
+│   │   └── polling.py          # Directory polling and workflow
+│   ├── conversion/              # STDF conversion
+│   │   └── stdf2data.py        # STDF → Parquet converter
+│   ├── analysis/                # Specialized analysis
+│   │   ├── char_processor.py   # Characterization analysis
+│   │   └── shmoo_visualizer.py # Shmoo plot generation
+│   ├── charts/                  # Chart generation
+│   │   └── chart_generator.py  # Plotly chart factory
+│   ├── reports/                 # Report generation
+│   │   ├── html_template.py    # HTML templates
+│   │   └── report_generators.py # Modular report generators
+│   ├── processors/              # Data processors
+│   │   ├── stdf_processor.py   # STDF data processing
+│   │   └── report_processor.py # Report orchestration
+│   ├── services/                # Business logic
+│   │   ├── file_service.py     # File operations
+│   │   └── processing_service.py # Processing orchestration
+│   ├── utils/                   # Utilities
+│   │   ├── validation.py       # Data validation
+│   │   ├── parallel.py         # Parallel processing
+│   │   └── file_utils.py       # File utilities
+│   ├── core/                    # Core models
+│   │   ├── models.py           # Data models
+│   │   ├── constants.py        # System constants
+│   │   └── exceptions.py       # Custom exceptions
+│   ├── pystdf/                  # STDF parsing library
+│   ├── jupiter/                 # Customization utilities
+│   └── script/                  # Legacy HTML generation
+└── README.md                    # This file
 ```
 
 ## Report Types
@@ -136,7 +159,7 @@ Create a configuration file to specify which products to process:
 
 ART.stdf supports parallel processing of STDF files to significantly reduce conversion time. By default, 2 parallel workers are used.
 
-**Configuration**: Edit `src/polling.py` and modify the `ProcessingConfig` class:
+**Configuration**: Edit `src/system/polling.py` and modify the `ProcessingConfig` class:
 
 ```python
 @dataclass
@@ -160,9 +183,14 @@ parallel_stdf_workers = 4
 
 ## Documentation
 
-- **[User Guide](doc/USER_GUIDE.html)** - Complete guide for end users
-- **[Developer Guide](doc/DEVELOPER_GUIDE.html)** - Technical documentation for developers
-- **[Original Docs](doc/ART.html)** - Original documentation
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[Developer Guide](docs/DEVELOPER_GUIDE.md)** - Technical documentation for developers
+- **[Architecture Guide](docs/ARCHITECTURE.md)** - System architecture overview
+- **[Configuration Guide](docs/CONFIGURATION.md)** - Configuration options
+- **[API Reference](docs/API.md)** - Complete API documentation
+- **[Performance Optimizations](docs/PERFORMANCE_OPTIMIZATIONS.md)** - Performance tuning guide
+- **[Modular Architecture](docs/MODULAR_ARCHITECTURE_GUIDE.md)** - Architecture patterns
 
 ## Technology Stack
 

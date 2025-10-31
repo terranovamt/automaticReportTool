@@ -24,12 +24,11 @@ from dataclasses import dataclass
 from typing import List, Dict, Set, Tuple
 
 
+from conversion import stdf2data
+from analysis import shmoo_visualizer as shmoo
+from analysis import char_processor as char
 import core
-import stdf2data
-import shmoo
-import charv3 as char
 from script.usage_analitics import generate_usage
-
 from jupiter.utility import get_personalization
 
 # ==================================================

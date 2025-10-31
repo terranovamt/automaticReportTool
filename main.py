@@ -21,7 +21,7 @@ if __name__ == "__main__":
     # Add src directory to Python path for imports
     sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
-    import polling
+    from system import polling
 
     # Check if custom watch path provided as command line argument
     if len(sys.argv) > 1:
