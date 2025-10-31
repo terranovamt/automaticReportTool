@@ -17,9 +17,24 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf.TableTemplate import TableTemplate
+# Core pystdf modules for STDF parsing and conversion
+# Removed modules that were cleaned up during refactoring:
+# - BinSummarizer (unused legacy module)
+# - ParametricSummarizer (unused legacy module)
+# - PartSummarizer (unused legacy module)
+# - Indexing (unused legacy module)
 
-from pystdf.BinSummarizer import BinSummarizer
-from pystdf.ParametricSummarizer import ParametricSummarizer
-from pystdf.PartSummarizer import PartSummarizer
-from pystdf.Indexing import *
+# Available modules:
+# - TableTemplate: Base class for STDF record types (required by Types and V4)
+# - V4: STDF V4 record definitions
+# - IO: Parser and I/O operations
+# - Pipeline: Data processing pipeline
+# - Types: STDF data types
+# - Writers: Output writers
+# - Importer: STDF to DataFrame conversion (main module)
+
+from pystdf.TableTemplate import TableTemplate
+from pystdf import V4, IO, Pipeline, Types, Writers, Importer
+
+__version__ = "1.0.0-optimized"
+__all__ = ["TableTemplate", "V4", "IO", "Pipeline", "Types", "Writers", "Importer"]
