@@ -506,6 +506,61 @@ def create_top_ids_chart(df: pl.DataFrame, top_n: int = 15) -> str:
     return f"Plotly.newPlot('chart9', {fig.to_json()});"
 
 
+def create_recent_executions_table(df: pl.DataFrame, n_executions: int = 10) -> str:
+    """
+    Create an HTML table showing the last N executions with details.
+
+    Args:
+        df: Preprocessed dataframe
+        n_executions: Number of recent executions to display
+
+    Returns:
+        str: HTML table string
+    """
+    # Sort by end_date (most recent first) and take the last N executions
+    recent_df = df.sort("end_date", descending=True).head(n_executions)
+
+    # Build table rows
+    rows = []
+    for row in recent_df.iter_rows(named=True):
+        start_str = row["start_date"].strftime("%Y-%m-%d %H:%M:%S")
+        end_str = row["end_date"].strftime("%Y-%m-%d %H:%M:%S")
+        duration = row["duration_hours"]
+
+        rows.append(
+            f"""
+            <tr>
+                <td>{start_str}</td>
+                <td>{end_str}</td>
+                <td>{row['productcut']}</td>
+                <td>{row['flow']}</td>
+                <td>{row['type']}</td>
+                <td>{duration:.2f}h</td>
+            </tr>
+            """
+        )
+
+    table_html = f"""
+    <table class="executions-table">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Product</th>
+                <th>Flow</th>
+                <th>Type</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            {''.join(rows)}
+        </tbody>
+    </table>
+    """
+
+    return table_html
+
+
 def calculate_statistics(df: pl.DataFrame) -> Dict[str, str]:
     """
     Calculate summary statistics from the dataframe.
@@ -516,21 +571,33 @@ def calculate_statistics(df: pl.DataFrame) -> Dict[str, str]:
     Returns:
         dict: Dictionary containing summary statistics
     """
+    # Get the most recent execution
+    latest_execution = df.sort("end_date", descending=True).head(1)
+    last_execution_time = "N/A"
+    if len(latest_execution) > 0:
+        last_execution_time = latest_execution["end_date"][0].strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
     return {
         "total_executions": str(len(df)),
         "unique_products": str(df["productcut"].n_unique()),
         "unique_flows": str(df["flow"].n_unique()),
         "total_hours": f"{df['duration_hours'].sum():.1f}",
+        "last_execution_time": last_execution_time,
     }
 
 
-def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
+def generate_html_report(
+    stats: Dict[str, str], scripts: List[str], recent_executions_html: str
+) -> str:
     """
     Generate the complete HTML report with embedded charts.
 
     Args:
         stats: Dictionary of summary statistics
         scripts: List of JavaScript code snippets for charts
+        recent_executions_html: HTML string for recent executions table
 
     Returns:
         str: Complete HTML document as string
@@ -553,16 +620,16 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
             --layout-color0: #ffffff;
             --md-grey-100: #eeeff1;
         }}
-        
+
         body {{
             font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, var(--ui-font-color2) 0%, 
+            background: linear-gradient(135deg, var(--ui-font-color2) 0%,
                                         var(--ui-font-color3) 100%);
             color: var(--ui-font-color0);
         }}
-        
+
         .container {{
             max-width: 1400px;
             margin: 0 auto;
@@ -571,30 +638,46 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
             border-radius: 15px;
             box-shadow: 0px 0px 12px 1px rgba(87, 87, 87, 0.2);
         }}
-        
+
         h1 {{
             color: var(--ui-font-color0);
             text-align: center;
             margin-bottom: 10px;
             font-size: 2.5em;
         }}
-        
+
         .subtitle {{
             text-align: center;
             color: #7f8c8d;
             margin-bottom: 30px;
             font-size: 1.2em;
         }}
-        
+
+        .last-execution {{
+            text-align: center;
+            background: linear-gradient(135deg, var(--ui-font-color2) 0%,
+                                        var(--ui-font-color3) 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }}
+
+        .last-execution strong {{
+            font-size: 1.3em;
+        }}
+
         .stats-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 40px;
         }}
-        
+
         .stat-card {{
-            background: linear-gradient(135deg, var(--ui-font-color1) 0%, 
+            background: linear-gradient(135deg, var(--ui-font-color1) 0%,
                                         #faa307 100%);
             color: var(--ui-font-color0);
             padding: 25px;
@@ -602,18 +685,18 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }}
-        
+
         .stat-value {{
             font-size: 2.5em;
             font-weight: bold;
             margin-bottom: 10px;
         }}
-        
+
         .stat-label {{
             font-size: 1em;
             opacity: 0.9;
         }}
-        
+
         .chart-container {{
             margin-bottom: 40px;
             padding: 20px;
@@ -621,7 +704,7 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }}
-        
+
         .chart-title {{
             font-size: 1.5em;
             color: var(--ui-font-color0);
@@ -629,12 +712,43 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
             text-align: center;
             font-weight: bold;
         }}
+
+        .executions-table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }}
+
+        .executions-table th {{
+            background-color: var(--ui-font-color0);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }}
+
+        .executions-table td {{
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }}
+
+        .executions-table tr:nth-child(even) {{
+            background-color: #f9f9f9;
+        }}
+
+        .executions-table tr:hover {{
+            background-color: var(--md-grey-100);
+        }}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📊 Resource Usage Analysis Report</h1>
         <p class="subtitle">Detailed analysis of resource usage and execution times</p>
+
+        <div class="last-execution">
+            🕐 Last Execution: <strong>{last_execution_time}</strong>
+        </div>
         
         <div class="stats-grid">
             <div class="stat-card">
@@ -654,7 +768,12 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
                 <div class="stat-label">Total Time</div>
             </div>
         </div>
-        
+
+        <div class="chart-container">
+            <div class="chart-title">📋 Recent Executions</div>
+            {recent_executions_html}
+        </div>
+
         <div class="chart-container">
             <div class="chart-title">Resource Usage by Product</div>
             <div id="chart1"></div>
@@ -708,14 +827,17 @@ def generate_html_report(stats: Dict[str, str], scripts: List[str]) -> str:
 </html>
 """
 
-    return html_template.format(**stats, scripts="\n".join(scripts))
+    return html_template.format(
+        **stats, scripts="\n".join(scripts), recent_executions_html=recent_executions_html
+    )
 
 
 def generate_usage(
     input_file: str = "history.parquet",
     output_file: str = r"\\gpm-pe-data.gnb.st.com\ENGI_MCD_STDF\analysis_report.html",
     top_n_ids: int = 15,
-    verbose: bool = True,
+    n_recent_executions: int = 10,
+    verbose: bool = False,
 ) -> Dict[str, str]:
     """
     Generate a complete resource analysis HTML report from PARQUET data.
@@ -728,6 +850,7 @@ def generate_usage(
         output_file: Path where the HTML report will be saved
                     (default: "resource_analysis_report.html")
         top_n_ids: Number of top IDs to display in the IDs chart (default: 15)
+        n_recent_executions: Number of recent executions to show in the table (default: 10)
         verbose: If True, prints progress messages (default: True)
 
     Returns:
@@ -736,6 +859,7 @@ def generate_usage(
             - unique_products: Number of unique products
             - unique_flows: Number of unique flows
             - total_hours: Total execution time in hours
+            - last_execution_time: Timestamp of the last execution
 
     Example:
         >>> # Simple usage
@@ -746,9 +870,11 @@ def generate_usage(
         ...     input_file="my_data.parquet",
         ...     output_file="my_report.html",
         ...     top_n_ids=20,
+        ...     n_recent_executions=15,
         ...     verbose=False
         ... )
         >>> print(f"Generated report with {stats['total_executions']} executions")
+        >>> print(f"Last execution: {stats['last_execution_time']}")
     """
     # Load and preprocess data
     if verbose:
@@ -770,13 +896,18 @@ def generate_usage(
         create_top_ids_chart(df, top_n=top_n_ids),
     ]
 
+    # Generate recent executions table
+    if verbose:
+        print("Generating recent executions table...")
+    recent_executions_html = create_recent_executions_table(df, n_recent_executions)
+
     # Calculate statistics
     stats = calculate_statistics(df)
 
     # Generate HTML report
     if verbose:
         print("Generating HTML report...")
-    html_content = generate_html_report(stats, scripts)
+    html_content = generate_html_report(stats, scripts, recent_executions_html)
 
     # Save report
     with open(output_file, "w", encoding="utf-8") as f:
@@ -790,6 +921,7 @@ def generate_usage(
         print(f"   - Unique products: {stats['unique_products']}")
         print(f"   - Unique flows: {stats['unique_flows']}")
         print(f"   - Total time: {stats['total_hours']} hours")
+        print(f"   - Last execution: {stats['last_execution_time']}")
 
     return stats
 
