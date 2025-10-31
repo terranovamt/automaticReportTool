@@ -27,6 +27,7 @@ import os
 from pystdf.IO import Parser
 from pystdf.Writers import TextWriter
 from collections import defaultdict
+from typing import Dict, List, Any
 
 class MemoryWriter:
     def __init__(self):
@@ -37,6 +38,83 @@ class MemoryWriter:
         self.data.append(line)
     def flush(self):
         pass # Do nothing
+
+class UltraFastMemoryWriter:
+    """Versione ultra-ottimizzata con pre-allocazione e batching
+
+    Ottimizzazioni:
+    - Batching: accumula record in batch prima di appendere
+    - Riduzione overhead: elimina operazioni non necessarie
+    - Minimal conditionals: meno controlli nel hot path
+    """
+    def __init__(self, batch_size=1000):
+        self.data_dict = defaultdict(lambda: defaultdict(list))
+        self.record_count = 0
+        self.batch_size = batch_size
+        self.batch_data = defaultdict(lambda: defaultdict(list))
+        self.batch_counts = defaultdict(int)
+
+    def after_send(self, dataSource, data):
+        RecType = data[0].__class__.__name__.upper()
+        batch_dict = self.batch_data[RecType]
+
+        # Accumula nel batch locale
+        field_map = data[0].fieldMap
+        fields = data[1]
+        for i in range(len(field_map)):
+            batch_dict[field_map[i][0]].append(fields[i])
+
+        self.batch_counts[RecType] += 1
+        self.record_count += 1
+
+        # Flush batch quando raggiunge la dimensione target
+        if self.batch_counts[RecType] >= self.batch_size:
+            self._flush_batch(RecType)
+
+        # Feedback periodico ogni 100000 record
+        if self.record_count % 100000 == 0:
+            print(f"Processed {self.record_count} records\r", end='', flush=True)
+
+    def _flush_batch(self, RecType):
+        """Trasferisce il batch al data_dict principale"""
+        batch_dict = self.batch_data[RecType]
+        main_dict = self.data_dict[RecType]
+
+        for field_name, values in batch_dict.items():
+            main_dict[field_name].extend(values)
+
+        # Reset batch
+        self.batch_data[RecType] = defaultdict(list)
+        self.batch_counts[RecType] = 0
+
+    def _flush_all_batches(self):
+        """Flush tutti i batch rimanenti"""
+        for RecType in list(self.batch_data.keys()):
+            if self.batch_counts[RecType] > 0:
+                self._flush_batch(RecType)
+
+    def to_dataframes_polars(self):
+        """Converte a Polars DataFrame - molto più veloce di Pandas"""
+        self._flush_all_batches()
+        result = {}
+        print(f"\nConverting {len(self.data_dict)} record types to Polars DataFrames...", flush=True)
+
+        for rec_type, fields_dict in self.data_dict.items():
+            try:
+                result[rec_type] = pl.DataFrame(fields_dict)
+            except Exception as e:
+                print(f"Warning: Could not convert {rec_type} to Polars DataFrame: {e}")
+                result[rec_type] = pd.DataFrame(fields_dict)
+
+        return result
+
+    def to_dataframes_pandas(self):
+        """Fallback a Pandas DataFrame per compatibilità"""
+        self._flush_all_batches()
+        result = {}
+        for rec_type, fields_dict in self.data_dict.items():
+            result[rec_type] = pd.DataFrame(fields_dict)
+        return result
 
 class OptimizedMemoryWriter:
     """Versione ottimizzata che usa defaultdict per accumulo più veloce"""
@@ -50,13 +128,16 @@ class OptimizedMemoryWriter:
         rec_dict = self.data_dict[RecType]
 
         # Accumula direttamente in dict per tipo di record
-        for field_info, value in zip(data[0].fieldMap, data[1]):
-            rec_dict[field_info[0]].append(value)
+        # Ottimizzazione: evita zip creando tuple, accedi direttamente agli indici
+        field_map = data[0].fieldMap
+        fields = data[1]
+        for i in range(len(field_map)):
+            rec_dict[field_map[i][0]].append(fields[i])
 
         self.record_count += 1
 
-        # Feedback periodico ogni 10000 record
-        if self.record_count % 10000 == 0:
+        # Feedback periodico ogni 50000 record (ridotto overhead print)
+        if self.record_count % 50000 == 0:
             print(f"Processed {self.record_count} records\r", end='', flush=True)
 
     def to_dataframes_polars(self):
@@ -169,6 +250,27 @@ def STDF2DataFrameFast(fname):
     """Alias per la versione più veloce con Polars ottimizzato"""
     return STDF2DataFrame(fname, use_polars=True, optimized=True)
 
+def STDF2DataFrameUltraFast(fname, batch_size=1000):
+    """Versione ULTRA-VELOCE con batching e ottimizzazioni massime
+
+    Questa è la versione MASSIMAMENTE OTTIMIZZATA per speed.
+    Usa batching, buffering 4MB, e accumulo ottimizzato.
+
+    Args:
+        fname: Path al file STDF (gestisce .gz automaticamente)
+        batch_size: Dimensione batch per accumulo (default: 1000)
+
+    Returns:
+        Dictionary di Polars DataFrame ottimizzati
+    """
+    with open_stdf_file(fname) as fin:
+        p = Parser(inp=fin)
+        storage = UltraFastMemoryWriter(batch_size=batch_size)
+        p.addSink(storage)
+        p.parse()
+
+    return storage.to_dataframes_polars()
+
 def open_stdf_file(fname):
     """Apre un file STDF (anche se compresso con gzip) in modo ottimizzato
 
@@ -183,8 +285,8 @@ def open_stdf_file(fname):
         # Per file gzip, usa decompressione ottimizzata
         return gzip.open(fname, 'rb')
     else:
-        # Per file non compressi, apri con buffering ottimizzato
-        return open(fname, 'rb', buffering=2*1024*1024)  # 2MB buffer
+        # Per file non compressi, apri con buffering ottimizzato (4MB per massime performance)
+        return open(fname, 'rb', buffering=4*1024*1024)  # 4MB buffer
 
 def STDF2DataFrameOptimized(fname, use_polars=True):
     """Versione completamente ottimizzata con gestione automatica compressione
@@ -209,16 +311,18 @@ def STDF2DataFrameOptimized(fname, use_polars=True):
     else:
         return storage.to_dataframes_pandas()
 
-def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
+def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4', ultra_fast=True, batch_size=1000):
     """Salva ogni tabella STDF come file Parquet separato
 
-    Questa è la versione OTTIMIZZATA che salva direttamente a Parquet.
+    Questa è la versione ULTRA-OTTIMIZZATA che salva direttamente a Parquet.
 
     Args:
         path_fin: Path al file STDF di input (gestisce .gz automaticamente)
         path_fout: Directory di output dove salvare i file Parquet
         use_polars: Usa Polars per performance massime (default: True)
         compression: Tipo di compressione ('lz4', 'snappy', 'gzip', 'zstd'). Default: 'lz4'
+        ultra_fast: Usa UltraFastMemoryWriter con batching (default: True)
+        batch_size: Dimensione batch per ultra_fast mode (default: 1000)
 
     Returns:
         List di file Parquet creati
@@ -249,12 +353,19 @@ def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4'):
 
     print(f"[STDF2Parquet] Parsing {os.path.basename(path_fin)}...")
 
-    # Parsing ottimizzato
+    # Parsing ultra-ottimizzato con batching
     with open_stdf_file(path_fin) as fin:
         p = Parser(inp=fin)
-        storage = OptimizedMemoryWriter()
+        if ultra_fast:
+            storage = UltraFastMemoryWriter(batch_size=batch_size)
+        else:
+            storage = OptimizedMemoryWriter()
         p.addSink(storage)
         p.parse()
+
+    # Flush batch rimanenti se ultra_fast
+    if ultra_fast:
+        storage._flush_all_batches()
 
     print(f"\n[STDF2Parquet] Saving {len(storage.data_dict)} tables to Parquet...")
 

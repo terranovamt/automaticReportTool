@@ -33,7 +33,7 @@ import polars as pl
 from pathlib import Path
 
 import jupiter.utility as uty
-from pystdf.Importer import STDF2DataFrame, STDF2DataFrameOptimized, STDF2ParquetFiles
+from pystdf.Importer import STDF2DataFrame, STDF2DataFrameOptimized, STDF2ParquetFiles, STDF2DataFrameUltraFast
 
 # Debug mode flag (set to True for verbose output)
 debug = False
@@ -307,13 +307,16 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
         # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
 
-        # USA VERSIONE SUPER OTTIMIZZATA - salva direttamente a Parquet con Polars
+        # USA VERSIONE ULTRA-OTTIMIZZATA - salva direttamente a Parquet con Polars
+        # Ottimizzazioni: batching, 4MB I/O buffer, print ridotto, accumulo efficiente
         # Formato: nomefile.std.tabellanome.parquet (tutto minuscolo)
         created_files = STDF2ParquetFiles(
             path_fin,
             path_fout,
-            use_polars=True,  # Usa Polars per massime performance
-            compression='lz4'  # Compressione veloce
+            use_polars=True,       # Usa Polars per massime performance
+            compression='lz4',     # Compressione veloce
+            ultra_fast=True,       # Usa UltraFastMemoryWriter con batching
+            batch_size=1000        # Batch size ottimale per accumulo
         )
     finally:
         # Pulisce la cartella temporanea

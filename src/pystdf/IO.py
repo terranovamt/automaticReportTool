@@ -257,11 +257,13 @@ class Parser(DataSource):
                             self._seen_sites_in_part.clear()
                             self._site_to_part_id.clear()
                             self._pir_count_in_part = 0
-                            print(
-                                f"PART_ID: {self._part_id_counter}" + " " * 60,
-                                end="\r",
-                                flush=True,
-                            )
+                            # Print only every 100 parts to avoid I/O overhead
+                            if self._part_id_counter % 100 == 0:
+                                print(
+                                    f"PART_ID: {self._part_id_counter}" + " " * 60,
+                                    end="\r",
+                                    flush=True,
+                                )
                         elif self._part_id_counter == 0:
                             self._part_id_counter = 1
 
@@ -376,11 +378,11 @@ class Parser(DataSource):
         # Aggiungi size per readHeader
         self._format_sizes["HBB"] = 4
 
-        # Buffering ottimizzato per I/O - usa 2MB invece di 65KB per file grandi
-        # 2MB è un ottimo compromesso tra memoria e performance I/O
+        # Buffering ottimizzato per I/O - usa 4MB per performance massime su file grandi
+        # 4MB buffer riduce drasticamente le syscall I/O
         if hasattr(inp, "read"):
             self.inp = (
-                io.BufferedReader(inp, buffer_size=2*1024*1024)  # 2MB buffer
+                io.BufferedReader(inp, buffer_size=4*1024*1024)  # 4MB buffer
                 if not isinstance(inp, io.BufferedReader)
                 else inp
             )
