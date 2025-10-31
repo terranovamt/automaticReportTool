@@ -296,15 +296,7 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
         debug and print(cmd)
         subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
-        hex_file = os.path.abspath("src/STDF2CSV.exe")
-        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
-        debug and print(cmd)
-        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
-        debug and print(cmd)
-        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
+        move_csv_files(os.path.dirname(path_fin), path_fout)
 
         # # USA VERSIONE SUPER OTTIMIZZATA - salva direttamente a Parquet con Polars
         # # Formato: nomefile.std.tabellanome.parquet (tutto minuscolo)
