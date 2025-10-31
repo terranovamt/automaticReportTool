@@ -67,11 +67,11 @@ class UltraFastMemoryWriter:
         self.batch_counts[RecType] += 1
         self.record_count += 1
 
-        # Flush batch quando raggiunge la dimensione target
+        # Flush batch when it reaches target size
         if self.batch_counts[RecType] >= self.batch_size:
             self._flush_batch(RecType)
 
-        # Feedback periodico ogni 100000 record
+        # Periodic feedback every 100000 records
         if self.record_count % 100000 == 0:
             print(f"Processed {self.record_count} records\r", end='', flush=True)
 
@@ -88,13 +88,13 @@ class UltraFastMemoryWriter:
         self.batch_counts[RecType] = 0
 
     def _flush_all_batches(self):
-        """Flush tutti i batch rimanenti"""
+        """Flush all remaining batches"""
         for RecType in list(self.batch_data.keys()):
             if self.batch_counts[RecType] > 0:
                 self._flush_batch(RecType)
 
     def to_dataframes_polars(self):
-        """Converte a Polars DataFrame - molto più veloce di Pandas"""
+        """Convert to Polars DataFrame - much faster than Pandas"""
         self._flush_all_batches()
         result = {}
         print(f"\nConverting {len(self.data_dict)} record types to Polars DataFrames...", flush=True)
@@ -136,12 +136,12 @@ class OptimizedMemoryWriter:
 
         self.record_count += 1
 
-        # Feedback periodico ogni 50000 record (ridotto overhead print)
+        # Periodic feedback every 50000 records (reduced print overhead)
         if self.record_count % 50000 == 0:
             print(f"Processed {self.record_count} records\r", end='', flush=True)
 
     def to_dataframes_polars(self):
-        """Converte a Polars DataFrame - molto più veloce di Pandas"""
+        """Convert to Polars DataFrame - much faster than Pandas"""
         result = {}
         print(f"\nConverting {len(self.data_dict)} record types to Polars DataFrames...", flush=True)
 
@@ -201,14 +201,14 @@ def STDF2DataFrame(fname, use_polars=True, optimized=True):
 
     Args:
         fname: Path to STDF file
-        use_polars: Use Polars (molto più veloce) invece di Pandas. Default: True
-        optimized: Usa versione ottimizzata con accumulo diretto. Default: True
+        use_polars: Use Polars (much faster) instead of Pandas. Default: True
+        optimized: Use optimized version with direct accumulation. Default: True
 
     Returns:
-        Dictionary di DataFrame (Polars o Pandas a seconda del parametro)
+        Dictionary of DataFrames (Polars or Pandas depending on parameter)
     """
     if optimized:
-        # VERSIONE OTTIMIZZATA - Accumulo diretto senza conversioni intermedie
+        # OPTIMIZED VERSION - Direct accumulation without intermediate conversions
         with open(fname, 'rb') as fin:
             p = Parser(inp=fin)
             storage = OptimizedMemoryWriter()
@@ -253,15 +253,15 @@ def STDF2DataFrameFast(fname):
 def STDF2DataFrameUltraFast(fname, batch_size=1000):
     """Versione ULTRA-VELOCE con batching e ottimizzazioni massime
 
-    Questa è la versione MASSIMAMENTE OTTIMIZZATA per speed.
-    Usa batching, buffering 4MB, e accumulo ottimizzato.
+    This is the MAXIMALLY OPTIMIZED version for speed.
+    Uses batching, 4MB buffering, and optimized accumulation.
 
     Args:
-        fname: Path al file STDF (gestisce .gz automaticamente)
-        batch_size: Dimensione batch per accumulo (default: 1000)
+        fname: Path to STDF file (automatically handles .gz)
+        batch_size: Batch size for accumulation (default: 1000)
 
     Returns:
-        Dictionary di Polars DataFrame ottimizzati
+        Dictionary of optimized Polars DataFrames
     """
     with open_stdf_file(fname) as fin:
         p = Parser(inp=fin)
@@ -272,13 +272,13 @@ def STDF2DataFrameUltraFast(fname, batch_size=1000):
     return storage.to_dataframes_polars()
 
 def open_stdf_file(fname):
-    """Apre un file STDF (anche se compresso con gzip) in modo ottimizzato
+    """Opens an STDF file (even if compressed with gzip) in optimized mode
 
     Args:
-        fname: Path al file STDF (può essere .std, .stdf, .gz, etc.)
+        fname: Path to STDF file (can be .std, .stdf, .gz, etc.)
 
     Returns:
-        File handle aperto in modalità binaria con buffering ottimizzato
+        File handle opened in binary mode with optimized buffering
     """
     # Controlla se è un file gzip
     if fname.lower().endswith('.gz'):
@@ -291,14 +291,14 @@ def open_stdf_file(fname):
 def STDF2DataFrameOptimized(fname, use_polars=True):
     """Versione completamente ottimizzata con gestione automatica compressione
 
-    Questa è la versione RACCOMANDATA per massime performance.
+    This is the RECOMMENDED version for maximum performance.
 
     Args:
-        fname: Path al file STDF (gestisce automaticamente .gz)
-        use_polars: Usa Polars (default: True, raccomandato per performance)
+        fname: Path to STDF file (automatically handles .gz)
+        use_polars: Use Polars (default: True, recommended for performance)
 
     Returns:
-        Dictionary di DataFrame ottimizzati
+        Dictionary of optimized DataFrames
     """
     with open_stdf_file(fname) as fin:
         p = Parser(inp=fin)
@@ -314,12 +314,12 @@ def STDF2DataFrameOptimized(fname, use_polars=True):
 def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4', ultra_fast=True, batch_size=1000):
     """Salva ogni tabella STDF come file Parquet separato
 
-    Questa è la versione ULTRA-OTTIMIZZATA che salva direttamente a Parquet.
+    This is the ULTRA-OPTIMIZED version that saves directly to Parquet.
 
     Args:
-        path_fin: Path al file STDF di input (gestisce .gz automaticamente)
-        path_fout: Directory di output dove salvare i file Parquet
-        use_polars: Usa Polars per performance massime (default: True)
+        path_fin: Path to input STDF file (automatically handles .gz)
+        path_fout: Output directory where to save Parquet files
+        use_polars: Use Polars for maximum performance (default: True)
         compression: Tipo di compressione ('lz4', 'snappy', 'gzip', 'zstd'). Default: 'lz4'
         ultra_fast: Usa UltraFastMemoryWriter con batching (default: True)
         batch_size: Dimensione batch per ultra_fast mode (default: 1000)
@@ -372,14 +372,14 @@ def STDF2ParquetFiles(path_fin, path_fout, use_polars=True, compression='lz4', u
     created_files = []
 
     for rec_type, fields_dict in storage.data_dict.items():
-        # Nome file: nomefile.std.tabellanome.parquet (tutto minuscolo)
+        # Filename: filename.std.tablename.parquet (all lowercase)
         table_name = rec_type.lower()
         output_filename = f"{base_name}.{table_name}.parquet"
         output_path = os.path.join(path_fout, output_filename)
 
         try:
             if use_polars:
-                # Usa Polars - molto più veloce
+                # Use Polars - much faster
                 df = pl.DataFrame(fields_dict)
                 df.write_parquet(
                     output_path,

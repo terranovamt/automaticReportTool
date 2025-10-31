@@ -28,7 +28,7 @@ from conversion import stdf2data
 from analysis import shmoo_visualizer as shmoo
 from analysis import char_processor as char
 import core
-from script.usage_analitics import generate_usage
+from script.usage_analytics import generate_usage
 from script.htmlgenv2 import get_personalization
 
 # ==================================================
@@ -1342,11 +1342,11 @@ class ProcessingWorker:
                 print(f"[WARNING] File not found: {file_path}")
                 return pl.DataFrame()
 
-        # Carica i dati di personalizzazione
+        # Load personalization data
         product_name = get_personalization(parameter, "product_name")
         parameter["PRODUCT"] = product_name
 
-        # Legge tutti i file necessari
+        # Read all required files
         ptr = read_file(
             f"{data_path}.ptr.parquet", usecols=[0, 1, 5, 6, 7, 10, 11, 12, 13, 14, 15]
         )

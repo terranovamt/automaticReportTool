@@ -555,7 +555,7 @@ class ShmooVisualizer:
             data = self.parse_shmoo_file(shm_file, debug)
             if not data or not data['duts']:
                 print(f"  No DUTs found in {shm_file.name}")
-                # Sposta comunque il file anche se il parsing fallisce
+                # Move file anyway even if parsing fails
                 self.move_file_to_shm(shm_file, shm_folder, debug)
                 continue
             
@@ -582,14 +582,14 @@ class ShmooVisualizer:
                         debug and print(f" File spostato in: shm/{shm_file.name}")
                         processed_count += 1
                     else:
-                        print(f" HTML creato ma errore nello spostamento del file")
+                        print(f" HTML created but error moving file")
                 else:
                     print(f"  ERROR: Failed to create plot for {shm_file.name}")
-                    # Sposta comunque il file anche se la creazione del plot fallisce
+                    # Move file anyway even if plot creation fails
                     self.move_file_to_shm(shm_file, shm_folder, debug)
             else:
                 print(f"  ERROR: Failed to create matrix for {shm_file.name}")
-                # Sposta comunque il file anche se la creazione della matrice fallisce
+                # Move file anyway even if matrix creation fails
                 self.move_file_to_shm(shm_file, shm_folder, debug)
         
         # Final progress update

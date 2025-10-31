@@ -343,7 +343,7 @@ def get_personalization(parameter: Dict, key: str) -> Any:
 
 - `htmlgenv2.py`: HTML template generation
 - `graphv2.py`: Chart generation helpers
-- `usage_analitics.py`: Usage statistics dashboard
+- `usage_analytics.py`: Usage statistics dashboard
 
 ### `web/` - Web Templates
 

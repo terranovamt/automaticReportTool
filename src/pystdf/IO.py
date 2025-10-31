@@ -151,10 +151,10 @@ class Parser(DataSource):
         return result
 
     def readVn(self, header):
-        """Ottimizzato: pre-allocazione e cache vnMap"""
+        """Optimized: pre-allocation and vnMap caching"""
         vlen = self.readField(header, "U2")
-        vn = []  # Non pre-allocabile perché dipende da fldtype
-        vnMap = self.vnMap  # Cache locale per evitare lookup ripetuti
+        vn = []  # Cannot pre-allocate because it depends on fldtype
+        vnMap = self.vnMap  # Local cache to avoid repeated lookups
         for _ in range(vlen):
             fldtype = self.readField(header, "B1")
             if fldtype in vnMap:
@@ -177,7 +177,7 @@ class Parser(DataSource):
         return result
 
     def readHeader(self):
-        """Ottimizzato: legge tutto in un colpo solo"""
+        """Optimized: reads everything in one go"""
         buf = self.inp.read(4)  # U2+U1+U1 = 4 bytes
         if not buf or len(buf) < 4:
             self.eof = 1

@@ -997,7 +997,7 @@ def get_limit_data(key, value):
             .with_columns(pl.col("°C").cast(pl.Utf8))
         )
 
-    # Raccogli tutti i valori per determinare il scaling
+    # Collect all values to determine scaling
     all_values = []
     for row in grouped.iter_rows(named=True):
         all_values.extend([row["Average"], row["Min_val"], row["Max_val"]])
