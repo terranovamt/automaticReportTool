@@ -1172,7 +1172,7 @@ class ProcessingWorker:
     def __init__(self, process_type: ProcessType):
         self.process_type = process_type
 
-    def save_history(self, path: str, parameter: dict):
+    def save_history(self, path: str, parameter: dict, start_time: datetime = None):
         """
         Save history with file metadata and parameters in Parquet format.
         Creates history.parquet file if it doesn't exist.
@@ -1180,16 +1180,13 @@ class ProcessingWorker:
         Args:
             path: File path to extract metadata from
             parameter: Dictionary with parameters to save
+            start_time: Start time of processing (if None, uses current time)
         """
         history_file = "history.parquet"
 
-        # Get file metadata
-        file_path = Path(path)
-        if file_path.exists():
-            stats = file_path.stat()
-            creation_time = datetime.fromtimestamp(stats.st_birthtime)
-        else:
-            creation_time = datetime.now()
+        # Use provided start_time or current time
+        if start_time is None:
+            start_time = datetime.now()
 
         # Get author (OS username)
         try:
@@ -1199,8 +1196,8 @@ class ProcessingWorker:
 
         # Format dates as strings: hh:mm:ss:ms Day-Month-Year
         creation_time_str = (
-            creation_time.strftime("%H:%M:%S:")
-            + f"{creation_time.microsecond // 1000:03d} {creation_time.strftime('%d-%m-%Y')}"
+            start_time.strftime("%H:%M:%S:")
+            + f"{start_time.microsecond // 1000:03d} {start_time.strftime('%d-%m-%Y')}"
         )
         current_time = datetime.now()
         current_time_str = (
@@ -1209,6 +1206,7 @@ class ProcessingWorker:
         )
 
         # Prepare data for new row
+        file_path = Path(path)
         new_data = {
             "path": str(file_path.parent.absolute()),
             "file": file_path.name,
@@ -1338,6 +1336,9 @@ class ReportWorker(ProcessingWorker):
             path: Path to condition file to process
             logger: Logger instance
         """
+        # Capture start time for history tracking
+        processing_start_time = datetime.now()
+
         if self.process_type == ProcessType.DATA2REPORT:
             parameter = ParameterExtractor.get_parameter(path)
         else:
@@ -1397,7 +1398,7 @@ class ReportWorker(ProcessingWorker):
             condition_directory = os.path.dirname(path)
         else:
             condition_directory = os.path.dirname(path)
-        self.save_history(path=path, parameter=parameter)
+        self.save_history(path=path, parameter=parameter, start_time=processing_start_time)
         marker_name, marker_content = self.get_completion_marker_info()
         FileProcessor.create_completion_marker(
             condition_directory, marker_name, marker_content
@@ -1541,6 +1542,9 @@ class CharWorker(ProcessingWorker):
             path: Path to condition file to process
             logger: Logger instance
         """
+        # Capture start time for history tracking
+        processing_start_time = datetime.now()
+
         parameter = ParameterExtractor.get_parameter(path)
 
         # Get composite list
@@ -1593,7 +1597,7 @@ class CharWorker(ProcessingWorker):
         marker_name, marker_content = self.get_completion_marker_info()
         FileProcessor.create_completion_marker(mainfolder, marker_name, marker_content)
 
-        self.save_history(path=path, parameter=parameter)
+        self.save_history(path=path, parameter=parameter, start_time=processing_start_time)
 
 
 # ==================================================
