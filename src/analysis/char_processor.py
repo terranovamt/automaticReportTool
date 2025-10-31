@@ -3,8 +3,7 @@ import polars as pl
 import glob
 import json
 import numpy as np
-from jupiter.utility import get_personalization
-from script.htmlgenv2 import gen_menu, gen_composite, gen_ptr, gen_ftr, gen_limits
+from script.htmlgenv2 import get_personalization, gen_menu, gen_composite, gen_ptr, gen_ftr, gen_limits
 
 HEAD = "[CHAR]"
 

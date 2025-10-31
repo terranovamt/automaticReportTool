@@ -29,7 +29,7 @@ from analysis import shmoo_visualizer as shmoo
 from analysis import char_processor as char
 import core
 from script.usage_analitics import generate_usage
-from jupiter.utility import get_personalization
+from script.htmlgenv2 import get_personalization
 
 # ==================================================
 # Constants and Configuration

@@ -7,7 +7,7 @@ from src.processors.base import BaseProcessor
 from src.core.models import ProcessingResult
 from src.core.exceptions import ProcessingError
 from src.utils.validation import validate_stdf_file
-import src.stdf2data as stdf2data  # Use existing conversion
+from conversion import stdf2data  # STDF to Parquet converter
 
 
 class STDFProcessor(BaseProcessor):

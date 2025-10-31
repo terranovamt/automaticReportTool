@@ -44,16 +44,18 @@ class ConditionReportProcessor(BaseReportProcessor):
         try:
             self.validate_input(input_path)
 
-            # Import here to avoid circular dependency
-            import src.condition_report as condition_report
+            # NOTE: condition_report module was removed in refactoring
+            # This processor is a placeholder for future implementation
+            # using the modular report generation system
 
-            # Generate report using existing module
+            # Generate report using modular system
             output_path = Path(output_path)
             output_path.mkdir(parents=True, exist_ok=True)
 
-            # Call existing condition report generation
-            # This would be adapted based on actual implementation
-            # For now, placeholder
+            # TODO: Implement condition report using reports.report_generators
+            # from reports.report_generators import ConditionReportGenerator
+            # generator = ConditionReportGenerator()
+            # generator.generate(parameter, data, output_path)
 
             processing_time = time.time() - start_time
 
@@ -88,15 +90,15 @@ class CharReportProcessor(BaseReportProcessor):
         try:
             self.validate_input(input_path)
 
-            # Import here to avoid circular dependency
-            import src.charv3 as charv3
+            # Import char processor from new location
+            from analysis import char_processor
 
             # Generate report using existing module
             output_path = Path(output_path)
             output_path.mkdir(parents=True, exist_ok=True)
 
-            # Call existing char report generation
-            # This would be adapted based on actual implementation
+            # Call char report generation (adapted to new module structure)
+            # char_processor.run(...) would be called here with proper parameters
 
             processing_time = time.time() - start_time
 
@@ -131,15 +133,15 @@ class ShmooReportProcessor(BaseReportProcessor):
         try:
             self.validate_input(input_path)
 
-            # Import here to avoid circular dependency
-            import src.shmoo as shmoo
+            # Import shmoo visualizer from new location
+            from analysis import shmoo_visualizer
 
             # Generate report using existing module
             output_path = Path(output_path)
             output_path.mkdir(parents=True, exist_ok=True)
 
-            # Call existing shmoo report generation
-            # This would be adapted based on actual implementation
+            # Call shmoo visualization (adapted to new module structure)
+            # shmoo_visualizer.process_shmoo_files(...) would be called here
 
             processing_time = time.time() - start_time
 
