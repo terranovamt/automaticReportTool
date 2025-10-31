@@ -1897,5 +1897,5 @@ if __name__ == "__main__":
     # Alternative path for Unix systems:
     # watch_path = "/prj/ENGI_MCD_STDF"
     # Local path
-    # watch_path = r".\STDF"
+    watch_path = r".\STDF"
     exit(main(watch_path))
