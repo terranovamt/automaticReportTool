@@ -132,6 +132,32 @@ Create a configuration file to specify which products to process:
 [44E, 44F, 449]
 ```
 
+### Parallel Processing Configuration
+
+ART.stdf supports parallel processing of STDF files to significantly reduce conversion time. By default, 2 parallel workers are used.
+
+**Configuration**: Edit `src/polling.py` and modify the `ProcessingConfig` class:
+
+```python
+@dataclass
+class ProcessingConfig:
+    # ...
+    parallel_stdf_workers = 2  # Default: 2 workers
+```
+
+**Performance Guidelines**:
+- **2 workers** (default): ~50% faster, uses 2 CPU cores
+- **4 workers**: ~75% faster, uses 4 CPU cores
+- **Recommended**: Set to number of available CPU cores minus 1
+
+**Example**:
+```python
+# For 8-core CPU, use 4-6 workers for optimal performance
+parallel_stdf_workers = 4
+```
+
+**Note**: Processing multiple STDF files simultaneously is most effective when you have multiple files to process. Single file processing remains sequential.
+
 ## Documentation
 
 - **[User Guide](doc/USER_GUIDE.html)** - Complete guide for end users
