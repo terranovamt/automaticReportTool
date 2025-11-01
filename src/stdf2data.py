@@ -290,31 +290,24 @@ def stdf2data_converter(path_fin, path_fout, option=""):
         path_fin = compressed_path
 
     try:
-        # hex_file = os.path.abspath("src/STDF2CSV.exe")
-        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
-        # debug and print(cmd)
-        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
-        # debug and print(cmd)
-        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
-        # hex_file = os.path.abspath("src/STDF2CSV.exe")
-        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
-        # debug and print(cmd)
-        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        # cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
-        # debug and print(cmd)
-        # subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
-        # move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
+        hex_file = os.path.abspath("src/STDF2CSV.exe")
+        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" -t'
+        debug and print(cmd)
+        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        cmd = f'"{hex_file}" "{os.path.join(path_fin)}" {option}'
+        debug and print(cmd)
+        subprocess.run(cmd, shell=True, stdout=subprocess.DEVNULL)
+        move_csv_files(os.path.dirname(path_fin), os.path.dirname(path_fout))
 
-        # USA VERSIONE SUPER OTTIMIZZATA - salva direttamente a Parquet con Polars
-        # Formato: nomefile.std.tabellanome.parquet (tutto minuscolo)
-        created_files = STDF2ParquetFiles(
-            path_fin,
-            path_fout,
-            use_polars=True,  # Usa Polars per massime performance
-            compression='lz4'  # Compressione veloce
-        )
+
+        # # USA VERSIONE SUPER OTTIMIZZATA - salva direttamente a Parquet con Polars
+        # # Formato: nomefile.std.tabellanome.parquet (tutto minuscolo)
+        # created_files = STDF2ParquetFiles(
+        #     path_fin,
+        #     path_fout,
+        #     use_polars=True,  # Usa Polars per massime performance
+        #     compression='lz4'  # Compressione veloce
+        # )
     finally:
         # Pulisce la cartella temporanea
         if temp_dir and os.path.exists(temp_dir):
