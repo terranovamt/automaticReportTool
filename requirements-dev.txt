@@ -1,0 +1,38 @@
+# ART.stdf - Development Dependencies
+# Install with: pip install -r requirements-dev.txt
+
+# Include production dependencies
+-r requirements.txt
+
+# Testing Framework
+pytest>=7.4.0                # Testing framework
+pytest-cov>=4.1.0            # Coverage plugin for pytest
+pytest-mock>=3.11.1          # Mocking plugin
+pytest-asyncio>=0.21.0       # Async test support
+
+# Code Quality
+black>=23.7.0                # Code formatter
+isort>=5.12.0                # Import sorter
+flake8>=6.1.0                # Linter
+pylint>=2.17.0               # Advanced linter
+mypy>=1.4.0                  # Static type checker
+
+# Development Tools
+ipython>=8.14.0              # Enhanced Python shell
+ipdb>=0.13.13                # IPython debugger
+jupyter>=1.0.0               # Jupyter notebook
+jupyterlab>=4.0.0            # JupyterLab interface
+
+# Documentation
+sphinx>=7.0.0                # Documentation generator
+sphinx-rtd-theme>=1.2.0      # ReadTheDocs theme
+pdoc3>=0.10.0                # Simple documentation generator
+
+# Performance Profiling
+memory-profiler>=0.61.0      # Memory profiling
+line-profiler>=4.0.0         # Line-by-line profiling
+
+# Build Tools
+build>=0.10.0                # Build frontend
+twine>=4.0.0                 # Package upload tool
+wheel>=0.40.0                # Wheel package support
