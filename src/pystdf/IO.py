@@ -133,18 +133,28 @@ class Parser(DataSource):
         return buf.decode("latin1")  # Decode diretto
 
     def readBn(self, header):
+        """Ottimizzato: pre-allocazione lista"""
         blen = self.readField(header, "U1")
-        return [self.readField(header, "B1") for _ in range(blen)]
+        result = [None] * blen
+        for i in range(blen):
+            result[i] = self.readField(header, "B1")
+        return result
 
     def readDn(self, header):
+        """Ottimizzato: pre-allocazione lista"""
         dbitlen = self.readField(header, "U2")
         dlen = dbitlen // 8 + (1 if dbitlen % 8 > 0 else 0)
-        return [self.readField(header, "B1") for _ in range(int(dlen))]
+        dlen_int = int(dlen)
+        result = [None] * dlen_int
+        for i in range(dlen_int):
+            result[i] = self.readField(header, "B1")
+        return result
 
     def readVn(self, header):
+        """Ottimizzato: pre-allocazione e cache vnMap"""
         vlen = self.readField(header, "U2")
-        vn = []
-        vnMap = self.vnMap
+        vn = []  # Non pre-allocabile perché dipende da fldtype
+        vnMap = self.vnMap  # Cache locale per evitare lookup ripetuti
         for _ in range(vlen):
             fldtype = self.readField(header, "B1")
             if fldtype in vnMap:
@@ -152,13 +162,19 @@ class Parser(DataSource):
         return vn
 
     def readArray(self, header, indexValue, stdfFmt):
-        """Ottimizzato: cache della funzione di parsing"""
+        """Ottimizzato: cache della funzione di parsing + pre-allocazione liste"""
         if stdfFmt == "N1":
             self.readArray(header, indexValue // 2 + indexValue % 2, "U1")
             return
 
         parse_fn = self.unpackMap[stdfFmt]  # Lookup una volta sola
-        return [parse_fn(header, stdfFmt) for _ in range(int(indexValue))]
+
+        # Pre-alloca la lista per performance migliori
+        count = int(indexValue)
+        result = [None] * count
+        for i in range(count):
+            result[i] = parse_fn(header, stdfFmt)
+        return result
 
     def readHeader(self):
         """Ottimizzato: legge tutto in un colpo solo"""
@@ -348,10 +364,11 @@ class Parser(DataSource):
         # Aggiungi size per readHeader
         self._format_sizes["HBB"] = 4
 
-        # Buffering ottimizzato per I/O
+        # Buffering ottimizzato per I/O - usa 2MB invece di 65KB per file grandi
+        # 2MB è un ottimo compromesso tra memoria e performance I/O
         if hasattr(inp, "read"):
             self.inp = (
-                io.BufferedReader(inp, buffer_size=65536)
+                io.BufferedReader(inp, buffer_size=2*1024*1024)  # 2MB buffer
                 if not isinstance(inp, io.BufferedReader)
                 else inp
             )
