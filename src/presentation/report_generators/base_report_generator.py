@@ -115,11 +115,11 @@ class BaseReportGenerator(ABC):
     <meta charset="UTF-8">
     <title>{title}</title>
     <link rel="shortcut icon" type="image/png" href="https://www.st.com/etc/clientlibs/st-site/media/app/images/favicon.ico">
-    <style>{self.get_template_content("style.css")}</style>
+    <style>{self.get_template_content("web/style.css")}</style>
 </head>
 <body>
 <main>
-    {self.get_template_content("navbar.html")}
+    {self.get_template_content("web/navbar.html")}
 """
 
     def build_html_footer(self) -> str:
@@ -130,9 +130,9 @@ class BaseReportGenerator(ABC):
             HTML footer string
         """
         return f"""
-    {self.get_template_content("gotop.html")}
+    {self.get_template_content("web/gotop.html")}
 </main>
-    {self.get_template_content("footer.html")}
+    {self.get_template_content("web/footer.html")}
 </body>
 </html>
 """

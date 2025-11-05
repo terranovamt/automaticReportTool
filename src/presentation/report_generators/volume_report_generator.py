@@ -121,9 +121,9 @@ class VolumeReportGenerator(BaseReportGenerator):
 
         html_content += f"""
         <div class="contentconteiner">
-        {self.get_template_content("stlogo.html")}
+        {self.get_template_content("web/stlogo.html")}
         <p>
-        {self.get_template_content("homebutton.html")}
+        {self.get_template_content("web/homebutton.html")}
         </p>
         </div>
         <h1 style="font-family:Arial; font-weight: normal; text-align:center; font-size: 4em; color:#03234B">
