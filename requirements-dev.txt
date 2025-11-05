@@ -20,8 +20,8 @@ mypy>=1.4.0                  # Static type checker
 # Development Tools
 ipython>=8.14.0              # Enhanced Python shell
 ipdb>=0.13.13                # IPython debugger
-jupyter>=1.0.0               # Jupyter notebook
-jupyterlab>=4.0.0            # JupyterLab interface
+# jupyter>=1.0.0             # Optional: Jupyter notebook (no longer required for production)
+# jupyterlab>=4.0.0          # Optional: JupyterLab interface (reports now use pure Python)
 
 # Documentation
 sphinx>=7.0.0                # Documentation generator

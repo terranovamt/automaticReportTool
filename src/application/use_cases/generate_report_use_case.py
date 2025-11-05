@@ -2,7 +2,7 @@
 ART.stdf - Generate Report Use Case
 
 Use case for generating test reports from Parquet data.
-Extracted and refactored from original core.py.
+Uses pure Python report generators (no Jupyter dependency).
 
 Author: Matteo Terranova (matteo.terranova@st.com)
 Organization: STMicroelectronics - MDRF GPAM
@@ -17,6 +17,7 @@ import polars as pl
 
 from src.domain.models.parameter import Parameter
 from src.infrastructure.storage.file_repository import FileRepository
+from src.presentation.report_generators import create_report_generator
 
 
 class GenerateReportUseCase:
@@ -169,24 +170,18 @@ class GenerateReportUseCase:
         df_stdf: Dict[str, pl.DataFrame],
         data_path: str
     ) -> Path:
-        """Generate standard composite report."""
-        # This will call the actual report generation logic
-        # For now, placeholder that will integrate with existing core.py logic
-        from core import process_single_composite
+        """Generate standard composite report using VolumeReportGenerator."""
+        # Use new pure Python report generator
+        generator = create_report_generator("VOLUME", parameter, logger=self.logger)
 
-        process_single_composite(
-            parameter.to_dict(),
-            None,  # TSR will be loaded internally
-            parameter.com,
-            data_path,
-            df_stdf
-        )
+        # Determine output directory
+        output_dir = os.path.dirname(data_path)
 
-        # Get report path
-        report_path = self.file_repository.get_report_path(
-            data_path,
-            parameter.to_dict(),
-            "DATA2REPORT"
+        # Generate report
+        report_path = generator.generate(
+            data_path=data_path,
+            output_path=Path(output_dir),
+            df_stdf=df_stdf
         )
 
         return report_path
@@ -197,24 +192,18 @@ class GenerateReportUseCase:
         df_stdf: Dict[str, pl.DataFrame],
         data_path: str
     ) -> Path:
-        """Generate test time analysis report."""
-        from core import process_ttime
+        """Generate test time analysis report using TTimeReportGenerator."""
+        # Use new pure Python report generator
+        generator = create_report_generator("TTIME", parameter, logger=self.logger)
 
-        # Load TSR if needed
-        tsr = pl.read_parquet(f"{data_path}.tsr.parquet")
+        # Determine output directory
+        output_dir = os.path.dirname(data_path)
 
-        process_ttime(
-            parameter.to_dict(),
-            tsr,
-            parameter.com,
-            data_path,
-            df_stdf
-        )
-
-        report_path = self.file_repository.get_report_path(
-            data_path,
-            parameter.to_dict(),
-            "DATA2REPORT"
+        # Generate report
+        report_path = generator.generate(
+            data_path=data_path,
+            output_path=Path(output_dir),
+            df_stdf=df_stdf
         )
 
         return report_path
@@ -225,28 +214,23 @@ class GenerateReportUseCase:
         df_stdf: Dict[str, pl.DataFrame],
         data_path: str
     ) -> Path:
-        """Generate yield analysis report."""
+        """Generate yield analysis report using YieldReportGenerator."""
         # Skip for X30 type
         if parameter.type.upper() == "X30":
+            self.logger.warning("Yield reports not supported for X30 type")
             raise ValueError("Yield reports not supported for X30 type")
 
-        from core import process_yield
+        # Use new pure Python report generator
+        generator = create_report_generator("YIELD", parameter, logger=self.logger)
 
-        # Load TSR
-        tsr = pl.read_parquet(f"{data_path}.tsr.parquet")
+        # Determine output directory
+        output_dir = os.path.dirname(data_path)
 
-        process_yield(
-            parameter.to_dict(),
-            tsr,
-            parameter.com,
-            data_path,
-            df_stdf
-        )
-
-        report_path = self.file_repository.get_report_path(
-            data_path,
-            parameter.to_dict(),
-            "DATA2REPORT"
+        # Generate report
+        report_path = generator.generate(
+            data_path=data_path,
+            output_path=Path(output_dir),
+            df_stdf=df_stdf
         )
 
         return report_path
@@ -256,19 +240,17 @@ class GenerateReportUseCase:
         parameter: Parameter,
         data_path: str
     ) -> Path:
-        """Generate condition report from anaflow HTML."""
-        from core import process_condition
+        """Generate condition report using ConditionReportGenerator."""
+        # Use new pure Python report generator
+        generator = create_report_generator("CONDITION", parameter, logger=self.logger)
 
-        process_condition(
-            parameter.to_dict(),
-            data_path,
-            None
-        )
+        # Determine output directory
+        output_dir = os.path.dirname(data_path)
 
-        report_path = self.file_repository.get_report_path(
-            data_path,
-            parameter.to_dict(),
-            "CONDITION2REPORT"
+        # Generate report (note: CONDITION doesn't need df_stdf pre-loaded)
+        report_path = generator.generate(
+            data_path=data_path,
+            output_path=Path(output_dir)
         )
 
         return report_path
