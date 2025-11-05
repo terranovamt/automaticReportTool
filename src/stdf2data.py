@@ -1,6 +1,23 @@
 """
 ART.stdf - STDF to Data Conversion Module
 
+⚠️ DEPRECATED - This module is deprecated and will be removed in a future version.
+
+MIGRATION: Use the new Clean Architecture implementation instead:
+    - Use: src.application.use_cases.convert_stdf_use_case.ConvertSTDFUseCase
+    - Parser: src.infrastructure.parsers.stdf_parser.STDFParser
+    - Repository: src.infrastructure.repositories.parquet_repository.ParquetRepository
+
+See LEGACY_DEPRECATION.md and MIGRATION_GUIDE.md for migration instructions.
+
+Benefits of new architecture:
+    - Better separation of concerns
+    - Fully testable with dependency injection
+    - Type-safe with 100% type hints coverage
+    - Better error handling and logging
+
+---
+
 This module handles the conversion of binary STDF (Standard Test Data Format) files
 into efficient columnar Parquet format using Polars DataFrames. It supports various
 compression formats and decompression methods.

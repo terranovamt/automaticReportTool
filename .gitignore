@@ -177,3 +177,8 @@ cython_debug/
 #.idea/
 src/jupiter/cfg.json
 src/post.json
+
+# Deprecated files (marked for future removal)
+# These files are replaced by Clean Architecture implementation
+# See LEGACY_DEPRECATION.md for details
+deprecated/
