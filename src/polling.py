@@ -22,8 +22,15 @@ from dataclasses import dataclass
 from typing import List, Dict, Set, Tuple
 
 
-import core
-import stdf2data
+# Legacy imports (deprecated - will be removed)
+# import core  # DEPRECATED - Use GenerateReportUseCase instead
+# import stdf2data  # DEPRECATED - Use ConvertSTDFUseCase instead
+
+# New Clean Architecture imports
+from src.domain.models.parameter import Parameter
+from src.application.use_cases.convert_stdf_use_case import ConvertSTDFUseCase
+from src.application.use_cases.generate_report_use_case import GenerateReportUseCase
+
 import shmoo
 import charv3 as char
 from script.usage_analitics import generate_usage
@@ -1437,19 +1444,42 @@ class ReportWorker(ProcessingWorker):
         local_parameter = copy.deepcopy(parameter)
         self._log_start_message(parameter)
 
+        # Convert dict to Parameter object for new architecture
+        param_obj = Parameter.from_dict(local_parameter)
+
         if self.process_type == ProcessType.DATA2REPORT:
-            # Usa i dati già caricati invece di rileggerli
-            core.process_composite(local_parameter, data_path, df_stdf)
+            # Use new GenerateReportUseCase instead of core.process_composite
+            use_case = GenerateReportUseCase(logger=logger)
+            report_type = parameter.get('TYPE', 'VOLUME')
+
+            # Generate report using new architecture
+            report_path = use_case.execute(
+                report_type=report_type,
+                parameter=param_obj,
+                df_stdf=df_stdf
+            )
+
             print(
                 f"[DATA2REPORT] End Report {parameter['CUT']} {parameter['FLOW']} "
                 f"{parameter['LOT']} {parameter['WAFER']} {parameter['TYPE'].lower()} {parameter['COM']}"
             )
+            logger.info(f"Report generated: {report_path}")
         else:
-            core.process_condition(local_parameter, path, df_stdf)
+            # Use new GenerateReportUseCase for condition reports
+            use_case = GenerateReportUseCase(logger=logger)
+
+            # Generate condition report using new architecture
+            report_path = use_case.execute(
+                report_type="CONDITION",
+                parameter=param_obj,
+                df_stdf=df_stdf
+            )
+
             print(
                 f"[CONDITION2REPORT] End Report {parameter['CODE']} {parameter['FLOW']} "
                 f"{parameter['COM']} condition"
             )
+            logger.info(f"Condition report generated: {report_path}")
 
 
 class STDFWorker(ProcessingWorker):
@@ -1489,11 +1519,20 @@ class STDFWorker(ProcessingWorker):
             path: Path to STDF file
             logger: Logger instance
         """
-        base_path = os.path.dirname(path)
-        data_folder = os.path.join(base_path, "parquet")
-        os.makedirs(data_folder, exist_ok=True)
-        data_path = os.path.join(data_folder, os.path.basename(path))
-        stdf2data.stdf2data_converter(path, data_path)
+        # Extract parameter from path
+        parameter_dict = ParameterExtractor.get_parameter_from_stdf_path(path)
+        parameter = Parameter.from_dict(parameter_dict)
+
+        # Use new ConvertSTDFUseCase instead of stdf2data.stdf2data_converter
+        use_case = ConvertSTDFUseCase(logger=logger)
+
+        # Convert STDF to Parquet using new architecture
+        parquet_files = use_case.execute(
+            stdf_path=path,
+            parameter=parameter
+        )
+
+        logger.info(f"STDF conversion complete: {len(parquet_files)} parquet files created")
 
 
 class ShmooWorker(ProcessingWorker):

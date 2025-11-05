@@ -1,12 +1,16 @@
 import os
 import json
 import fileinput
-import subprocess
+import subprocess  # Keep for now, may be used elsewhere
 import numpy as np
 import pandas as pd
 
 from bs4 import BeautifulSoup
 from io import StringIO
+
+# New Clean Architecture imports
+from src.domain.models.parameter import Parameter
+from src.application.use_cases.generate_report_use_case import GenerateReportUseCase
 
 def detect_file_type(file_path):
     """Rileva il tipo di file basandosi sull'estensione"""
@@ -285,18 +289,21 @@ def main():
                     if not os.path.exists(dir_output):
                         os.makedirs(dir_output)
 
-                    cmd = f'jupyter nbconvert --execute --no-input --to html --output "{dir_output}/{str_output}" ./src/jupiter/{str(parameter["TYPE"]).upper()}.ipynb'
-                    if (
-                        subprocess.call(
-                            args=cmd,
-                            shell=True,
-                            stdout=subprocess.DEVNULL,
+                    # Use new GenerateReportUseCase instead of jupyter nbconvert
+                    try:
+                        param_obj = Parameter.from_dict(parameter)
+                        use_case = GenerateReportUseCase()
+                        report_type = str(parameter["TYPE"]).upper()
+
+                        # Generate report using new Clean Architecture
+                        report_path = use_case.execute(
+                            report_type=report_type,
+                            parameter=param_obj
                         )
-                        == 0
-                    ):
-                        print(f"Report generato con successo per {comp_value}")
-                    else:
-                        print(f"ERROR: execution failed {cmd}")
+
+                        print(f"Report generato con successo per {comp_value}: {report_path}")
+                    except Exception as e:
+                        print(f"ERROR: Report generation failed for {comp_value}: {str(e)}")
         else:
             print("Colonna COMP/Comp non trovata, processo il file intero")
             condition_file = condition_rework(parameter, file_path)
