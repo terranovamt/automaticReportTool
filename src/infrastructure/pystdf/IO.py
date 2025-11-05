@@ -22,9 +22,9 @@ import struct
 import re
 import io
 
-from pystdf.Types import *
-from pystdf import V4
-from pystdf.Pipeline import DataSource
+from .Types import *
+from . import V4
+from .Pipeline import DataSource
 
 # Pre-compilazione regex per performance
 ARRAY_PATTERN = re.compile(r"k(\d+)([A-Z][a-z0-9]+)")

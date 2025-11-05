@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf.OoHelpers import abstract
-from pystdf import V4
+from .OoHelpers import abstract
+from . import V4
 
 class StreamIndexer:
   def before_header(self, dataSource, header):

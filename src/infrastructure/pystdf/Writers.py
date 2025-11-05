@@ -20,7 +20,7 @@
 import sys, os
 from time import strftime, localtime
 from xml.sax.saxutils import quoteattr
-from pystdf import V4
+from . import V4
 
 import pdb
 

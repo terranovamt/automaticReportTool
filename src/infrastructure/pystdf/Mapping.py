@@ -17,9 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf.Types import *
-from pystdf.Indexing import *
-from pystdf import V4
+from .Types import *
+from .Indexing import *
+from . import V4
 
 class StreamMapper(StreamIndexer):
 

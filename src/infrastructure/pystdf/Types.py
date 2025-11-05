@@ -19,7 +19,7 @@
 
 import sys
 
-from pystdf import TableTemplate
+from . import TableTemplate
 
 import pdb
 

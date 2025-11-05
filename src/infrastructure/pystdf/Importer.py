@@ -24,8 +24,8 @@ import pandas as pd
 import polars as pl
 import gzip
 import os
-from pystdf.IO import Parser
-from pystdf.Writers import TextWriter
+from .IO import Parser
+from .Writers import TextWriter
 from collections import defaultdict
 
 class MemoryWriter:

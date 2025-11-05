@@ -17,8 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf.Pipeline import EventSource
-from pystdf.V4 import ptr, mpr, ftr, tsr
+from .Pipeline import EventSource
+from .V4 import ptr, mpr, ftr, tsr
 
 def filterNull(value):
   if value == 4294967295:

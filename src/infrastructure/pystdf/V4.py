@@ -106,8 +106,8 @@ kxTYPE  Array of data of the type specified.                 TYPE[]
 
 """
 import sys
-from pystdf.Types import StdfRecordMeta, RecordType, stdfToLogicalType
-from pystdf import TableTemplate
+from .Types import StdfRecordMeta, RecordType, stdfToLogicalType
+from . import TableTemplate
 
 import pdb
 

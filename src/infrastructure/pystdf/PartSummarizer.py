@@ -17,9 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf import Pipeline
-from pystdf.SummaryStatistics import SummaryStatistics
-from pystdf.V4 import prr, pcr
+from . import Pipeline
+from .SummaryStatistics import SummaryStatistics
+from .V4 import prr, pcr
 
 def filterNull(value):
     if value == 4294967295:

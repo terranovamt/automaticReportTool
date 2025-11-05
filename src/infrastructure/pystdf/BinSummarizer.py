@@ -17,9 +17,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from pystdf.Pipeline import EventSource
-from pystdf.SummaryStatistics import SummaryStatistics
-from pystdf.V4 import prr, hbr, sbr
+from .Pipeline import EventSource
+from .SummaryStatistics import SummaryStatistics
+from .V4 import prr, hbr, sbr
 
 def ifElse(cond, trueVal, falseVal):
   if cond:
