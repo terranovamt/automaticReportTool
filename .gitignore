@@ -1,11 +1,12 @@
-# peronal ingore 
+# peronal ingore
 *.std
 *.stdf
 *.csv
 *.code-workspace
 Report/**
 STDF/**
-**test_**
+# Note: Allowing test files in tests/ directory
+# **test_** - Removed to allow pytest test files
 **/post.json
 **/cfg.json
 tmp/**
