@@ -24,7 +24,7 @@ class TestFileRepository:
         marker_file.touch()
 
         # Act
-        result = FileRepository.check_completion_marker(str(temp_dir))
+        result = FileRepository.check_completion_marker(str(temp_dir), marker_name=".DONE")
 
         # Assert
         assert result is True
@@ -55,7 +55,7 @@ class TestFileRepository:
     def test_create_completion_marker(self, temp_dir):
         """Test creating a completion marker."""
         # Act
-        FileRepository.create_completion_marker(str(temp_dir))
+        FileRepository.create_completion_marker(str(temp_dir), marker_name=".DONE")
 
         # Assert
         marker_file = temp_dir / ".DONE"
@@ -67,6 +67,7 @@ class TestFileRepository:
         file_count = 5
         FileRepository.create_completion_marker(
             str(temp_dir),
+            marker_name=".DONE",
             file_count=file_count
         )
 
@@ -84,7 +85,7 @@ class TestFileRepository:
         assert marker_file.exists()
 
         # Act
-        FileRepository.remove_completion_marker(str(temp_dir))
+        FileRepository.remove_completion_marker(str(temp_dir), marker_name=".DONE")
 
         # Assert
         assert not marker_file.exists()

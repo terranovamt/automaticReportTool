@@ -10,7 +10,7 @@ Organization: STMicroelectronics - MDRF GPAM
 
 import os
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 
 from config.settings import settings
 
@@ -51,7 +51,8 @@ class FileRepository:
     def create_completion_marker(
         path: str,
         marker_name: str = None,
-        content: str = None
+        content: str = None,
+        file_count: int = None
     ) -> None:
         """
         Create completion marker file in a directory.
@@ -60,15 +61,20 @@ class FileRepository:
             path: Directory path where marker will be created
             marker_name: Name of marker file (default: from settings)
             content: Content to write to marker (default: from settings)
+            file_count: Optional file count to include in marker content
 
         Example:
             >>> FileRepository.create_completion_marker("/path/to/dir")
+            >>> FileRepository.create_completion_marker("/path/to/dir", file_count=5)
         """
         if marker_name is None:
             marker_name = settings.REPORT_COMPLETION_MARKER
 
         if content is None:
-            content = settings.COMPLETION_MARKER_CONTENT
+            if file_count is not None:
+                content = f"Completed processing {file_count} files"
+            else:
+                content = settings.COMPLETION_MARKER_CONTENT
 
         # Ensure directory exists
         directory = Path(path)
@@ -77,6 +83,28 @@ class FileRepository:
         # Write marker file
         marker_path = directory / marker_name
         marker_path.write_text(content, encoding='utf-8')
+
+    @staticmethod
+    def remove_completion_marker(
+        path: str,
+        marker_name: str = None
+    ) -> None:
+        """
+        Remove completion marker file from a directory.
+
+        Args:
+            path: Directory path where marker exists
+            marker_name: Name of marker file (default: from settings)
+
+        Example:
+            >>> FileRepository.remove_completion_marker("/path/to/dir")
+        """
+        if marker_name is None:
+            marker_name = settings.REPORT_COMPLETION_MARKER
+
+        marker_path = Path(path) / marker_name
+        if marker_path.exists():
+            marker_path.unlink()
 
     @staticmethod
     def get_report_directory(
@@ -237,3 +265,50 @@ class FileRepository:
         parquet_dir = FileRepository.get_parquet_directory(base_path)
         parquet_dir.mkdir(parents=True, exist_ok=True)
         return parquet_dir
+
+    @staticmethod
+    def find_files(path: str, pattern: str = "*") -> List[Path]:
+        """
+        Find files in a directory matching a pattern.
+
+        Args:
+            path: Directory path to search
+            pattern: Glob pattern (default: "*")
+
+        Returns:
+            List of Path objects matching the pattern
+
+        Example:
+            >>> files = FileRepository.find_files("/path/to/dir", "*.std")
+            >>> files = FileRepository.find_files("/path/to/dir", "**/*.std")  # recursive
+        """
+        directory = Path(path)
+        if not directory.exists():
+            return []
+
+        # Check if pattern is recursive (contains **)
+        if "**" in pattern:
+            # Use rglob for recursive search
+            pattern_without_stars = pattern.replace("**/", "")
+            return sorted(directory.rglob(pattern_without_stars))
+        else:
+            # Use glob for non-recursive search
+            return sorted(directory.glob(pattern))
+
+    @staticmethod
+    def ensure_directory(path: str) -> Path:
+        """
+        Ensure a directory exists, creating it if necessary.
+
+        Args:
+            path: Directory path to ensure exists
+
+        Returns:
+            Path object for the directory
+
+        Example:
+            >>> path = FileRepository.ensure_directory("/path/to/new/dir")
+        """
+        directory = Path(path)
+        directory.mkdir(parents=True, exist_ok=True)
+        return directory
