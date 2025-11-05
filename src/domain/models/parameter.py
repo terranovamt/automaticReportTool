@@ -24,6 +24,34 @@ class FileCorner:
     corner: str
     path: str
 
+    def to_dict(self) -> Dict:
+        """
+        Convert FileCorner to dictionary.
+
+        Returns:
+            Dictionary with corner and path
+        """
+        return {
+            "corner": self.corner,
+            "path": self.path
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict) -> "FileCorner":
+        """
+        Create FileCorner from dictionary.
+
+        Args:
+            data: Dictionary with corner and path
+
+        Returns:
+            FileCorner instance
+        """
+        return cls(
+            corner=data.get("corner", ""),
+            path=data.get("path", "")
+        )
+
 
 @dataclass
 class Parameter:
@@ -80,6 +108,14 @@ class Parameter:
             for wafer_id, file_data in self.file.items():
                 if isinstance(file_data, dict):
                     self.file[wafer_id] = FileCorner(**file_data)
+
+        # Compute title if not provided
+        if not self.title:
+            self.title = f"{self.lot}_{self.wafer}_{self.code}_{self.cut}_{self.flow}_{self.type}"
+
+        # Compute com if not provided
+        if not self.com:
+            self.com = f"{self.code} {self.cut} {self.lot} {self.flow} WAFER:{self.wafer}"
 
     @property
     def product_cut(self) -> str:
